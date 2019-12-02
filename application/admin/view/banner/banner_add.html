@@ -1,6 +1,6 @@
 {include file="common/header" /}
 	<div class="x-body">
-		<form class="layui-form">
+		<form class="layui-form" enctype="multipart/form-data">
 			<div class="layui-form-item">
 				<label for="banner_img" class="layui-form-label">
 					<span class="x-red">*</span>轮播图
@@ -21,7 +21,7 @@
 					链接地址
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="link" value="" name="link_url" class="layui-input">
+					<input type="text" id="link" value="{:url('index')}" name="link_url" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -59,7 +59,6 @@
 			    </div>
 			</div>
 			<input type="hidden" name="img_url" value="">
-			<input type="hidden" name="type" value="add">
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
@@ -72,38 +71,55 @@
 	<script>
 		layui.use(['form','layer','upload'], function(){
 			$ = layui.jquery;
-		  var form = layui.form()
-		  ,layer = layui.layer;
+		  	var form = layui.form()
+		  	,layer = layui.layer;
 
 
 		  //图片上传接口
-		  layui.upload({
+		layui.upload({
 			url: '{:url("Base/uploads")}' //上传接口
 			,success: function(res){ //上传成功后的回调
-				console.log(res);
+				// console.log(res);
 				if (res['status'] == 1)
 				{	var upload_url = "<?php echo '__IMAGE__'; ?>";
 					var img_url = upload_url + res['img_url'];
 					// 显示图片并记录图片地址
-					$(input['name="img_url"']).val($res['img_url']);
+					$('input[name="img_url"]').val(res['img_url']);
 			  		$('#LAY_demo_upload').attr('src', img_url);
 				} else {
 					layer.msg('图片上传失败', {inco: 5});
 				}
 			}
-		  });
+		});
 		
 
 		  //监听提交
-		  form.on('submit(add)', function(data){
-			console.log(data['field']);
-			//发异步，把数据提交给php
-			// layer.alert("增加成功", {icon: 6},function () {
-			// 	// 获得frame索引
-			// 	var index = parent.layer.getFrameIndex(window.name);
-			// 	//关闭当前frame
-			// 	parent.layer.close(index);
-			// });
+		form.on('submit(add)', function(data){
+			// console.log(data['field']);
+			// var images = $("#banner_img")[0].files[0];
+			var img_url = $("input[name='img_url']").val();
+			if (!img_url) {
+				layer.msg('请上传图片', {inco: 5});
+				return false;
+			}
+
+			// 提交数据到后台
+			var _this = parent.layer;
+			$.ajax({
+				url: "{:url('Banner/ajaxAddData')}",
+				type: 'post',
+				data: data['field'],
+				success:function(res){
+					if (res['status'] == 1)
+					{
+						// window.location.href = "{:url('Banner/banner_list')}";
+						var index = _this.getFrameIndex(window.name);
+						_this.close(index);
+					} else {
+						layer.msg(res['msg'], {inco: 5});
+					}
+				}
+			});
 			return false;
 		  });
 		  

@@ -1,4 +1,4 @@
-<?php /*a:5:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\welcome.html";i:1575086352;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575098746;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\footer.html";i:1575088361;}*/ ?>
+<?php /*a:5:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\welcome.html";i:1575162368;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\footer.html";i:1575088361;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,12 +24,12 @@
 <?php endif; if (in_array('x-layui', $js_array)): ?>
 	<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
 <?php endif; ?>
-
+<script src="/static/js/jquery.min.js"></script>
     </head>
     <body>
         <div class="x-body">
             <blockquote class="layui-elem-quote">
-                欢迎来祖安 德玛西亚总部！<span class="f-14">v1.0</span>开黑交流群： 3114802825
+                欢迎来祖安 德玛西亚总部！<span class="f-14"><<< !!! >>>>  </span> 开黑交流群： 3114802825
             </blockquote>
             <p>登录次数：<?php echo Session('user')['login_num']; ?> </p>
             <p>上次登录IP：<?php echo Session('user')['last_ip']; ?>  上次登录时间： <?php $last_time = Session('user'); echo date('Y-m-d H:i:s', $last_time['last_time']); ?></p>

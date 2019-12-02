@@ -61,11 +61,11 @@ function uploads($imgName = '', $type = 1, $resType = 0, $thumb = false, $width 
 			
 			if ($resType == 0 )
 			{
-				return $info->getSaveName();
+				return date('Ymd') . '/' . $info->getFilename();
 			} else {
 				$result = [
 					'status' => 1,
-					'img_url' => $info->getSaveName(),
+					'img_url' => date('Ymd') . '/' . $info->getFilename(),
 					'thumb_url' => $thumb_url
 				];
 				return $result;

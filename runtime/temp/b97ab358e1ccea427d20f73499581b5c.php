@@ -1,4 +1,4 @@
-<?php /*a:4:{s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_add.html";i:1575187808;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575098746;}*/ ?>
+<?php /*a:4:{s:70:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_edit.html";i:1575196571;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,11 +24,11 @@
 <?php endif; if (in_array('x-layui', $js_array)): ?>
 	<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
 <?php endif; ?>
-
+<script src="/static/js/jquery.min.js"></script>
     </head>
     <body>
 	<div class="x-body">
-		<form class="layui-form" enctype="multipart/form-data">
+		<form class="layui-form">
 			<div class="layui-form-item">
 				<label for="banner_img" class="layui-form-label">
 					<span class="x-red">*</span>轮播图
@@ -42,14 +42,15 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 80px; height: 80px;" width="400" src="">
+				<img id="LAY_demo_upload" style="width: 80px; height: 80px;" width="400" src="<?php echo empty($result['img_url'])?'':'/static/uploads/'.$result['img_url']; ?>">
 			</div>
+			
 			<div class="layui-form-item">
 				<label for="link" class="layui-form-label">
 					链接地址
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="link" value="<?php echo url('index'); ?>" name="link_url" class="layui-input">
+					<input type="text" id="link" value="<?php echo htmlentities($result['link_url']); ?>" name="link_url" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -57,7 +58,7 @@
 					图片排序
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="sort" value="0" name="sort" class="layui-input">
+					<input type="text" id="sort" value="<?php echo htmlentities($result['sort']); ?>" name="sort" class="layui-input">
 				</div>
 				<div class="layui-form-mid layui-word-aux">
 					<span class="x-red">越大排在前面最大不能超过255</span>
@@ -66,8 +67,8 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">是否显示</label>
 				<div class="layui-input-block">
-					 <input type="radio" name="is_show" checked value="0" title="显示">
-					 <input type="radio" name="is_show" value="-1" title="隐藏">
+					 <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? '' : 'checked'; ?> value="0" title="显示">
+					 <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? 'checked' : ''; ?> value="-1" title="隐藏">
 				</div>
 			 </div>
 			<div class="layui-form-item">
@@ -83,11 +84,12 @@
 					图片描述
 				</label>
 				<div class="layui-input-block">
-			     	<textarea for="img_des" name="img_des" placeholder="请输入内容" class="layui-textarea"></textarea>
+			     	<textarea for="img_des" name="img_des" placeholder="请输入内容" class="layui-textarea"><?php echo htmlentities($result['img_des']); ?></textarea>
 			    </div>
 			</div>
-			<input type="hidden" name="img_url" value="">
-			<input type="hidden" name="type" value="add">
+			<input type="hidden" name="img_url" value="<?php echo htmlentities($result['img_url']); ?>">
+			<input type="hidden" name="type" value="edit">
+			<input type="hidden" name="id" value="<?php echo htmlentities($result['id']); ?>">
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
@@ -100,8 +102,8 @@
 	<script>
 		layui.use(['form','layer','upload'], function(){
 			$ = layui.jquery;
-		  	var form = layui.form()
-		  	,layer = layui.layer;
+			var form = layui.form()
+			,layer = layui.layer;
 
 
 		  //图片上传接口
@@ -119,13 +121,12 @@
 					layer.msg('图片上传失败', {inco: 5});
 				}
 			}
-		});
+		  });
 		
 
-		  //监听提交
+		//监听提交
 		form.on('submit(add)', function(data){
-			// console.log(data['field']);
-			// var images = $("#banner_img")[0].files[0];
+			// console.log(data);
 			var img_url = $("input[name='img_url']").val();
 			if (!img_url) {
 				layer.msg('请上传图片', {inco: 5});
@@ -135,7 +136,7 @@
 			// 提交数据到后台
 			var _this = parent.layer;
 			$.ajax({
-				url: "<?php echo url('Banner/banner_add'); ?>",
+				url: "<?php echo url('Banner/ajaxEidtData'); ?>",
 				type: 'post',
 				data: data['field'],
 				success:function(res){
@@ -155,6 +156,6 @@
 		  
 		});
 	</script>
-</body>
+	</body>
 
 </html>

@@ -1,4 +1,4 @@
-<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575098746;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1575087724;}*/ ?>
+<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1575087724;}*/ ?>
 	<!-- 头部文件引入 -->
 	<!DOCTYPE html>
 <html>
@@ -25,7 +25,7 @@
 <?php endif; if (in_array('x-layui', $js_array)): ?>
 	<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
 <?php endif; ?>
-
+<script src="/static/js/jquery.min.js"></script>
     </head>
     <body>
 	<body>
