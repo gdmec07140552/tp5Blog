@@ -57,11 +57,9 @@ class Banner extends Model
 		}
 
 		// 如果有新的图片上传则删除旧图片
-		if (!empty($banner['img_url']) && $banner['img_url'] != $data['img_url'])
-		{
-			$config = Config::get('blog_config');
-			unlink($config['upload_url'] . $banner['img_url']);
-		}
+		if (!empty($banner) && $banner!= $data['img_url'])
+			delImage($banner);
+
 		$saveData = [
 			'img_url' => $data['img_url'],
 			'img_des' => $data['img_des'],
@@ -108,11 +106,8 @@ class Banner extends Model
 	 */
 	public function updateOneData($where, $data)
 	{	
-		$result = Db::name($this->table)->where($where)->update($data);
-		if ($result)
-			return 1;
-		else 
-			return 0;
+		return Db::name($this->table)->where($where)->update($data);
+		
 	}
 
 	/**
@@ -128,17 +123,9 @@ class Banner extends Model
 	 * 删除数据
 	 * @return [type] [description]
 	 */
-	public function deleteData()
-	{
-		$data = input();
-		// 删除之前先把图片清除
-		if (!empty($data['img_url']))
-		{
-			$config = Config::pull('blog_config');
-			unlink($config['upload_url'] . '/' . $data['img_url']);
-		}
-
-		$res = Db::name($this->table)->where(['id' => $data['id']])->delete();
+	public function deleteData($where)
+	{		
+		$res = Db::name($this->table)->where($where)->delete();
 
 		if ($res)
 			return ['status' => 1, 'msg' => '删除成功'];

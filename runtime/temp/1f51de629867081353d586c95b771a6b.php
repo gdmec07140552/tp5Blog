@@ -1,4 +1,4 @@
-<?php /*a:5:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\welcome.html";i:1575162368;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\footer.html";i:1575088361;}*/ ?>
+<?php /*a:5:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\welcome.html";i:1575162368;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575278868;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\footer.html";i:1575088361;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,6 +15,7 @@
         <meta name="format-detection" content="telephone=no">
         <!-- css样式文件引入 -->
         <link rel="stylesheet" href="/static/admin/css/x-admin.css" media="all">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
         <!-- js文件引入 -->
         <!-- 判断js文件是否需要引入 -->
 <?php if (in_array('layui', $js_array)): ?>

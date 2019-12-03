@@ -1,4 +1,4 @@
-<?php /*a:4:{s:70:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_edit.html";i:1575196571;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:70:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_edit.html";i:1575248787;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -42,7 +42,7 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 80px; height: 80px;" width="400" src="<?php echo empty($result['img_url'])?'':'/static/uploads/'.$result['img_url']; ?>">
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="<?php echo empty($result['img_url'])?'':'/static/uploads/'.$result['img_url']; ?>">
 			</div>
 			
 			<div class="layui-form-item">

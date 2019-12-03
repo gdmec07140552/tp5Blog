@@ -1,11 +1,10 @@
 <?php
 namespace app\admin\controller;
 
-use think\Db;
 /**
-* 轮播图管理页面
+* 文章分类管理
 */
-class Banner extends Base
+class Category extends Base
 {
 	
 	function __construct()
@@ -14,19 +13,22 @@ class Banner extends Base
 	}
 
 	/**
-	 * 轮播图--列表
+	 * [list 分类列表]
 	 * @return [type] [description]
 	 */
-	public function banner_list()
+	public function list()
 	{
 		$input = input() ? input() : array();
 
-		$result = model('Banner')->getAllData();
-		$this->assign('result', $result);
+		$result = model('Base')->getAllData(0, '', true);
+
+		// dump($result->render());die;
+
+		$this->assign('result' , $result);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
-		return $this->fetch('banner_list');
+		return $this->fetch('list');
 	}
 
 	/**
@@ -105,16 +107,16 @@ class Banner extends Base
 	}
 
 	/**
-	 * 轮播图--添加
+	 * 文章分类--添加
 	 * @return [type] [description]
 	 */
-	public function banner_add()
+	public function add()
 	{
 		$input = input() ? input() : array();
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
-		return $this->fetch('banner_add');
+		return $this->fetch('add');
 	}
 
 	/**
@@ -129,10 +131,10 @@ class Banner extends Base
 	}
 
 	/**
-	 * 轮播图--编辑
+	 * 文章分类--编辑
 	 * @return [type] [description]
 	 */
-	public function banner_edit()
+	public function edit()
 	{
 		$input = input() ? input() : array();
 		
@@ -141,7 +143,7 @@ class Banner extends Base
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-admin']);
-		return $this->fetch('banner_edit');
+		return $this->fetch('edit');
 	}
 
 	/**

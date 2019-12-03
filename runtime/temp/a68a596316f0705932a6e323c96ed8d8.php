@@ -1,4 +1,4 @@
-<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1575087724;}*/ ?>
+<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575278868;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1575271358;}*/ ?>
 	<!-- 头部文件引入 -->
 	<!DOCTYPE html>
 <html>
@@ -16,6 +16,7 @@
         <meta name="format-detection" content="telephone=no">
         <!-- css样式文件引入 -->
         <link rel="stylesheet" href="/static/admin/css/x-admin.css" media="all">
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
         <!-- js文件引入 -->
         <!-- 判断js文件是否需要引入 -->
 <?php if (in_array('layui', $js_array)): ?>
@@ -67,6 +68,27 @@
                         <dd class="">
                             <a href="javascript:;" _href="<?php echo url('Banner/banner_list'); ?>">
                                 <cite>轮播图列表</cite>
+                            </a>
+                        </dd>
+                    </dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a class="javascript:;" href="javascript:;">
+                    <i class="layui-icon" style="top: 3px;">&#xe630;</i><cite>文章管理</cite>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd class="">
+                        <dd class="">
+                            <a href="javascript:;" _href="<?php echo url('Category/list'); ?>">
+                                <cite>分类列表</cite>
+                            </a>
+                        </dd>
+                    </dd>
+                    <dd class="">
+                        <dd class="">
+                            <a href="javascript:;" _href="./question-del.html">
+                                <cite>文章列表</cite>
                             </a>
                         </dd>
                     </dd>
@@ -147,18 +169,6 @@
                                 <cite>订单列表（待开发）</cite>
                             </a>
                         </dd>
-                    </dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-                <a class="javascript:;" href="javascript:;">
-                    <i class="layui-icon" style="top: 3px;">&#xe630;</i><cite>分类管理</cite>
-                </a>
-                <dl class="layui-nav-child">
-                    <dd class="">
-                        <a href="javascript:;" _href="./category.html">
-                            <cite>分类列表</cite>
-                        </a>
                     </dd>
                 </dl>
             </li>

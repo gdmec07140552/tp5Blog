@@ -18,13 +18,13 @@ use think\Image;
 
 /**
  * 图片上传
- * patten: imgName 图片名称
- * patten: $type 1单图片，2多图片
- * patten: $type 0返回图片地址， 1返回数组
- * patten: $thumb true生成缩略图 false不生成
- * patten: $width 缩略图宽度
- * patten: $height 缩略图高度
- * @return [type] [description]
+ * param: imgName 图片名称
+ * param: $type 1单图片，2多图片
+ * param: $type 0返回图片地址， 1返回数组
+ * param: $thumb true生成缩略图 false不生成
+ * param: $width 缩略图宽度
+ * param: $height 缩略图高度
+ * @return [array] [返回数组]
  */
 function uploads($imgName = '', $type = 1, $resType = 0, $thumb = false, $width = 300, $height = 300)
 {
@@ -77,4 +77,15 @@ function uploads($imgName = '', $type = 1, $resType = 0, $thumb = false, $width 
 				return array('status' => -1, 'img_url' => $info->getError());
 		}
 	}
+}
+
+/**
+ * 删除图片
+ * param: img_url 图片地址
+ * @return [type] [description]
+ */
+function delImage($img_url)
+{
+	$config = Config::pull('blog_config');
+	unlink($config['upload_url'] . '/' . $img_url);
 }

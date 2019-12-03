@@ -1,4 +1,4 @@
-<?php /*a:4:{s:70:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_list.html";i:1575270538;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575277123;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\category\list.html";i:1575277946;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575278868;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -108,7 +108,7 @@
             </table>
         </form>
         <input type="hidden" name="totalNum" value="<?php echo count($result); ?>">
-        <div id="page"></div>
+        <div id="page" style="text-align: center;"><?php echo $result; ?></div>
     </div>        
     <script>
         layui.use(['laydate','element','laypage','layer'], function(){

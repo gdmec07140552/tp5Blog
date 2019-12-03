@@ -1,4 +1,4 @@
-<?php /*a:4:{s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_add.html";i:1575187808;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575098746;}*/ ?>
+<?php /*a:4:{s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_add.html";i:1575248799;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575079099;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,7 +24,7 @@
 <?php endif; if (in_array('x-layui', $js_array)): ?>
 	<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
 <?php endif; ?>
-
+<script src="/static/js/jquery.min.js"></script>
     </head>
     <body>
 	<div class="x-body">
@@ -42,7 +42,7 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 80px; height: 80px;" width="400" src="">
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="">
 			</div>
 			<div class="layui-form-item">
 				<label for="link" class="layui-form-label">
@@ -87,7 +87,6 @@
 			    </div>
 			</div>
 			<input type="hidden" name="img_url" value="">
-			<input type="hidden" name="type" value="add">
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
@@ -135,7 +134,7 @@
 			// 提交数据到后台
 			var _this = parent.layer;
 			$.ajax({
-				url: "<?php echo url('Banner/banner_add'); ?>",
+				url: "<?php echo url('Banner/ajaxAddData'); ?>",
 				type: 'post',
 				data: data['field'],
 				success:function(res){
