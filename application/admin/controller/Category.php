@@ -20,12 +20,13 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 
-		$result = model('Base')->getAllData(0, '', true);
+		$result = model('Category')->getAllData('', 0, ['sort' => 'desc', 'cate_id' => 'desc'] , true);
+		// dump($result);
+		// 打印树形数据
+		$cate = model('Category')->getTree($result);
 
-		// dump($result->render());die;
-
+		$this->assign('cate', $cate);
 		$this->assign('result' , $result);
-
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
 		return $this->fetch('list');
@@ -39,9 +40,9 @@ class Category extends Base
 	{
 		$data = input();
 
-		if (empty($data['id']))
+		if (empty($data['cate_id']))
 			return json(['status' => 0, 'msg' => '删除失败']);
-		$result = model('Banner')->deleteData(['id' => $data['id']]);		
+		$result = model('Category')->deleteData(['cate_id' => $data['cate_id']]);		
 		// 删除成功之后先把图片清除
 		if (!empty($data['img_url']) && $result['status'] == 1)
 			delImage($data['img_url']);
@@ -65,7 +66,7 @@ class Category extends Base
 			// 轮播id和图片地址分离
 			foreach ($data['id_image'] as $key => $value) {
 				$idImage = explode('--', $value);
-				$result = model('Banner')->deleteData(['id' => $idImage['0']]);
+				$result = model('Category')->deleteData(['cate_id' => $idImage['0']]);
 				if (!empty($idImage[1]) && $result['status'] == 1)
 					delImage($idImage[1]);
 
@@ -85,7 +86,7 @@ class Category extends Base
 	public function ajaxIsShow()
 	{
 		$input = input() ? input() : array();
-		$result = model('Banner')->updateOneData(['id' => $input['id']], ['is_show' => $input['is_show']]);
+		$result = model('Category')->updateOneData(['cate_id' => $input['cate_id']], ['is_show' => $input['is_show']]);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -99,7 +100,7 @@ class Category extends Base
 	public function ajaxSort()
 	{
 		$input = input() ? input() : array();
-		$result = model('Banner')->updateOneData(['id' => $input['id']], ['sort' => $input['sort']]);
+		$result = model('Category')->updateOneData(['cate_id' => $input['cate_id']], ['sort' => $input['sort']]);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -114,6 +115,16 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 
+		//取出所有的分类
+		$cate = model('Category')->getAllData(
+				'cate_id, cate_name, pid',
+				0,
+				['sort' => 'desc', 'cate_id' => 'desc']
+			);
+
+		$result = model('Category')->getTrees($cate);
+		$this->assign('cate', $result);
+
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
 		return $this->fetch('add');
@@ -126,8 +137,14 @@ class Category extends Base
 	public function ajaxAddData()
 	{
 		//添加数据
-		$result = model('Banner')->addData();
-		return json($result);
+		$input = input('post.');
+		if (empty($input))
+			return json(['status' => 0, 'msg' => '添加失败']);
+		$result = model('Category')->insertData($input);
+		if ($result)
+			return json(['status' => 1, 'msg' => '添加成功']);
+		else
+			return json(['status' => 0, 'msg' => '添加失败']);
 	}
 
 	/**
@@ -138,8 +155,16 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 		
-		$result = model('Banner')->getOneData(['id' => input('id')]);
+		$result = model('Category')->getOneData(['cate_id' => input('cate_id')]);
 		$this->assign('result', $result);
+		// 获取分类数据
+		$array = model('Category')->getAllData(
+				'cate_id, cate_name, pid',
+				0,
+				['sort' => 'desc', 'cate_id' => 'desc']
+			);
+		$cate = model('Category')->getTrees($array);
+		$this->assign('cate', $cate);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-admin']);
@@ -152,8 +177,13 @@ class Category extends Base
 	 */
 	public function ajaxEidtData()
 	{
+		$input = input('post.') ? input('post.') : array();
 		// 修改数据
-		$result = model('Banner')->saveData();
-		return json($result);
+		if (empty($input['cate_id']))
+			return json(['status' => 0, 'msg' => '修改失败']);
+		$cate_id = $input['cate_id'];
+		unset($input['cate_id']);
+		$result = model('Category')->editData(['cate_id' => $cate_id], $input);
+		return json(['status' => 1, 'msg' => '修改成功']);
 	}
 }

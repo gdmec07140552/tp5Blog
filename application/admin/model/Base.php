@@ -11,11 +11,10 @@ use think\facade\Config;
 */
 class Base extends Model
 {
-	protected $table = 'banner';
+	protected $table = '';
 	function __construct()
 	{
 		parent::__construct();
-		$this->table = $this->table;
 	}
 
 	/**
@@ -32,43 +31,74 @@ class Base extends Model
 
 	/**
 	 * [getAllData 获取所有的数据]
+	 * param [field 获取字段]
 	 * param [num 0获取所有数据]
 	 * param [order 排序]
 	 * param [page false表示不分页]
-	 * pageNum [page 显示分页数据,默认是10条]
+	 * param [pageNum 显示分页数据,默认是10条]
+	 * param [isTotal 是否显示分页数]
 	 * @return [type] [description]
 	 */
-	public function getAllData($num = 0, $order = [], $page = false, $pageNum = 1)
+	public function getAllData($field = '', $num = 0, $order = [], $page = false, $pageNum = 10, $isTotal = false)
 	{
 		if ($page)
 		{
-			$result = Db::name($this->table)->order($order)->limit($num)->paginate($pageNum);
-			// dump($result->lastPage());die;
+			$result = Db::name($this->table)->field($field)->order($order)->limit($num)->paginate($pageNum);
 			// 拼接分页总数
-			// <ul class="pagination"><li class="disabled"><span>上一页</span></li> </ul>
-			if (count($result) > 0)
+			if (!$result->render())
 			{
-				$str = '<li class="disabled"><span>总共1页'. $result->total() .'条数据</span></li>';
+				$pageHtml = '<ul class="pagination"><li class="disabled"><span>总共'. $result->lastPage() .'页'. $result->total() .'条数据</span></li></ul>';
+			} else {
+				$ulArray = explode('</ul>', $result->render());
+				$pageHtml = $ulArray[0] . '<li class="disabled"><span>总共'. $result->lastPage() .'页'. $result->total() .'条数据</span></li>' . $ulArray[1];
 			}
 			$data = [
 				'result' => $result,
-				'page' => $result->render()
+				'page' => $pageHtml
 			];
-			return $result;
+			if ($isTotal == true)
+				return $data;
+			else
+				return $result;
 		} else {
-			return Db::name($this->table)->limit($num)->order($order)->select();
+			return Db::name($this->table)->limit($num)->field($field)->order($order)->select();
 		}
-		// return Db::name('banner')->order($order)->limit($num)->paginate($page);
-		// if ($num == 0)
-		// {
-		// 	return Db::name($this->table)->order($order)->select();
-		// 	if (empty($order))
-		// 	{
 
-		// 	}
-		// } else {
-		// 	return Db::name('banner')->order($order)->limit($num)->select()->paginate($page);
-		// }
+	}
 
+	/**
+	 * [editData 修改数据]
+	 * @return [type] [description]
+	 */
+	public function editData($where, $data = [])
+	{
+		return Db::name($this->table)->where($where)->update($data);
+	}
+
+	/**
+	 * [deleteData 删除数据]
+	 * @return [type] [description]
+	 */
+	public function deleteData($where)
+	{
+		return Db::name($this->table)->where($where)->delete();
+	}
+
+	/**
+	 * [insertData 添加单条数据]
+	 * @return [type] [description]
+	 */
+	public function insertData($data)
+	{
+		return Db::name($this->table)->insertGetId($data);
+	}
+
+	/**
+	 * [insertAllData 添加多条数据]
+	 * @return [type] [description]
+	 */
+	public function insertAllData($data)
+	{
+		return Db::name($this->table)->insertAll($data);
 	}
 }

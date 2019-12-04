@@ -1,4 +1,4 @@
-<?php /*a:4:{s:70:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_edit.html";i:1575248787;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\category\edit.html";i:1575367479;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,32 +31,27 @@
 	<div class="x-body">
 		<form class="layui-form">
 			<div class="layui-form-item">
-				<label for="banner_img" class="layui-form-label">
-					<span class="x-red">*</span>轮播图
-				</label>
-				<div class="layui-input-inline">
-				  <div class="site-demo-upbar">
-					<input type="file" name="images" class="layui-upload-file" id="banner_img">
-				  </div>
+				<label class="layui-form-label" for="pid">所属分类</label>
+				<div class="layui-input-block" style="width: 300px;">
+					<select name="pid" id="pid">
+						<option value="0">顶级分类</option>
+						<?php foreach($cate as $v): ?>
+							<option <?php echo $v['cate_id']==$result['pid'] ? 'selected' : ''; ?> value="<?php echo htmlentities($v['cate_id']); ?>"><?php echo htmlentities($v['cate_name']); ?></option>
+						<?php endforeach; ?>
+					</select>
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label  class="layui-form-label">缩略图
-				</label>
-				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="<?php echo empty($result['img_url'])?'':'/static/uploads/'.$result['img_url']; ?>">
-			</div>
-			
-			<div class="layui-form-item">
 				<label for="link" class="layui-form-label">
-					链接地址
+					分类名称
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="link" value="<?php echo htmlentities($result['link_url']); ?>" name="link_url" class="layui-input">
+					<input type="text" id="link" value="<?php echo htmlentities($result['cate_name']); ?>" name="cate_name" class="layui-input" lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label for="sort" class="layui-form-label">
-					图片排序
+					分类排序
 				</label>
 				<div class="layui-input-inline">
 					<input type="text" id="sort" value="<?php echo htmlentities($result['sort']); ?>" name="sort" class="layui-input">
@@ -72,25 +67,7 @@
 					 <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? 'checked' : ''; ?> value="-1" title="隐藏">
 				</div>
 			 </div>
-			<div class="layui-form-item">
-				<label class="layui-form-label" for="author_id">选择作者</label>
-				<div class="layui-input-block">
-					<select name="author_id" id="author_id" lay-verify="required">
-						<option value="0">请选择</option>
-					</select>
-				</div>
-			</div>
-			<div class="layui-form-item layui-form-text">
-				<label for="img_des" class="layui-form-label">
-					图片描述
-				</label>
-				<div class="layui-input-block">
-			     	<textarea for="img_des" name="img_des" placeholder="请输入内容" class="layui-textarea"><?php echo htmlentities($result['img_des']); ?></textarea>
-			    </div>
-			</div>
-			<input type="hidden" name="img_url" value="<?php echo htmlentities($result['img_url']); ?>">
-			<input type="hidden" name="type" value="edit">
-			<input type="hidden" name="id" value="<?php echo htmlentities($result['id']); ?>">
+			<input type="hidden" name="cate_id" value="<?php echo htmlentities($result['cate_id']); ?>">
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
@@ -101,49 +78,29 @@
 		</form>
 	</div>
 	<script>
-		layui.use(['form','layer','upload'], function(){
+		layui.use(['form','layer'], function(){
 			$ = layui.jquery;
 			var form = layui.form()
 			,layer = layui.layer;
 
-
-		  //图片上传接口
-		layui.upload({
-			url: '<?php echo url("Base/uploads"); ?>' //上传接口
-			,success: function(res){ //上传成功后的回调
-				// console.log(res);
-				if (res['status'] == 1)
-				{	var upload_url = "<?php echo '/static/uploads/'; ?>";
-					var img_url = upload_url + res['img_url'];
-					// 显示图片并记录图片地址
-					$('input[name="img_url"]').val(res['img_url']);
-			  		$('#LAY_demo_upload').attr('src', img_url);
-				} else {
-					layer.msg('图片上传失败', {inco: 5});
-				}
-			}
-		  });
-		
-
 		//监听提交
 		form.on('submit(add)', function(data){
-			// console.log(data);
-			var img_url = $("input[name='img_url']").val();
-			if (!img_url) {
-				layer.msg('请上传图片', {inco: 5});
+			var cate_name = $("input[name='cate_name']").val();
+			if (!cate_name)
+			{
+				layer.msg('分类名称不能为空');
 				return false;
 			}
-
 			// 提交数据到后台
 			var _this = parent.layer;
 			$.ajax({
-				url: "<?php echo url('Banner/ajaxEidtData'); ?>",
+				url: "<?php echo url('Category/ajaxEidtData'); ?>",
 				type: 'post',
 				data: data['field'],
 				success:function(res){
 					if (res['status'] == 1)
 					{
-						// window.location.href = "<?php echo url('Banner/banner_list'); ?>";
+						// window.location.href = "<?php echo url('Category/banner_list'); ?>";
 						var index = _this.getFrameIndex(window.name);
 						_this.close(index);
 					} else {
