@@ -58,10 +58,10 @@ CREATE TABLE IF NOT EXISTS blog_author
 	author_id int(11) NOT NULL AUTO_INCREMENT,
 	author char(20) NOT NULL DEFAULT '' COMMENT '作者',
 	head_img varchar(255) NOT NULL DEFAULT '2' COMMENT '头像',
-	sex tinyint(1) NOT NULL DEFAULT '1' COMMENT '性别：0妹子，1渣男，2禽兽不如',
+	sex tinyint(1) NOT NULL DEFAULT '1' COMMENT '性别：0妹子，1渣男，2禽兽',
 	introduction char(100) NOT NULL DEFAULT '' COMMENT '简介',
 	content varchar(255) NOT NULL DEFAULT '' COMMENT '个人说明',
-	is_use tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁言：0正常，-1禁用',
+	is_show tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁言：0正常，-1禁用',
 	sort tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序：越大排在前面最大不能超过255',
 	create_time int(11) NOT NULL DEFAULT '0' COMMENT '发布时间',
 	PRIMARY KEY (author_id)

@@ -1,4 +1,4 @@
-<?php /*a:4:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\category\list.html";i:1575365778;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\category\list.html";i:1575426792;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -152,9 +152,8 @@
         function banner_del(_this,id){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
-                $.post(
-                    '<?php echo url("Category/ajaxDeleteData"); ?>',
-                    {id: id},
+                $.get(
+                    '<?php echo url("Category/ajaxDeleteData"); ?>/cate_id/'+id,
                     function(res){               
                         if (res['status'] == 1)
                         {

@@ -123,9 +123,8 @@
         function banner_del(_this,id){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
-                $.post(
-                    '{:url("Category/ajaxDeleteData")}',
-                    {id: id},
+                $.get(
+                    '{:url("Category/ajaxDeleteData")}/cate_id/'+id,
                     function(res){               
                         if (res['status'] == 1)
                         {

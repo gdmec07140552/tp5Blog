@@ -5,7 +5,7 @@ use think\Db;
 /**
 * 文章分类管理
 */
-class Category extends Base
+class Author extends Base
 {
 	
 	function __construct()
@@ -20,14 +20,9 @@ class Category extends Base
 	public function list()
 	{
 		$input = input() ? input() : array();
-
-		$result = model('Category')->getPage([],'', 0, ['sort' => 'desc', 'cate_id' => 'desc']);
-		// dump($result);
-		// 打印树形数据
-		$cate = model('Category')->getTree($result);
-
-		$this->assign('cate', $cate);
+		$result = model('Author')->getPage([],'', 0, ['sort' => 'desc', 'author_id' => 'desc']);
 		$this->assign('result' , $result);
+
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
 		return $this->fetch('list');
@@ -41,13 +36,13 @@ class Category extends Base
 	{
 		$data = input();
 
-		if (empty($data['cate_id']))
+		if (empty($data['author_id']))
 			return json(['status' => 0, 'msg' => '删除失败']);
-		$result = model('Category')->deleteData(['cate_id' => $data['cate_id']]);
+		$result = model('Author')->deleteData(['author_id' => $data['author_id']]);
 		if ($result)
 		{
 			// 删除成则把它下级分类设置成一级分类
-			model('Category')->editData(['pid' => $data['cate_id']], ['pid' => 0]);
+			model('Author')->editData(['pid' => $data['author_id']], ['pid' => 0]);
 			return json(['status' => 1, 'msg' => '删除成功']);
 		} else {
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -65,11 +60,11 @@ class Category extends Base
 			return json(['status' => 0, 'msg' => '删除失败']);
 		Db::startTrans();
 		try {
-			$where['cate_id'] = ['IN', $data['idArr']];
-			model('Category')->deleteData($where);
+			$where['author_id'] = ['IN', $data['idArr']];
+			model('Author')->deleteData($where);
 			// 删除成则把它下级分类设置成一级分类
 			foreach ($data['idArr'] as $value) {
-				model('Category')->editData(['pid' => $value], ['pid' => 0]);
+				model('Author')->editData(['pid' => $value], ['pid' => 0]);
 			}
 			Db::commit();
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -86,7 +81,7 @@ class Category extends Base
 	public function ajaxIsShow()
 	{
 		$input = input() ? input() : array();
-		$result = model('Category')->editData(['cate_id' => $input['cate_id']], ['is_show' => $input['is_show']]);
+		$result = model('Author')->editData(['author_id' => $input['author_id']], ['is_show' => $input['is_show']]);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -100,7 +95,7 @@ class Category extends Base
 	public function ajaxSort()
 	{
 		$input = input() ? input() : array();
-		$result = model('Category')->editData(['cate_id' => $input['cate_id']], ['sort' => $input['sort']]);
+		$result = model('Author')->editData(['author_id' => $input['author_id']], ['sort' => $input['sort']]);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -115,17 +110,6 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 
-		//取出所有的分类
-		$cate = model('Category')->getAllData(
-				[],
-				'cate_id, cate_name, pid',
-				0,
-				['sort' => 'desc', 'cate_id' => 'desc']
-			);
-
-		$result = model('Category')->getTrees($cate);
-		$this->assign('cate', $result);
-
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
 		return $this->fetch('add');
@@ -139,9 +123,11 @@ class Category extends Base
 	{
 		//添加数据
 		$input = input('post.');
+		unset($input['images']);
+		$input['create_time'] = time();
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
-		$result = model('Category')->insertData($input);
+		$result = model('Author')->insertData($input);
 		if ($result)
 			return json(['status' => 1, 'msg' => '添加成功']);
 		else
@@ -156,17 +142,8 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 		
-		$result = model('Category')->getOneData(['cate_id' => input('cate_id')]);
+		$result = model('Author')->getOneData(['author_id' => input('author_id')]);
 		$this->assign('result', $result);
-		// 获取分类数据
-		$array = model('Category')->getAllData(
-				[],
-				'cate_id, cate_name, pid',
-				0,
-				['sort' => 'desc', 'cate_id' => 'desc']
-			);
-		$cate = model('Category')->getTrees($array);
-		$this->assign('cate', $cate);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-admin']);
@@ -180,21 +157,21 @@ class Category extends Base
 	public function ajaxEidtData()
 	{
 		$input = input('post.') ? input('post.') : array();
-		$cate_id = $input['cate_id'];
-		unset($input['cate_id']);
+		$author = $input['author_id'];
+		unset($input['author_id']);
 		// 查找是否有该分类
-		$cate = model('Category')->getOneData(['cate_id' => $cate_id], 'pid');		
+		$cate = model('Author')->getOneData(['author_id' => $author], 'pid');		
 		if (!$cate)
 			return json(['status' => 0, 'msg' => '修改失败']);
 		Db::startTrans();
 		try {
 			// 如果把当前分类设置成自己的子分类的话，则把他设置成顶级分类
-			if ($cate_id == $input['pid'])
+			if ($author == $input['pid'])
 				$input['pid'] = 0;
-			model('Category')->editData(['cate_id' => $cate_id], $input);
+			model('Author')->editData(['author_id' => $author], $input);
 			// 如果是顶级分类修改的话，则把他的下一级分类设置成顶级分类
 			if ($cate['pid'] == 0)
-				model('Category')->editData(['pid' => $cate_id], ['pid' => 0]);
+				model('Author')->editData(['pid' => $author], ['pid' => 0]);
 
 			Db::commit();
 			return json(['status' => 1, 'msg' => '修改成功']);

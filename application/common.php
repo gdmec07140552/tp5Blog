@@ -89,3 +89,20 @@ function delImage($img_url)
 	$config = Config::pull('blog_config');
 	unlink($config['upload_url'] . '/' . $img_url);
 }
+
+/**
+ * [arrayStringToInt 数组中string类型转int]
+ * @param  [type] $array [转换数组]
+ * @return [type]        [description]
+ */
+function arrayStringToInt($array)
+{
+	// foreach ($array as $key => $value) {
+	// 	$array[$key] = (int) $value;
+	// }
+	// return $array;
+	$newArr = array_map(function($data){
+		return (int) $data;
+	}, $array);
+	return $newArr;
+}

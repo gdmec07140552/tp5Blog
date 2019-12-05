@@ -5,6 +5,7 @@ use think\Db;
 use think\Model;
 use think\facade\Session;
 use think\facade\Config;
+use think\db\Where;
 
 /**
 * 通用基类
@@ -19,18 +20,45 @@ class Base extends Model
 
 	/**
 	 * [getOneData 获取单挑数据]
-	 * @return [type] [description]
+	 * @param  [type] $where [查询条件]
+	 * @param  string $field [获取字段]
+	 * @return [type]        [description]
 	 */
 	public function getOneData($where, $fieLd = '')
 	{
 		if (empty($fieLd))
-			return Db::name($this->table)->where($where)->find();
+			return Db::name($this->table)->where(new Where($where))->find();
 		else
-			return Db::name($this->table)->where($where)->value($fieLd);
+			return Db::name($this->table)->where(new Where($where))->field($fieLd)->find();
+	}
+
+	/**
+	 * [getValue 获取单条数据]
+	 * @param  [type] $where [查询条件]
+	 * @param  string $field [获取字段]
+	 * @return [type]        [description]
+	 */
+	public function getValue($where, $field = '')
+	{
+		return Db::name($this->table)->where(new Where($where))->value($fieLd);
 	}
 
 	/**
 	 * [getAllData 获取所有的数据]
+	 * param [field 获取字段]
+	 * param [num 0获取所有数据]
+	 * param [order 排序]
+	 * param [where 查询条件]
+	 * @return [type] [description]
+	 */
+	public function getAllData($where = [], $field = '', $num = 0, $order = [])
+	{
+		return Db::name($this->table)->where(new Where($where))->limit($num)->field($field)->order($order)->select();
+
+	}
+
+	/**
+	 * [getPage 获取所有的数据]
 	 * param [field 获取字段]
 	 * param [num 0获取所有数据]
 	 * param [order 排序]
@@ -39,30 +67,26 @@ class Base extends Model
 	 * param [isTotal 是否显示分页数]
 	 * @return [type] [description]
 	 */
-	public function getAllData($field = '', $num = 0, $order = [], $page = false, $pageNum = 10, $isTotal = false)
+	public function getPage($where = [], $field = '', $num = 0, $order = [], $pageNum = 15, $isTotal = false)
 	{
-		if ($page)
+
+		$result = Db::name($this->table)->where(new Where($where))->field($field)->order($order)->limit($num)->paginate($pageNum);
+		// 拼接分页总数
+		if (!$result->render())
 		{
-			$result = Db::name($this->table)->field($field)->order($order)->limit($num)->paginate($pageNum);
-			// 拼接分页总数
-			if (!$result->render())
-			{
-				$pageHtml = '<ul class="pagination"><li class="disabled"><span>总共'. $result->lastPage() .'页'. $result->total() .'条数据</span></li></ul>';
-			} else {
-				$ulArray = explode('</ul>', $result->render());
-				$pageHtml = $ulArray[0] . '<li class="disabled"><span>总共'. $result->lastPage() .'页'. $result->total() .'条数据</span></li>' . $ulArray[1];
-			}
-			$data = [
-				'result' => $result,
-				'page' => $pageHtml
-			];
-			if ($isTotal == true)
-				return $data;
-			else
-				return $result;
+			$pageHtml = '<ul class="pagination"><li class="disabled"><span>总共'. $result->lastPage() .'页'. $result->total() .'条数据</span></li></ul>';
 		} else {
-			return Db::name($this->table)->limit($num)->field($field)->order($order)->select();
+			$ulArray = explode('</ul>', $result->render());
+			$pageHtml = $ulArray[0] . '<li class="disabled"><span>总共'. $result->lastPage() .'页'. $result->total() .'条数据</span></li>' . $ulArray[1];
 		}
+		$data = [
+			'result' => $result,
+			'page' => $pageHtml
+		];
+		if ($isTotal == true)
+			return $data;
+		else
+			return $result;
 
 	}
 
@@ -70,18 +94,18 @@ class Base extends Model
 	 * [editData 修改数据]
 	 * @return [type] [description]
 	 */
-	public function editData($where, $data = [])
+	public function editData($where = [], $data = [])
 	{
-		return Db::name($this->table)->where($where)->update($data);
+		return Db::name($this->table)->where(new Where($where))->update($data);
 	}
 
 	/**
 	 * [deleteData 删除数据]
 	 * @return [type] [description]
 	 */
-	public function deleteData($where)
+	public function deleteData($where = [])
 	{
-		return Db::name($this->table)->where($where)->delete();
+		return Db::name($this->table)->where(new Where($where))->delete();
 	}
 
 	/**

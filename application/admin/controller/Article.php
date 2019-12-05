@@ -5,7 +5,7 @@ use think\Db;
 /**
 * 文章分类管理
 */
-class Category extends Base
+class Article extends Base
 {
 	
 	function __construct()
@@ -21,10 +21,10 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 
-		$result = model('Category')->getPage([],'', 0, ['sort' => 'desc', 'cate_id' => 'desc']);
+		$result = model('Article')->getPage([],'', 0, ['sort' => 'desc', 'cate_id' => 'desc']);
 		// dump($result);
 		// 打印树形数据
-		$cate = model('Category')->getTree($result);
+		$cate = model('Article')->getTree($result);
 
 		$this->assign('cate', $cate);
 		$this->assign('result' , $result);
@@ -43,11 +43,11 @@ class Category extends Base
 
 		if (empty($data['cate_id']))
 			return json(['status' => 0, 'msg' => '删除失败']);
-		$result = model('Category')->deleteData(['cate_id' => $data['cate_id']]);
+		$result = model('Article')->deleteData(['cate_id' => $data['cate_id']]);
 		if ($result)
 		{
 			// 删除成则把它下级分类设置成一级分类
-			model('Category')->editData(['pid' => $data['cate_id']], ['pid' => 0]);
+			model('Article')->editData(['pid' => $data['cate_id']], ['pid' => 0]);
 			return json(['status' => 1, 'msg' => '删除成功']);
 		} else {
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -66,10 +66,10 @@ class Category extends Base
 		Db::startTrans();
 		try {
 			$where['cate_id'] = ['IN', $data['idArr']];
-			model('Category')->deleteData($where);
+			model('Article')->deleteData($where);
 			// 删除成则把它下级分类设置成一级分类
 			foreach ($data['idArr'] as $value) {
-				model('Category')->editData(['pid' => $value], ['pid' => 0]);
+				model('Article')->editData(['pid' => $value], ['pid' => 0]);
 			}
 			Db::commit();
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -86,7 +86,7 @@ class Category extends Base
 	public function ajaxIsShow()
 	{
 		$input = input() ? input() : array();
-		$result = model('Category')->editData(['cate_id' => $input['cate_id']], ['is_show' => $input['is_show']]);
+		$result = model('Article')->editData(['cate_id' => $input['cate_id']], ['is_show' => $input['is_show']]);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -100,7 +100,7 @@ class Category extends Base
 	public function ajaxSort()
 	{
 		$input = input() ? input() : array();
-		$result = model('Category')->editData(['cate_id' => $input['cate_id']], ['sort' => $input['sort']]);
+		$result = model('Article')->editData(['cate_id' => $input['cate_id']], ['sort' => $input['sort']]);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -116,14 +116,14 @@ class Category extends Base
 		$input = input() ? input() : array();
 
 		//取出所有的分类
-		$cate = model('Category')->getAllData(
+		$cate = model('Article')->getAllData(
 				[],
 				'cate_id, cate_name, pid',
 				0,
 				['sort' => 'desc', 'cate_id' => 'desc']
 			);
 
-		$result = model('Category')->getTrees($cate);
+		$result = model('Article')->getTrees($cate);
 		$this->assign('cate', $result);
 
 		//引入js文件
@@ -141,7 +141,7 @@ class Category extends Base
 		$input = input('post.');
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
-		$result = model('Category')->insertData($input);
+		$result = model('Article')->insertData($input);
 		if ($result)
 			return json(['status' => 1, 'msg' => '添加成功']);
 		else
@@ -156,16 +156,16 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 		
-		$result = model('Category')->getOneData(['cate_id' => input('cate_id')]);
+		$result = model('Article')->getOneData(['cate_id' => input('cate_id')]);
 		$this->assign('result', $result);
 		// 获取分类数据
-		$array = model('Category')->getAllData(
+		$array = model('Article')->getAllData(
 				[],
 				'cate_id, cate_name, pid',
 				0,
 				['sort' => 'desc', 'cate_id' => 'desc']
 			);
-		$cate = model('Category')->getTrees($array);
+		$cate = model('Article')->getTrees($array);
 		$this->assign('cate', $cate);
 
 		//引入js文件
@@ -183,7 +183,7 @@ class Category extends Base
 		$cate_id = $input['cate_id'];
 		unset($input['cate_id']);
 		// 查找是否有该分类
-		$cate = model('Category')->getOneData(['cate_id' => $cate_id], 'pid');		
+		$cate = model('Article')->getOneData(['cate_id' => $cate_id], 'pid');		
 		if (!$cate)
 			return json(['status' => 0, 'msg' => '修改失败']);
 		Db::startTrans();
@@ -191,10 +191,10 @@ class Category extends Base
 			// 如果把当前分类设置成自己的子分类的话，则把他设置成顶级分类
 			if ($cate_id == $input['pid'])
 				$input['pid'] = 0;
-			model('Category')->editData(['cate_id' => $cate_id], $input);
+			model('Article')->editData(['cate_id' => $cate_id], $input);
 			// 如果是顶级分类修改的话，则把他的下一级分类设置成顶级分类
 			if ($cate['pid'] == 0)
-				model('Category')->editData(['pid' => $cate_id], ['pid' => 0]);
+				model('Article')->editData(['pid' => $cate_id], ['pid' => 0]);
 
 			Db::commit();
 			return json(['status' => 1, 'msg' => '修改成功']);

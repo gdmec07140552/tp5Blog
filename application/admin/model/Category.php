@@ -66,7 +66,7 @@ class Category extends Base
 		foreach ($list as $k => $val) {
 			if (isset($list[$val['pid']]))
 			{
-				$list[$val['pid']]['son'] = &$list[$k];
+				$list[$val['pid']]['son'][$k] = &$list[$k];
 			} else {
 				$tree[] = &$list[$k];
 			}
@@ -92,15 +92,13 @@ class Category extends Base
 		foreach ($array as $key => $value) {
 			if (!empty($array[$key][$str]))
 			{
-				// 定义一个临时数组
-				$newArr[] = $array[$key][$str];
+				$newArr = $value[$str];
 				unset($array[$key][$str]);
 				if ($level > 0 && $isStr == true)
 					$value['cate_name'] = '|' . str_repeat('----', $level) . $value['cate_name'];
 				$list[] = $value;
-				$this->arrayMoreToOne($newArr, $str, $level + 1);
-				// 把这个临时数组清除
-				unset($newArr);
+				//开始递归,查找父array后面去添加数组,级别则为原级别+1
+				$this->arrayMoreToOne($value[$str], $str, $level + 1);
 			} else {
 				if ($level > 0 && $isStr == true)
 					$value['cate_name'] = '|' . str_repeat('----', $level) . $value['cate_name'];

@@ -1,4 +1,4 @@
-<?php /*a:4:{s:70:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_list.html";i:1575447197;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\list.html";i:1575451503;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,13 +31,13 @@
     <div class="x-nav">
         <span class="layui-breadcrumb">
           <a><cite>首页</cite></a>
-          <a><cite>轮播管理</cite></a>
-          <a><cite>轮播列表</cite></a>
+          <a><cite>作者管理</cite></a>
+          <a><cite>作者列表</cite></a>
         </span>
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加轮播图','<?php echo url("Banner/banner_add"); ?>','600','630')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
+        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加作者','<?php echo url("Author/add"); ?>','','')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
         <form>
             <table class="layui-table">
                 <thead>
@@ -49,13 +49,16 @@
                             排序
                         </th>
                         <th>
-                            缩略图
+                            头像
                         </th>
                         <th>
-                            链接
+                            昵称
                         </th>
                         <th>
-                            描述
+                            性别
+                        </th>
+                        <th>
+                            详情
                         </th>
                         <th>
                             显示状态
@@ -69,23 +72,35 @@
                     <?php foreach($result as $k => $res): ?>
                     <tr>
                         <td>
-                            <input type="checkbox" value="<?php echo htmlentities($res['id'].'--'.$res['img_url']); ?>" name="id_image[]" lay-skin="primary">
+                            <input type="checkbox" value="<?php echo htmlentities($res['author_id'].'--'.$res['head_img']); ?>" name="id_image[]" lay-skin="primary">
                         </td>
                         <td>
-                            <input style="width: 50px;" type="text" data-id="<?php echo htmlentities($res['id']); ?>" value="<?php echo htmlentities($res['sort']); ?>" class="layui-input">  
+                            <input style="width: 50px;" type="text" data-author_id="<?php echo htmlentities($res['author_id']); ?>" value="<?php echo htmlentities($res['sort']); ?>" class="layui-input">  
                             
                         </td>
                         <td>
-                            <img style="height: 80px; width: auto;" src="/static/uploads/<?php echo htmlentities($res['img_url']); ?>" width="200" alt="<?php echo htmlentities($res['img_des']); ?>">
+                            <img style="height: 80px; width: auto;"  src="/static/uploads/<?php echo htmlentities($res['head_img']); ?>" width="200" alt="<?php echo htmlentities($res['introduction']); ?>">
+
                         </td>
                         <td >
-                            <?php echo htmlentities($res['link_url']); ?>
+                            <?php echo htmlentities($res['author']); ?>
                         </td>
                         <td >
-                            <?php echo htmlentities($res['img_des']); ?>
+                            <?php if($res['sex']==0): ?>
+                                <button type="button" style="padding: 0 10px;" class="layui-btn layui-btn-warm">妹子</button>
+                            <?php elseif($res['sex']==1): ?>
+                                <button type="button" style="padding: 0 10px;" class="layui-btn layui-btn-danger">渣男</button>
+                            <?php else: ?>
+                                <button type="button" style="padding: 0 10px;" class="layui-btn layui-btn-disabled">禽兽</button>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="showDetail">
+                                <i class="layui-icon" style="top: 3px; font-size: 30px;">&#xe60b;</i>
+                            </a>
                         </td>
                         <td class="td-status">
-                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-id="<?php echo htmlentities($res['id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
+                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-author_id="<?php echo htmlentities($res['author_id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
                                 <?php echo $res['is_show']==-1 ? '隐藏' : '显示'; ?>
                             </span>
                         </td>
@@ -93,11 +108,11 @@
                             <!-- <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a> -->
-                            <a title="编辑" href="javascript:;" onclick="banner_edit('编辑','<?php echo url('Banner/banner_edit'); ?>?id=<?php echo htmlentities($res['id']); ?>','4','600','630')"
+                            <a title="编辑作者" href="javascript:;" onclick="banner_edit('编辑作者','<?php echo url('Author/banner_edit'); ?>?author_id=<?php echo htmlentities($res['author_id']); ?>','4','600','630')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['id']); ?>, '<?php echo htmlentities($res['img_url']); ?>')" 
+                            <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['author_id']); ?>, '<?php echo htmlentities($res['head_img']); ?>')" 
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
@@ -109,24 +124,100 @@
         </form>
         <input type="hidden" name="totalNum" value="<?php echo count($result); ?>">
         <div id="page"></div>
-    </div>        
+    </div>
+    <div id="x-body"></div>
+    <script id="detialHtml" type="text/html">
+        <div class="x-body">
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">缩略图
+                    </label>
+                    <img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="">
+                </div>
+                <div class="layui-form-item">
+                    <label for="author" class="layui-form-label">
+                        作者名字
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="author" value="德玛西亚" placeholder="请输入你的名字" name="author" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="sort" class="layui-form-label">
+                        展示顺序
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="sort" value="0" name="sort" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">
+                        <span class="x-red">越大排在前面最大不能超过255</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">作者性别</label>
+                    <div class="layui-input-block">
+                         <input type="radio" name="sex" value="0" title="妹子">
+                         <input type="radio" name="sex" value="1" checked title="渣男">
+                         <input type="radio" name="sex" value="2" title="禽兽不如">
+                    </div>
+                 </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否显示</label>
+                    <div class="layui-input-block">
+                         <input type="radio" name="is_show" checked value="0" title="显示">
+                         <input type="radio" name="is_show" value="-1" title="隐藏">
+                    </div>
+                 </div>
+                <div class="layui-form-item layui-form-text">
+                    <label for="introduction" class="layui-form-label">
+                        个人简介
+                    </label>
+                    <div class="layui-input-block">
+                        <textarea for="introduction" name="introduction" placeholder="请输入内容" class="layui-textarea">该作者懒得要死，什么也没有留下。。。(๑‾᷅^‾᷅๑) 嫌弃你</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label for="content" class="layui-form-label">
+                        个人说明
+                    </label>
+                    <div class="layui-input-block">
+                        <textarea for="content" name="content" placeholder="请输入内容" class="layui-textarea">该作者是真的懒，什么东西都不写。。。(๑‾᷅^‾᷅๑) 嫌弃你</textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </script>        
     <script>
-        layui.use(['laydate','element','laypage','layer'], function(){
+        layui.use(['laydate','element','laypage','layer', 'laytpl'], function(){
             $ = layui.jquery;//jquery
             laydate = layui.laydate;//日期插件
             lement = layui.element();//面包导航
             laypage = layui.laypage;//分页
             layer = layui.layer;//弹出层
+            laytpl = layui.laytpl;
 
-          //以上模块根据需要引入
-
+            //以上模块根据需要引入
             layer.ready(function(){ //为了layer.ext.js加载完毕再执行
                 layer.photos({
                     photos: '#x-img'
-                //,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+                    ,shift: 3 //0-6的选择，指定弹出图片动画类型，默认随机
                 });
             }); 
           
+        });
+
+        $('.showDetail').hover(function(){
+            //鼠标移入
+            var data = { //数据
+                  "title":"Layui常用模块"
+                  ,"list":[{"modname":"弹层","alias":"layer","site":"layer.layui.com"},{"modname":"表单","alias":"form"}]
+                }
+            var getTpl = document.getElementById('detialHtml').innerHTML;
+            laytpl(getTpl).render(data, function(html){
+              document.getElementById('x-body').innerHTML = html;
+            });
+        }, function(){
+
         });
 
         //批量删除提交
@@ -134,7 +225,7 @@
             layer.confirm('确认要删除吗？',function(index){
                 //捉到所有被选中的，发异步进行删除
                 $.ajax({
-                    url: "<?php echo url('Banner/ajaxDelAllData'); ?>",
+                    url: "<?php echo url('Author/ajaxDelAllData'); ?>",
                     type: 'post',
                     data: $('form').serialize(),
                     success: function(res)
@@ -151,6 +242,7 @@
                 
             });
         }
+
          /*添加*/
         function banner_add(title,url,w,h){
             x_admin_show(title,url,w,h);
@@ -161,12 +253,12 @@
             x_admin_show(title,url,w,h); 
         }
         /*删除*/
-        function banner_del(_this,id, img_url){
+        function banner_del(_this,id, head_img){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
                 $.post(
-                    '<?php echo url("Banner/ajaxDeleteData"); ?>',
-                    {id: id, img_url: img_url},
+                    '<?php echo url("Author/ajaxDeleteData"); ?>',
+                    {author_id: id, head_img: head_img},
                     function(res){               
                         if (res['status'] == 1)
                         {
@@ -189,11 +281,11 @@
             $('.layui-btn-mini').on('click', function(data){
                 var _this = $(this);
                 var status = _this.data('status');
-                var id = _this.data('id');
+                var author_id = _this.data('author_id');
                 var is_show = status==0 ? '-1' : '0';
                 
                 $.get(
-                    "<?php echo url('Banner/ajaxIsShow'); ?>/is_show/" + is_show+"/id/"+id,
+                    "<?php echo url('Author/ajaxIsShow'); ?>/is_show/" + is_show+"/author_id/"+author_id,
                     function(res){
                         if (res['status'] == 1)
                         {
@@ -224,10 +316,10 @@
 
             // 排序设置
             $('.layui-input').on('change', function(data){
-                var id = $(this).data('id');
+                var author_id = $(this).data('author_id');
                 var val = $(this).val();
                 $.get(
-                    "<?php echo url('Banner/ajaxSort'); ?>/id/" + id + '/sort/' + val,
+                    "<?php echo url('Author/ajaxSort'); ?>/author_id/" + author_id + '/sort/' + val,
                     function(res){
                         if (res['status'] == 1)
                         {
