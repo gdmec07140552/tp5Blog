@@ -66,9 +66,8 @@ class Banner extends Base
 				$result = model('Banner')->deleteData(['id' => $idImage['0']]);
 				if (!empty($idImage[1]) && $result['status'] == 1)
 					delImage($idImage[1]);
-
-				Db::commit();
 			}
+			Db::commit();
 		} catch (Exception $e) {
 			Db::rollback();
 		}

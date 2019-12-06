@@ -1,4 +1,4 @@
-<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\add.html";i:1575446400;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\add.html";i:1575519663;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -132,6 +132,12 @@
 
 		  //监听提交
 		form.on('submit(add)', function(data){
+			var author = $("input[name=author]").val();
+			if (!author)
+			{
+				layer.msg('用户名不能为空');
+				return false;
+			}
 			var head_img = $("input[name='head_img']").val();
 			if (!head_img) {
 				layer.msg('请上传图片', {inco: 5});

@@ -20,14 +20,13 @@ class Article extends Base
 	public function list()
 	{
 		$input = input() ? input() : array();
+		$result = model('Article')->getPage([],'', 0, ['sort' => 'desc', 'art_id' => 'desc']);
+		$array = [];
+		foreach ($result as $key => $value) {
+			$array[] = $value;
+		}
+		$this->assign('result' , $array);
 
-		$result = model('Article')->getPage([],'', 0, ['sort' => 'desc', 'cate_id' => 'desc']);
-		// dump($result);
-		// 打印树形数据
-		$cate = model('Article')->getTree($result);
-
-		$this->assign('cate', $cate);
-		$this->assign('result' , $result);
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
 		return $this->fetch('list');
@@ -39,15 +38,16 @@ class Article extends Base
 	 */
 	public function ajaxDeleteData()
 	{
-		$data = input();
+		$data = input('post.');
 
-		if (empty($data['cate_id']))
+		if (empty($data['art_id']))
 			return json(['status' => 0, 'msg' => '删除失败']);
-		$result = model('Article')->deleteData(['cate_id' => $data['cate_id']]);
+		$result = model('Article')->deleteData(['art_id' => $data['art_id']]);
 		if ($result)
 		{
-			// 删除成则把它下级分类设置成一级分类
-			model('Article')->editData(['pid' => $data['cate_id']], ['pid' => 0]);
+			// 删除成则把它的图片从本地删除
+			if (!empty($input['head_img']))
+				delImage($input['head_img']);
 			return json(['status' => 1, 'msg' => '删除成功']);
 		} else {
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -61,15 +61,16 @@ class Article extends Base
 	public function ajaxDelAllData()
 	{
 		$data = input('post.');
-		if (empty($data['idArr']))
+		if (empty($data['id_image']))
 			return json(['status' => 0, 'msg' => '删除失败']);
 		Db::startTrans();
 		try {
-			$where['cate_id'] = ['IN', $data['idArr']];
-			model('Article')->deleteData($where);
-			// 删除成则把它下级分类设置成一级分类
-			foreach ($data['idArr'] as $value) {
-				model('Article')->editData(['pid' => $value], ['pid' => 0]);
+			// 轮播id和图片地址分离
+			foreach ($data['id_image'] as $key => $value) {
+				$idImage = explode('--', $value);
+				$result = model('Article')->deleteData(['art_id' => $idImage['0']]);
+				if (!empty($idImage[1]) && $result)
+					delImage($idImage[1]);
 			}
 			Db::commit();
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -86,7 +87,7 @@ class Article extends Base
 	public function ajaxIsShow()
 	{
 		$input = input() ? input() : array();
-		$result = model('Article')->editData(['cate_id' => $input['cate_id']], ['is_show' => $input['is_show']]);
+		$result = model('Article')->editData(['art_id' => $input['art_id']], ['is_show' => $input['is_show']]);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -100,7 +101,7 @@ class Article extends Base
 	public function ajaxSort()
 	{
 		$input = input() ? input() : array();
-		$result = model('Article')->editData(['cate_id' => $input['cate_id']], ['sort' => $input['sort']]);
+		$result = model('Article')->editData(['art_id' => $input['art_id']], ['sort' => $input['sort']]);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -115,17 +116,6 @@ class Article extends Base
 	{
 		$input = input() ? input() : array();
 
-		//取出所有的分类
-		$cate = model('Article')->getAllData(
-				[],
-				'cate_id, cate_name, pid',
-				0,
-				['sort' => 'desc', 'cate_id' => 'desc']
-			);
-
-		$result = model('Article')->getTrees($cate);
-		$this->assign('cate', $result);
-
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
 		return $this->fetch('add');
@@ -139,6 +129,8 @@ class Article extends Base
 	{
 		//添加数据
 		$input = input('post.');
+		unset($input['images']);
+		$input['create_time'] = time();
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
 		$result = model('Article')->insertData($input);
@@ -156,17 +148,8 @@ class Article extends Base
 	{
 		$input = input() ? input() : array();
 		
-		$result = model('Article')->getOneData(['cate_id' => input('cate_id')]);
+		$result = model('Article')->getOneData(['art_id' => input('art_id')]);
 		$this->assign('result', $result);
-		// 获取分类数据
-		$array = model('Article')->getAllData(
-				[],
-				'cate_id, cate_name, pid',
-				0,
-				['sort' => 'desc', 'cate_id' => 'desc']
-			);
-		$cate = model('Article')->getTrees($array);
-		$this->assign('cate', $cate);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-admin']);
@@ -180,26 +163,20 @@ class Article extends Base
 	public function ajaxEidtData()
 	{
 		$input = input('post.') ? input('post.') : array();
-		$cate_id = $input['cate_id'];
-		unset($input['cate_id']);
-		// 查找是否有该分类
-		$cate = model('Article')->getOneData(['cate_id' => $cate_id], 'pid');		
-		if (!$cate)
+		$art_id = $input['art_id'];
+		unset($input['art_id']);
+		unset($input['images']);
+		$res = model('Article')->getOneData(['art_id' => $art_id], 'head_img');
+		if (!$res)
 			return json(['status' => 0, 'msg' => '修改失败']);
-		Db::startTrans();
-		try {
-			// 如果把当前分类设置成自己的子分类的话，则把他设置成顶级分类
-			if ($cate_id == $input['pid'])
-				$input['pid'] = 0;
-			model('Article')->editData(['cate_id' => $cate_id], $input);
-			// 如果是顶级分类修改的话，则把他的下一级分类设置成顶级分类
-			if ($cate['pid'] == 0)
-				model('Article')->editData(['pid' => $cate_id], ['pid' => 0]);
-
-			Db::commit();
+		$result = model('Article')->editData(['art_id' => $art_id], $input);		
+		if ($result)
+		{
+			//修改成功把旧的图片删除
+			if (!empty($input['head_img']) && $input['head_img'] != $res['head_img'])
+				delImage($res['head_img']);
 			return json(['status' => 1, 'msg' => '修改成功']);
-		} catch (Exception $e) {
-			Db::rollback();
+		} else {
 			return json(['status' => 0, 'msg' => '修改失败']);
 		}
 	}

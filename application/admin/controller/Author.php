@@ -21,7 +21,11 @@ class Author extends Base
 	{
 		$input = input() ? input() : array();
 		$result = model('Author')->getPage([],'', 0, ['sort' => 'desc', 'author_id' => 'desc']);
-		$this->assign('result' , $result);
+		$array = [];
+		foreach ($result as $key => $value) {
+			$array[] = $value;
+		}
+		$this->assign('result' , $array);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
@@ -34,15 +38,16 @@ class Author extends Base
 	 */
 	public function ajaxDeleteData()
 	{
-		$data = input();
+		$data = input('post.');
 
 		if (empty($data['author_id']))
 			return json(['status' => 0, 'msg' => '删除失败']);
 		$result = model('Author')->deleteData(['author_id' => $data['author_id']]);
 		if ($result)
 		{
-			// 删除成则把它下级分类设置成一级分类
-			model('Author')->editData(['pid' => $data['author_id']], ['pid' => 0]);
+			// 删除成则把它的图片从本地删除
+			if (!empty($input['head_img']))
+				delImage($input['head_img']);
 			return json(['status' => 1, 'msg' => '删除成功']);
 		} else {
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -56,15 +61,16 @@ class Author extends Base
 	public function ajaxDelAllData()
 	{
 		$data = input('post.');
-		if (empty($data['idArr']))
+		if (empty($data['id_image']))
 			return json(['status' => 0, 'msg' => '删除失败']);
 		Db::startTrans();
 		try {
-			$where['author_id'] = ['IN', $data['idArr']];
-			model('Author')->deleteData($where);
-			// 删除成则把它下级分类设置成一级分类
-			foreach ($data['idArr'] as $value) {
-				model('Author')->editData(['pid' => $value], ['pid' => 0]);
+			// 轮播id和图片地址分离
+			foreach ($data['id_image'] as $key => $value) {
+				$idImage = explode('--', $value);
+				$result = model('Author')->deleteData(['author_id' => $idImage['0']]);
+				if (!empty($idImage[1]) && $result)
+					delImage($idImage[1]);
 			}
 			Db::commit();
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -157,26 +163,20 @@ class Author extends Base
 	public function ajaxEidtData()
 	{
 		$input = input('post.') ? input('post.') : array();
-		$author = $input['author_id'];
+		$author_id = $input['author_id'];
 		unset($input['author_id']);
-		// 查找是否有该分类
-		$cate = model('Author')->getOneData(['author_id' => $author], 'pid');		
-		if (!$cate)
+		unset($input['images']);
+		$res = model('Author')->getOneData(['author_id' => $author_id], 'head_img');
+		if (!$res)
 			return json(['status' => 0, 'msg' => '修改失败']);
-		Db::startTrans();
-		try {
-			// 如果把当前分类设置成自己的子分类的话，则把他设置成顶级分类
-			if ($author == $input['pid'])
-				$input['pid'] = 0;
-			model('Author')->editData(['author_id' => $author], $input);
-			// 如果是顶级分类修改的话，则把他的下一级分类设置成顶级分类
-			if ($cate['pid'] == 0)
-				model('Author')->editData(['pid' => $author], ['pid' => 0]);
-
-			Db::commit();
+		$result = model('Author')->editData(['author_id' => $author_id], $input);		
+		if ($result)
+		{
+			//修改成功把旧的图片删除
+			if (!empty($input['head_img']) && $input['head_img'] != $res['head_img'])
+				delImage($res['head_img']);
 			return json(['status' => 1, 'msg' => '修改成功']);
-		} catch (Exception $e) {
-			Db::rollback();
+		} else {
 			return json(['status' => 0, 'msg' => '修改失败']);
 		}
 	}

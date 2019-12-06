@@ -66,3 +66,14 @@ CREATE TABLE IF NOT EXISTS blog_author
 	create_time int(11) NOT NULL DEFAULT '0' COMMENT '发布时间',
 	PRIMARY KEY (author_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='作者' AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS blog_admin_log
+(
+	log_id int(11) NOT NULL AUTO_INCREMENT,
+	type tinyint(1) NOT NULL DEFAULT '0' COMMENT '类型：0登录，1添加，2修改，3删除',
+	admin_name char(20) NOT NULL DEFAULT '' COMMENT '管理员名字',
+	login_ip char(20) NOT NULL DEFAULT '' COMMENT '登录ip地址',
+	log_content varchar(255) NOT NULL DEFAULT '' COMMENT '日志内容',
+	create_time int(11) NOT NULL DEFAULT '0' COMMENT '操作时间',
+	PRIMARY KEY (log_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT="日志文件" AUTO_INCREMENT=1;

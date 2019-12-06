@@ -66,8 +66,8 @@
                             {/if}
                         </td>
                         <td>
-                            <a href="javascript:;" class="showDetail">
-                                <i class="layui-icon" style="top: 3px; font-size: 30px;">&#xe60b;</i>
+                            <a href="javascript:;">
+                                <i class="layui-icon showDetail" data-index="{$k}" style="top: 3px; font-size: 30px;">&#xe60b;</i>
                             </a>
                         </td>
                         <td class="td-status">
@@ -79,7 +79,7 @@
                             <!-- <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a> -->
-                            <a title="编辑作者" href="javascript:;" onclick="banner_edit('编辑作者','{:url('Author/banner_edit')}?author_id={$res['author_id']}','4','600','630')"
+                            <a title="编辑作者" href="javascript:;" onclick="banner_edit('编辑作者','{:url('Author/edit')}?author_id={$res['author_id']}','4','','')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
@@ -96,63 +96,76 @@
         <input type="hidden" name="totalNum" value="{:count($result)}">
         <div id="page"></div>
     </div>
-    <div id="x-body"></div>
     <script id="detialHtml" type="text/html">
         <div class="x-body">
             <form class="layui-form">
                 <div class="layui-form-item">
-                    <label  class="layui-form-label">缩略图
+                    <label  class="layui-form-label" style="color: #009688;">作者头像：
                     </label>
-                    <img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="">
+                    <img id="LAY_demo_upload" style="width: auto; height: 100px;" width="400" src="__STATIC__/uploads/{{ d.head_img }}">
                 </div>
                 <div class="layui-form-item">
-                    <label for="author" class="layui-form-label">
-                        作者名字
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="author" value="德玛西亚" placeholder="请输入你的名字" name="author" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="sort" class="layui-form-label">
-                        展示顺序
+                    <label for="author" class="layui-form-label" style="color: #009688;">
+                        作者名字：
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="sort" value="0" name="sort" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">越大排在前面最大不能超过255</span>
+                        <label for="" class="layui-input" style="border: none;">{{ d.author }}</label>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">作者性别</label>
-                    <div class="layui-input-block">
-                         <input type="radio" name="sex" value="0" title="妹子">
-                         <input type="radio" name="sex" value="1" checked title="渣男">
-                         <input type="radio" name="sex" value="2" title="禽兽不如">
+                    <label for="author" class="layui-form-label" style="color: #009688;">
+                        展示顺序：
+                    </label>
+                    <div class="layui-input-inline">
+                        <label for="" class="layui-input" style="border: none;">{{ d.sort }}</label>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="author" class="layui-form-label" style="color: #009688;">
+                        作者性别：
+                    </label>
+                    <div class="layui-input-inline">
+                        <label for="" class="layui-input" style="border: none;">
+                        {{#  if(d.sex === 0){ }}
+                            妹子
+                        {{# } }}
+                        {{#  if(d.sex === 1){ }}
+                            渣男
+                        {{# } }}
+                        {{#  if(d.sex === 2){ }}
+                            禽兽
+                        {{# } }}
+                        </label>
                     </div>
                  </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">是否显示</label>
-                    <div class="layui-input-block">
-                         <input type="radio" name="is_show" checked value="0" title="显示">
-                         <input type="radio" name="is_show" value="-1" title="隐藏">
+                    <label for="author" class="layui-form-label" style="color: #009688;">
+                        是否显示：
+                    </label>
+                    <div class="layui-input-inline">
+                        {{#  if(d.is_show === 0){ }}
+                            <label for="" class="layui-input" style="border: none;">显示</label> 
+                        {{# } }}
+                        
+                        {{#  if(d.is_show === -1){ }}
+                            <label for="" class="layui-input" style="border: none; color: #C71D23;">隐藏</label>       
+                        {{# } }}
                     </div>
                  </div>
                 <div class="layui-form-item layui-form-text">
-                    <label for="introduction" class="layui-form-label">
-                        个人简介
+                    <label for="introduction" class="layui-form-label" style="color: #009688;">
+                        个人简介：
                     </label>
                     <div class="layui-input-block">
-                        <textarea for="introduction" name="introduction" placeholder="请输入内容" class="layui-textarea">该作者懒得要死，什么也没有留下。。。(๑‾᷅^‾᷅๑) 嫌弃你</textarea>
+                        <textarea for="introduction" name="introduction" disabled class="layui-textarea">{{ d.introduction }}</textarea>
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
-                    <label for="content" class="layui-form-label">
-                        个人说明
+                    <label for="content" class="layui-form-label" style="color: #009688;">
+                        个人说明：
                     </label>
                     <div class="layui-input-block">
-                        <textarea for="content" name="content" placeholder="请输入内容" class="layui-textarea">该作者是真的懒，什么东西都不写。。。(๑‾᷅^‾᷅๑) 嫌弃你</textarea>
+                        <textarea for="content" name="content" disabled class="layui-textarea">{{ d.content }}</textarea>
                     </div>
                 </div>
             </form>
@@ -177,18 +190,21 @@
           
         });
 
-        $('.showDetail').hover(function(){
-            //鼠标移入
-            var data = { //数据
-                  "title":"Layui常用模块"
-                  ,"list":[{"modname":"弹层","alias":"layer","site":"layer.layui.com"},{"modname":"表单","alias":"form"}]
-                }
+        $('.showDetail').click(function(){
+            var data = <?php echo json_encode($result?:''); ?>;
+            // console.log(data);
+            var index = $(this).data("index");
             var getTpl = document.getElementById('detialHtml').innerHTML;
-            laytpl(getTpl).render(data, function(html){
-              document.getElementById('x-body').innerHTML = html;
+            laytpl(getTpl).render(data[index], function(html){
+                //页面层
+                layer.open({
+                    title: '详情',
+                    type: 1,
+                    shadeClose: true,
+                    area: ['600px', ''], //宽高
+                    content: html
+                });
             });
-        }, function(){
-
         });
 
         //批量删除提交

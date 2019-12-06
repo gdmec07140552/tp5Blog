@@ -103,6 +103,12 @@
 
 		  //监听提交
 		form.on('submit(add)', function(data){
+			var author = $("input[name=author]").val();
+			if (!author)
+			{
+				layer.msg('用户名不能为空');
+				return false;
+			}
 			var head_img = $("input[name='head_img']").val();
 			if (!head_img) {
 				layer.msg('请上传图片', {inco: 5});
