@@ -1,4 +1,4 @@
-<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\category\add.html";i:1575345998;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\category\add.html";i:1575602892;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -51,7 +51,7 @@
 			</div>
 			<div class="layui-form-item">
 				<label for="sort" class="layui-form-label">
-					分类排序
+					展示顺序
 				</label>
 				<div class="layui-input-inline">
 					<input type="text" id="sort" value="0" name="sort" class="layui-input">
@@ -106,7 +106,7 @@
 						var index = _this.getFrameIndex(window.name);
 						_this.close(index);
 					} else {
-						layer.msg(res['msg'], {inco: 5});
+						layer.msg(res['msg'], {icon: 5});
 					}
 				}
 			});

@@ -3,7 +3,7 @@ namespace app\admin\controller;
 
 use think\Db;
 /**
-* 文章分类管理
+* 文章管理
 */
 class Article extends Base
 {
@@ -14,7 +14,7 @@ class Article extends Base
 	}
 
 	/**
-	 * [list 分类列表]
+	 * [list 文章列表]
 	 * @return [type] [description]
 	 */
 	public function list()
@@ -109,12 +109,20 @@ class Article extends Base
 	}
 
 	/**
-	 * 文章分类--添加
+	 * 文章--添加
 	 * @return [type] [description]
 	 */
 	public function add()
 	{
 		$input = input() ? input() : array();
+		// 获取文章分类
+		$cate = model('Category')->getAllData([]);
+		$cateData = model('Category')->getTrees($cate);
+		$this->assign('cate', $cateData);
+
+		// 获取作者
+		$author = model('Author')->getAllData([], 'author_id, author');
+		$this->assign('author', $author);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
@@ -131,17 +139,25 @@ class Article extends Base
 		$input = input('post.');
 		unset($input['images']);
 		$input['create_time'] = time();
+		// 删除文本编译器中自带的file字段
+		unset($input['file']);
+		// 处理热门标签
+		if (!empty($input['inte_id']))
+			$input['inte_id'] = implode(',', $input['inte_id']);
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
 		$result = model('Article')->insertData($input);
-		if ($result)
+		if ($result){
+			// 添加管理员日志
+			model('Base')->addLog(1, '文章管理', $result);
 			return json(['status' => 1, 'msg' => '添加成功']);
-		else
+		} else{
 			return json(['status' => 0, 'msg' => '添加失败']);
+		}
 	}
 
 	/**
-	 * 文章分类--编辑
+	 * 文章--编辑
 	 * @return [type] [description]
 	 */
 	public function edit()

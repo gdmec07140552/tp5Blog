@@ -1,4 +1,4 @@
-<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\edit.html";i:1575536738;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\edit.html";i:1575602807;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -126,7 +126,7 @@
 					$('input[name="head_img"]').val(res['img_url']);
 			  		$('#LAY_demo_upload').attr('src', head_img);
 				} else {
-					layer.msg('图片上传失败', {inco: 5});
+					layer.msg('图片上传失败', {icon: 5});
 				}
 			}
 		  });
@@ -142,7 +142,7 @@
 			}
 			var head_img = $("input[name='head_img']").val();
 			if (!head_img) {
-				layer.msg('请上传图片', {inco: 5});
+				layer.msg('请上传图片', {icon: 5});
 				return false;
 			}
 
@@ -159,7 +159,7 @@
 						var index = _this.getFrameIndex(window.name);
 						_this.close(index);
 					} else {
-						layer.msg(res['msg'], {inco: 5});
+						layer.msg(res['msg'], {icon: 5});
 					}
 				}
 			});

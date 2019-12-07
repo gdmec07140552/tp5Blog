@@ -34,7 +34,8 @@ class Banner extends Model
 				'sort' => $data['sort'],
 				'is_show' => $data['is_show']
 			]);
-
+		// 管理员日志记录
+		model('Base')->addLog(1, '轮播图', $res);
 		if ($res)
 			return ['status' => 1, 'msg' => '添加成功'];
 		else
@@ -68,6 +69,8 @@ class Banner extends Model
 			'sort' => $data['sort'],
 			'is_show' => $data['is_show']
 		];
+		// 管理员日志记录
+		model('Base')->addLog(2, '轮播图', $id);
 		$res = $this->updateOneData(['id' => $id], $saveData);
 
 		return ['status' => 1, 'msg' => '修改成功'];

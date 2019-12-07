@@ -1,4 +1,33 @@
-{include file="common/header" /}
+<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\add.html";i:1575607052;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>
+            德玛西亚总部
+        </title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <!-- css样式文件引入 -->
+        <link rel="stylesheet" href="/static/admin/css/x-admin.css" media="all">
+<!-- <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+        <!-- js文件引入 -->
+        <!-- 判断js文件是否需要引入 -->
+<?php if (in_array('layui', $js_array)): ?>
+	<script src="/static/admin/lib/layui/layui.js" charset="utf-8"></script>
+<?php endif; if (in_array('x-admin', $js_array)): ?>
+	<script src="/static/admin/js/x-admin.js"></script>
+<?php endif; if (in_array('x-layui', $js_array)): ?>
+	<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
+<?php endif; ?>
+<script src="/static/js/jquery.min.js"></script>
+    </head>
+    <body>
     <div class="x-nav">
         <span class="layui-breadcrumb">
           <a><cite>首页</cite></a>
@@ -46,9 +75,9 @@
 				<div class="layui-input-block" style="width: 400px;">
 					<select name="cate_id" id="cate_id">
 						<option value="0">请选择</option>
-						{foreach name="cate" item="list"}
-							<option value="{$list['cate_id']}">{$list['cate_name']}</option>
-						{/foreach}
+						<?php if(is_array($cate) || $cate instanceof \think\Collection || $cate instanceof \think\Paginator): if( count($cate)==0 ) : echo "" ;else: foreach($cate as $key=>$list): ?>
+							<option value="<?php echo htmlentities($list['cate_id']); ?>"><?php echo htmlentities($list['cate_name']); ?></option>
+						<?php endforeach; endif; else: echo "" ;endif; ?>
 					</select>
 				</div>
 			</div>
@@ -84,7 +113,7 @@
 					<select name="author_id" id="author_id">
 						<option value="0">请选择</option>
 						<?php foreach($author as $v): ?>
-							<option value="{$v['author_id']}">{$v['author']}</option>
+							<option value="<?php echo htmlentities($v['author_id']); ?>"><?php echo htmlentities($v['author']); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -127,11 +156,11 @@
 
 		  	//图片上传接口
 			layui.upload({
-				url: '{:url("Base/uploads")}' //上传接口
+				url: '<?php echo url("Base/uploads"); ?>' //上传接口
 				,success: function(res){ //上传成功后的回调
 					// console.log(res);
 					if (res['status'] == 1)
-					{	var upload_url = "<?php echo '__IMAGE__'; ?>";
+					{	var upload_url = "<?php echo '/static/uploads/'; ?>";
 						var art_img = upload_url + res['img_url'];
 						// 显示图片并记录图片地址
 						$('input[name="art_img"]').val(res['img_url']);
@@ -153,7 +182,7 @@
 
 				// 提交数据到后台
 				$.ajax({
-						url: "{:url('Article/ajaxAddData')}",
+						url: "<?php echo url('Article/ajaxAddData'); ?>",
 						type: 'post',
 						data: data['field'],
 						success:function(res){
@@ -161,7 +190,7 @@
 							{
 								layer.msg(res['msg'], {icon: 6});
 								setTimeout(function(){
-									window.location.href = "{:url('Article/list')}";
+									window.location.href = "<?php echo url('Article/list'); ?>";
 								}, 2000);
 							} else {
 								layer.msg(res['msg'], {icon: 5});

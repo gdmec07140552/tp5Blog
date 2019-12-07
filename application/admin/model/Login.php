@@ -52,6 +52,8 @@ class Login extends Model
 					'login_num' => $user['login_num'] + 1,
 					'last_time' => time()
 				]);
+		// 3.管理员日志记录
+			model('Base')->addLog();
 
 		return ['status' => 1, 'data' => Session::get('user')];
 	}

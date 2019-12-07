@@ -1,4 +1,4 @@
-<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\list.html";i:1575447173;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\list.html";i:1575606882;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,13 +31,13 @@
     <div class="x-nav">
         <span class="layui-breadcrumb">
           <a><cite>首页</cite></a>
-          <a><cite>轮播管理</cite></a>
-          <a><cite>轮播列表</cite></a>
+          <a><cite>文章管理</cite></a>
+          <a><cite>文章列表</cite></a>
         </span>
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加轮播图','<?php echo url("Banner/banner_add"); ?>','600','630')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
+        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><a href="<?php echo url('Article/add'); ?>" class="layui-btn"><i class="layui-icon">&#xe608;</i>添加</a><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
         <form>
             <table class="layui-table">
                 <thead>
@@ -52,10 +52,13 @@
                             缩略图
                         </th>
                         <th>
-                            链接
+                            文章分类
                         </th>
                         <th>
-                            描述
+                            文章标题
+                        </th>
+                        <th>
+                            阅读量
                         </th>
                         <th>
                             显示状态
@@ -69,23 +72,26 @@
                     <?php foreach($result as $k => $res): ?>
                     <tr>
                         <td>
-                            <input type="checkbox" value="<?php echo htmlentities($res['id'].'--'.$res['img_url']); ?>" name="id_image[]" lay-skin="primary">
+                            <input type="checkbox" value="<?php echo htmlentities($res['art_id'].'--'.$res['art_img']); ?>" name="id_image[]" lay-skin="primary">
                         </td>
                         <td>
-                            <input style="width: 50px;" type="text" data-id="<?php echo htmlentities($res['id']); ?>" value="<?php echo htmlentities($res['sort']); ?>" class="layui-input">  
+                            <input style="width: 50px;" type="text" data-id="<?php echo htmlentities($res['art_id']); ?>" value="<?php echo htmlentities($res['sort']); ?>" class="layui-input">  
                             
                         </td>
                         <td>
-                            <img style="height: 80px; width: auto;" src="/static/uploads/<?php echo htmlentities($res['img_url']); ?>" width="200" alt="<?php echo htmlentities($res['img_des']); ?>">
+                            <img style="height: 80px; width: auto;" src="/static/uploads/<?php echo htmlentities($res['art_img']); ?>" width="200" alt="<?php echo htmlentities($res['art_title']); ?>">
                         </td>
                         <td >
-                            <?php echo htmlentities($res['link_url']); ?>
+                            <?php echo htmlentities($res['cate_id']); ?>
                         </td>
                         <td >
-                            <?php echo htmlentities($res['img_des']); ?>
+                            <?php echo htmlentities($res['art_title']); ?>
+                        </td>
+                        <td >
+                            <?php echo htmlentities($res['view']); ?>
                         </td>
                         <td class="td-status">
-                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-id="<?php echo htmlentities($res['id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
+                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-id="<?php echo htmlentities($res['art_id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
                                 <?php echo $res['is_show']==-1 ? '隐藏' : '显示'; ?>
                             </span>
                         </td>
@@ -93,11 +99,11 @@
                             <!-- <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a> -->
-                            <a title="编辑" href="javascript:;" onclick="banner_edit('编辑','<?php echo url('Banner/banner_edit'); ?>?id=<?php echo htmlentities($res['id']); ?>','4','600','630')"
+                            <a title="编辑文章" href="javascript:;" onclick="banner_edit('编辑','<?php echo url('Article/edit'); ?>?id=<?php echo htmlentities($res['art_id']); ?>','4','','')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['id']); ?>, '<?php echo htmlentities($res['img_url']); ?>')" 
+                            <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['art_id']); ?>, '<?php echo htmlentities($res['art_img']); ?>')" 
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
@@ -134,7 +140,7 @@
             layer.confirm('确认要删除吗？',function(index){
                 //捉到所有被选中的，发异步进行删除
                 $.ajax({
-                    url: "<?php echo url('Banner/ajaxDelAllData'); ?>",
+                    url: "<?php echo url('Article/ajaxDelAllData'); ?>",
                     type: 'post',
                     data: $('form').serialize(),
                     success: function(res)
@@ -161,12 +167,12 @@
             x_admin_show(title,url,w,h); 
         }
         /*删除*/
-        function banner_del(_this,id, img_url){
+        function banner_del(_this,id, art_img){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
                 $.post(
-                    '<?php echo url("Banner/ajaxDeleteData"); ?>',
-                    {id: id, img_url: img_url},
+                    '<?php echo url("Article/ajaxDeleteData"); ?>',
+                    {id: id, art_img: art_img},
                     function(res){               
                         if (res['status'] == 1)
                         {
@@ -193,7 +199,7 @@
                 var is_show = status==0 ? '-1' : '0';
                 
                 $.get(
-                    "<?php echo url('Banner/ajaxIsShow'); ?>/is_show/" + is_show+"/id/"+id,
+                    "<?php echo url('Article/ajaxIsShow'); ?>/is_show/" + is_show+"/id/"+id,
                     function(res){
                         if (res['status'] == 1)
                         {
@@ -227,7 +233,7 @@
                 var id = $(this).data('id');
                 var val = $(this).val();
                 $.get(
-                    "<?php echo url('Banner/ajaxSort'); ?>/id/" + id + '/sort/' + val,
+                    "<?php echo url('Article/ajaxSort'); ?>/id/" + id + '/sort/' + val,
                     function(res){
                         if (res['status'] == 1)
                         {

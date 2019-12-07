@@ -3,7 +3,7 @@ namespace app\admin\controller;
 
 use think\Db;
 /**
-* 文章分类管理
+* 作者管理
 */
 class Author extends Base
 {
@@ -14,7 +14,7 @@ class Author extends Base
 	}
 
 	/**
-	 * [list 分类列表]
+	 * [list 作者列表]
 	 * @return [type] [description]
 	 */
 	public function list()
@@ -48,6 +48,8 @@ class Author extends Base
 			// 删除成则把它的图片从本地删除
 			if (!empty($input['head_img']))
 				delImage($input['head_img']);
+			// 管理员日志记录
+			model('Base')->addLog(3, '作者管理', $data['author_id']);
 			return json(['status' => 1, 'msg' => '删除成功']);
 		} else {
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -71,6 +73,8 @@ class Author extends Base
 				$result = model('Author')->deleteData(['author_id' => $idImage['0']]);
 				if (!empty($idImage[1]) && $result)
 					delImage($idImage[1]);
+				// 管理员日志记录
+				model('Base')->addLog(3, '作者管理', $idImage['0']);
 			}
 			Db::commit();
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -88,6 +92,8 @@ class Author extends Base
 	{
 		$input = input() ? input() : array();
 		$result = model('Author')->editData(['author_id' => $input['author_id']], ['is_show' => $input['is_show']]);
+		// 管理员日志记录
+		model('Base')->addLog(2, '作者管理', $input['author_id']);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -102,6 +108,8 @@ class Author extends Base
 	{
 		$input = input() ? input() : array();
 		$result = model('Author')->editData(['author_id' => $input['author_id']], ['sort' => $input['sort']]);
+		// 管理员日志记录
+			model('Base')->addLog(2, '作者管理', $input['author_id']);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -109,7 +117,7 @@ class Author extends Base
 	}
 
 	/**
-	 * 文章分类--添加
+	 * 文章作者--添加
 	 * @return [type] [description]
 	 */
 	public function add()
@@ -134,6 +142,8 @@ class Author extends Base
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
 		$result = model('Author')->insertData($input);
+		// 管理员日志记录
+			model('Base')->addLog(1, '作者管理', $result);
 		if ($result)
 			return json(['status' => 1, 'msg' => '添加成功']);
 		else
@@ -141,7 +151,7 @@ class Author extends Base
 	}
 
 	/**
-	 * 文章分类--编辑
+	 * 文章作者--编辑
 	 * @return [type] [description]
 	 */
 	public function edit()
@@ -175,6 +185,8 @@ class Author extends Base
 			//修改成功把旧的图片删除
 			if (!empty($input['head_img']) && $input['head_img'] != $res['head_img'])
 				delImage($res['head_img']);
+			// 管理员日志记录
+			model('Base')->addLog(2, '作者管理', $author_id);
 			return json(['status' => 1, 'msg' => '修改成功']);
 		} else {
 			return json(['status' => 0, 'msg' => '修改失败']);

@@ -43,6 +43,8 @@ class Banner extends Base
 		// 删除成功之后先把图片清除
 		if (!empty($data['img_url']) && $result['status'] == 1)
 			delImage($data['img_url']);
+		// 管理员日志记录
+		model('Base')->addLog(3, '轮播图', $data['id']);
 
 		return json($result);
 	}
@@ -66,6 +68,8 @@ class Banner extends Base
 				$result = model('Banner')->deleteData(['id' => $idImage['0']]);
 				if (!empty($idImage[1]) && $result['status'] == 1)
 					delImage($idImage[1]);
+				// 管理员日志记录
+				model('Base')->addLog(3, '轮播图', $idImage['0']);
 			}
 			Db::commit();
 		} catch (Exception $e) {
@@ -83,6 +87,8 @@ class Banner extends Base
 	{
 		$input = input() ? input() : array();
 		$result = model('Banner')->updateOneData(['id' => $input['id']], ['is_show' => $input['is_show']]);
+		// 管理员日志记录
+		model('Base')->addLog(2, '轮播图', $input['id']);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -97,6 +103,8 @@ class Banner extends Base
 	{
 		$input = input() ? input() : array();
 		$result = model('Banner')->updateOneData(['id' => $input['id']], ['sort' => $input['sort']]);
+		// 管理员日志记录
+		model('Base')->addLog(2, '轮播图', $input['id']);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else

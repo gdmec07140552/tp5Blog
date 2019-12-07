@@ -48,6 +48,8 @@ class Category extends Base
 		{
 			// 删除成则把它下级分类设置成一级分类
 			model('Category')->editData(['pid' => $data['cate_id']], ['pid' => 0]);
+			// 管理员日志记录
+			model('Base')->addLog(3, '文章分类', $data['cate_id']);
 			return json(['status' => 1, 'msg' => '删除成功']);
 		} else {
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -70,6 +72,8 @@ class Category extends Base
 			// 删除成则把它下级分类设置成一级分类
 			foreach ($data['idArr'] as $value) {
 				model('Category')->editData(['pid' => $value], ['pid' => 0]);
+				// 管理员日志记录
+				model('Base')->addLog(3, '文章分类', $value);
 			}
 			Db::commit();
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -87,6 +91,8 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 		$result = model('Category')->editData(['cate_id' => $input['cate_id']], ['is_show' => $input['is_show']]);
+		// 管理员日志记录
+			model('Base')->addLog(2, '文章分类', $input['cate_id']);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -101,6 +107,8 @@ class Category extends Base
 	{
 		$input = input() ? input() : array();
 		$result = model('Category')->editData(['cate_id' => $input['cate_id']], ['sort' => $input['sort']]);
+		// 管理员日志记录
+			model('Base')->addLog(2, '文章分类', $input['cate_id']);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -142,6 +150,8 @@ class Category extends Base
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
 		$result = model('Category')->insertData($input);
+		// 管理员日志记录
+			model('Base')->addLog(1, '文章分类', $result);
 		if ($result)
 			return json(['status' => 1, 'msg' => '添加成功']);
 		else
@@ -195,6 +205,8 @@ class Category extends Base
 			// 如果是顶级分类修改的话，则把他的下一级分类设置成顶级分类
 			if ($cate['pid'] == 0)
 				model('Category')->editData(['pid' => $cate_id], ['pid' => 0]);
+			// 管理员日志记录
+			model('Base')->addLog(2, '文章分类', $cate_id);
 
 			Db::commit();
 			return json(['status' => 1, 'msg' => '修改成功']);

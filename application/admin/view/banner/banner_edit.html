@@ -90,7 +90,7 @@
 					$('input[name="img_url"]').val(res['img_url']);
 			  		$('#LAY_demo_upload').attr('src', img_url);
 				} else {
-					layer.msg('图片上传失败', {inco: 5});
+					layer.msg('图片上传失败', {icon: 5});
 				}
 			}
 		  });
@@ -101,7 +101,7 @@
 			// console.log(data);
 			var img_url = $("input[name='img_url']").val();
 			if (!img_url) {
-				layer.msg('请上传图片', {inco: 5});
+				layer.msg('请上传图片', {icon: 5});
 				return false;
 			}
 
@@ -118,7 +118,7 @@
 						var index = _this.getFrameIndex(window.name);
 						_this.close(index);
 					} else {
-						layer.msg(res['msg'], {inco: 5});
+						layer.msg(res['msg'], {icon: 5});
 					}
 				}
 			});

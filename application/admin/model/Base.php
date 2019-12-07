@@ -126,23 +126,23 @@ class Base extends Model
 		return Db::name($this->table)->insertAll($data);
 	}
 
-	public function addLog($type, $name, $id, $title)
+	public function addLog($type = 0, $name = '', $id = 0)
 	{
 		$user = Session::get('user');
 		$content = '';
 		if ($type == 0)
-			$content = '登录成功';
+			$content = '管理员登录';
 		if ($type == 1)
-			$content = '添加了' . $name . 'ID为' . $id . '的：'  . $title '数据';
+			$content = '添加了' . $name . 'ID为' . $id . '的数据';
 		if ($type == 2)
-			$content = '编辑了' . $name . 'ID为' . $id . '的：'  . $title '数据';
+			$content = '编辑了' . $name . 'ID为' . $id . '的数据';
 		if ($type == 3)
-			$content = '删除了' . $name . 'ID为' . $id . '的：'  . $title '数据';
+			$content = '删除了' . $name . 'ID为' . $id . '的数据';
 		$data = [
 			'admin_name' => $user['admin_name'],
 			'type' => $type,
 			'login_ip' => $_SERVER['REMOTE_ADDR'],
-			'login_cotent' => $content,
+			'log_content' => $content,
 			'create_time' => time()
 		];
 

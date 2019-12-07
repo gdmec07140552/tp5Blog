@@ -38,11 +38,12 @@ CREATE TABLE IF NOT EXISTS blog_article
 (
 	art_id int(11) NOT NULL AUTO_INCREMENT,
 	art_title varchar(255) NOT NULL DEFAULT '' COMMENT '文章标题',
+	subtitle varchar(255) NOT NULL DEFAULT '' COMMENT '文章副标题',
 	art_img varchar(255) NOT NULL DEFAULT '' COMMENT '文章封面图',
 	author_id int(11) NOT NULL DEFAULT '0' COMMENT '作者id',
 	create_time int(11) NOT NULL DEFAULT '0' COMMENT '发布时间',
 	cate_id int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
-	inte_id varchar(255) NOT NULL DEFAULT '' COMMENT '兴趣爱好',
+	inte_id char(100) NOT NULL DEFAULT '0' COMMENT '热门标签',
 	is_show tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示：0正常，-1禁用',
 	sort tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序：越大排在前面最大不能超过255',
 	view int(1) NOT NULL DEFAULT '8888' COMMENT '阅读量',
@@ -52,6 +53,7 @@ CREATE TABLE IF NOT EXISTS blog_article
 	INDEX idx_art_title (art_title),
 	INDEX idx_author_id (author_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章' AUTO_INCREMENT=1;
+-- ALTER TABLE blog_article ADD COLUMN subtitle varchar(255) NOT NULL DEFAULT '' COMMENT '文章副标题' AFTER art_title;
 
 CREATE TABLE IF NOT EXISTS blog_author
 (
