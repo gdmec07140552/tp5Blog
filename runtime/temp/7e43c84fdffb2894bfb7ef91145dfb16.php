@@ -1,4 +1,4 @@
-<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\list.html";i:1575606882;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\list.html";i:1575703166;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -61,6 +61,9 @@
                             阅读量
                         </th>
                         <th>
+                            详情
+                        </th>
+                        <th>
                             显示状态
                         </th>
                         <th>
@@ -75,23 +78,28 @@
                             <input type="checkbox" value="<?php echo htmlentities($res['art_id'].'--'.$res['art_img']); ?>" name="id_image[]" lay-skin="primary">
                         </td>
                         <td>
-                            <input style="width: 50px;" type="text" data-id="<?php echo htmlentities($res['art_id']); ?>" value="<?php echo htmlentities($res['sort']); ?>" class="layui-input">  
+                            <input style="width: 50px;" type="text" data-art_id="<?php echo htmlentities($res['art_id']); ?>" value="<?php echo htmlentities($res['sort']); ?>" class="layui-input">  
                             
                         </td>
                         <td>
                             <img style="height: 80px; width: auto;" src="/static/uploads/<?php echo htmlentities($res['art_img']); ?>" width="200" alt="<?php echo htmlentities($res['art_title']); ?>">
                         </td>
                         <td >
-                            <?php echo htmlentities($res['cate_id']); ?>
+                            <?php echo htmlentities($res['cate']); ?>
                         </td>
                         <td >
                             <?php echo htmlentities($res['art_title']); ?>
                         </td>
                         <td >
                             <?php echo htmlentities($res['view']); ?>
+                        </td>                        
+                        <td>
+                            <a href="<?php echo url('Article/detail'); ?>?art_id=<?php echo htmlentities($res['art_id']); ?>">
+                                <i class="layui-icon showDetail" style="top: 3px; font-size: 30px;">&#xe60b;</i>
+                            </a>
                         </td>
                         <td class="td-status">
-                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-id="<?php echo htmlentities($res['art_id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
+                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-art_id="<?php echo htmlentities($res['art_id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
                                 <?php echo $res['is_show']==-1 ? '隐藏' : '显示'; ?>
                             </span>
                         </td>
@@ -99,8 +107,7 @@
                             <!-- <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a> -->
-                            <a title="编辑文章" href="javascript:;" onclick="banner_edit('编辑','<?php echo url('Article/edit'); ?>?id=<?php echo htmlentities($res['art_id']); ?>','4','','')"
-                            class="ml-5" style="text-decoration:none">
+                            <a title="编辑文章" href="<?php echo url('Article/edit'); ?>?art_id=<?php echo htmlentities($res['art_id']); ?>" class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
                             <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['art_id']); ?>, '<?php echo htmlentities($res['art_img']); ?>')" 
@@ -114,7 +121,7 @@
             </table>
         </form>
         <input type="hidden" name="totalNum" value="<?php echo count($result); ?>">
-        <div id="page"></div>
+        <div id="page" style="text-align: center;"><?php echo $page; ?></div>
     </div>        
     <script>
         layui.use(['laydate','element','laypage','layer'], function(){
@@ -129,7 +136,7 @@
             layer.ready(function(){ //为了layer.ext.js加载完毕再执行
                 layer.photos({
                     photos: '#x-img'
-                //,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+                    ,shift: 3 //0-6的选择，指定弹出图片动画类型，默认随机
                 });
             }); 
           
@@ -148,7 +155,7 @@
                         if (res['status'] == 1)
                         {
                             layer.msg(res['msg'], {icon: 6});
-                            window.location.reload();
+                            setTimeout(function(){window.location.reload();}, 2000);
                         } else{
                             layer.msg(res['msg'], {icon: 5});
                         }
@@ -157,22 +164,14 @@
                 
             });
         }
-         /*添加*/
-        function banner_add(title,url,w,h){
-            x_admin_show(title,url,w,h);
-        }
 
-        // 编辑
-        function banner_edit (title,url,id,w,h) {
-            x_admin_show(title,url,w,h); 
-        }
         /*删除*/
-        function banner_del(_this,id, art_img){
+        function banner_del(_this,art_id, art_img){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
                 $.post(
                     '<?php echo url("Article/ajaxDeleteData"); ?>',
-                    {id: id, art_img: art_img},
+                    {art_id: art_id, art_img: art_img},
                     function(res){               
                         if (res['status'] == 1)
                         {
@@ -195,11 +194,11 @@
             $('.layui-btn-mini').on('click', function(data){
                 var _this = $(this);
                 var status = _this.data('status');
-                var id = _this.data('id');
+                var art_id = _this.data('art_id');
                 var is_show = status==0 ? '-1' : '0';
                 
                 $.get(
-                    "<?php echo url('Article/ajaxIsShow'); ?>/is_show/" + is_show+"/id/"+id,
+                    "<?php echo url('Article/ajaxIsShow'); ?>/is_show/" + is_show+"/art_id/"+art_id,
                     function(res){
                         if (res['status'] == 1)
                         {
@@ -230,10 +229,10 @@
 
             // 排序设置
             $('.layui-input').on('change', function(data){
-                var id = $(this).data('id');
+                var art_id = $(this).data('art_id');
                 var val = $(this).val();
                 $.get(
-                    "<?php echo url('Article/ajaxSort'); ?>/id/" + id + '/sort/' + val,
+                    "<?php echo url('Article/ajaxSort'); ?>/art_id/" + art_id + '/sort/' + val,
                     function(res){
                         if (res['status'] == 1)
                         {

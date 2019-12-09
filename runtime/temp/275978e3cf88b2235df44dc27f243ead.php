@@ -1,4 +1,4 @@
-<?php /*a:4:{s:70:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_list.html";i:1575447197;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:70:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_list.html";i:1575714365;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -123,7 +123,7 @@
             layer.ready(function(){ //为了layer.ext.js加载完毕再执行
                 layer.photos({
                     photos: '#x-img'
-                //,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+                    ,shift: 3 //0-6的选择，指定弹出图片动画类型，默认随机
                 });
             }); 
           

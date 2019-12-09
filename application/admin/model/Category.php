@@ -109,4 +109,31 @@ class Category extends Base
 		return $list;
 	}
 
+	/**
+	 * [getArticleCate 获取文章的所属分类]
+	 * @param  [type]  $cate     [分类数组]
+	 * @param  [type]  $cate_id  [分类id]
+	 * @param  string  $show_str [显示格式]
+	 * @return [type]            [description]
+	 */
+	public function getArticleCate($cate, $cate_id, $show_str = '-->')
+	{
+
+		$cate_str = '';
+		foreach ($cate as $k => $value) {
+			if ($cate_id == $value['cate_id']) {
+				if ($value['pid'] == 0)
+				{
+					return $value['cate_name'];
+				} else {
+					unset($cate[$k]);
+					//开始递归,查找父array后面去添加$cate_str
+					$cate_str .= $this->getArticleCate($cate, $value['pid'], $show_str) . $show_str . $value['cate_name'];
+				}
+			}
+		}
+
+		return $cate_str;
+	}
+
 }

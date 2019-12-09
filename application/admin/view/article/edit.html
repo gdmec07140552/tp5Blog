@@ -1,9 +1,18 @@
 {include file="common/header" /}
-	<div class="x-body">
-		<form class="layui-form">
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+          <a><cite>首页</cite></a>
+          <a><cite>文章管理</cite></a>
+          <a><cite>文章列表</cite></a>
+          <a><cite>编辑文章</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:0px; font-size: 14px;margin-left: 10px;"  href="javascript:window.history.go(-1);" title="返回上一页"><i class="layui-icon" style="line-height:30px; font-size: 12px !important;">返回上一页</i></a>
+    </div>
+    <div class="x-body">
+		<form class="layui-form" enctype="multipart/form-data">
 			<div class="layui-form-item">
 				<label for="banner_img" class="layui-form-label">
-					<span class="x-red">*</span>轮播图
+					<span class="x-red">*</span>封面图片
 				</label>
 				<div class="layui-input-inline">
 				  <div class="site-demo-upbar">
@@ -14,15 +23,41 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="{:empty($result['img_url'])?'':'__STATIC__/uploads/'.$result['img_url']}">
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="__STATIC__/uploads/{$result['art_img']}">
 			</div>
-			
 			<div class="layui-form-item">
 				<label for="link" class="layui-form-label">
-					链接地址
+					文章标题
+				</label>
+				<div class="layui-input-inline" style="width: 50%;">
+					<input type="text" id="link" value="{$result['art_title']?:''}" placeholder="输入文章标题" name="art_title" class="layui-input" lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item layui-form-text">
+				<label for="subtitle" class="layui-form-label">
+					副标题
+				</label>
+				<div class="layui-input-block" style="width: 50%;">
+			     	<textarea id="subtitle" name="subtitle" placeholder="请输入内容" class="layui-textarea">{$result['subtitle']?:''}</textarea>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" for="cate_id">文章分类</label>
+				<div class="layui-input-block" style="width: 400px;">
+					<select name="cate_id" id="cate_id">
+						<option value="0">请选择</option>
+						{foreach name="cate" item="list"}
+							<option value="{$list['cate_id']}" {$list['cate_id']==$result['cate_id']?'selected':''}>{$list['cate_name']}</option>
+						{/foreach}
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="view" class="layui-form-label">
+					阅读量
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="link" value="{$result['link_url']}" name="link_url" class="layui-input">
+					<input type="text" id="view" value="{$result['view']?:'8888'}" name="view" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -30,104 +65,117 @@
 					展示顺序
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="sort" value="{$result['sort']}" name="sort" class="layui-input">
+					<input type="text" id="sort" value="{$result['sort']?:0}" name="sort" class="layui-input">
 				</div>
 				<div class="layui-form-mid layui-word-aux">
 					<span class="x-red">越大排在前面最大不能超过255</span>
 				</div>
-			</div>
+			</div>			
 			<div class="layui-form-item">
 				<label class="layui-form-label">是否显示</label>
 				<div class="layui-input-block">
-					 <input type="radio" name="is_show" {$result['is_show']==-1?'':'checked'} value="0" title="显示">
+					 <input type="radio" name="is_show" {$result['is_show']==0?'checked':''} value="0" title="显示">
 					 <input type="radio" name="is_show" {$result['is_show']==-1?'checked':''} value="-1" title="隐藏">
 				</div>
 			 </div>
 			<div class="layui-form-item">
 				<label class="layui-form-label" for="author_id">选择作者</label>
-				<div class="layui-input-block">
-					<select name="author_id" id="author_id" lay-verify="required">
+				<div class="layui-input-block" style="width: 400px;">
+					<select name="author_id" id="author_id">
 						<option value="0">请选择</option>
+						<?php foreach($author as $v): ?>
+							<option value="{$v['author_id']}" {$v['author_id']==$result['author_id']?'selected':''}>{$v['author']}</option>
+						<?php endforeach; ?>
 					</select>
 				</div>
 			</div>
-			<div class="layui-form-item layui-form-text">
-				<label for="img_des" class="layui-form-label">
-					图片描述
-				</label>
+			<div class="layui-form-item">
+				<label class="layui-form-label">热门标签</label>
 				<div class="layui-input-block">
-			     	<textarea for="img_des" name="img_des" placeholder="请输入内容" class="layui-textarea">{$result['img_des']}</textarea>
+					<input type="checkbox" name="inte_id[]" value="1" {:in_array(1, $result['inte_id'])?'checked':''} title="妹子">
+					<input type="checkbox" name="inte_id[]" value="2" {:in_array('2', $result['inte_id'])?'checked':''} title="鸡汤文"> 
+					<input type="checkbox" name="inte_id[]" value="3" {:in_array(3, $result['inte_id'])?'checked':''} title="趣味"> 
+					<input type="checkbox" name="inte_id[]" value="4" {:in_array('4', $result['inte_id'])?'checked':''} title="户外拍摄"> 
+				</div>
+			 </div>
+			<div class="layui-form-item layui-form-text">
+				<label for="content" class="layui-form-label">
+					文章内容
+				</label>
+				<div class="layui-input-block" style="width: 80%;">
+			     	<textarea id="content" style="display: none;" name="content" placeholder="请输入内容" class="layui-textarea">{$result['content']?:''}</textarea>
 			    </div>
 			</div>
-			<input type="hidden" name="img_url" value="{$result['img_url']}">
-			<input type="hidden" name="type" value="edit">
-			<input type="hidden" name="id" value="{$result['id']}">
+			<input type="hidden" name="art_img" value="{$result['art_img']?:''}">
+			<input type="hidden" name="art_id" value="{$result['art_id']}">
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
-				<button  class="layui-btn" lay-filter="add" lay-submit="">
+				<button  class="layui-btn sendForm">
 					确定
 				</button>
 			</div>
 		</form>
-	</div>
-	<script>
-		layui.use(['form','layer','upload'], function(){
+	</div>     
+    <script>
+		layui.use(['form','layer','upload','element','layedit'], function(){
 			$ = layui.jquery;
-			var form = layui.form()
-			,layer = layui.layer;
-
-
-		  //图片上传接口
-		layui.upload({
-			url: '{:url("Base/uploads")}' //上传接口
-			,success: function(res){ //上传成功后的回调
-				// console.log(res);
-				if (res['status'] == 1)
-				{	var upload_url = "<?php echo '__IMAGE__'; ?>";
-					var img_url = upload_url + res['img_url'];
-					// 显示图片并记录图片地址
-					$('input[name="img_url"]').val(res['img_url']);
-			  		$('#LAY_demo_upload').attr('src', img_url);
-				} else {
-					layer.msg('图片上传失败', {inco: 5});
-				}
-			}
-		  });
-		
-
-		//监听提交
-		form.on('submit(add)', function(data){
-			// console.log(data);
-			var img_url = $("input[name='img_url']").val();
-			if (!img_url) {
-				layer.msg('请上传图片', {inco: 5});
-				return false;
-			}
-
-			// 提交数据到后台
-			var _this = parent.layer;
-			$.ajax({
-				url: "{:url('Banner/ajaxEidtData')}",
-				type: 'post',
-				data: data['field'],
-				success:function(res){
+		  	var form = layui.form()
+		  	,layer = layui.layer;
+            var lement = layui.element();//面包导航
+            var layedit = layui.layedit;//富文本编辑器
+            var index = layedit.build('content');
+		  	//图片上传接口
+			layui.upload({
+				url: '{:url("Base/uploads")}' //上传接口
+				,success: function(res){ //上传成功后的回调
 					if (res['status'] == 1)
-					{
-						// window.location.href = "{:url('Banner/banner_list')}";
-						var index = _this.getFrameIndex(window.name);
-						_this.close(index);
+					{	var upload_url = "<?php echo '__IMAGE__'; ?>";
+						var art_img = upload_url + res['img_url'];
+						// 显示图片并记录图片地址
+						$('input[name="art_img"]').val(res['img_url']);
+				  		$('#LAY_demo_upload').attr('src', art_img);
 					} else {
-						layer.msg(res['msg'], {inco: 5});
+						layer.msg('图片上传失败', {icon: 5});
 					}
 				}
-			});
-			return false;
-		  });
+			});			
+
+			//监听提交
+			$('.sendForm').on('click', function(data){
+
+				// 为富文本编译器赋值
+				var content = layedit.getContent(index);
+				$("textarea[name='content']").val(content);
+				var art_img = $("input[name='art_img']").val();
+				if (!art_img) {
+					layer.msg('请上传图片', {icon: 5});
+					return false;
+				}
+
+				// 提交数据到后台
+				$.ajax({
+					url: "{:url('Article/ajaxEidtData')}",
+					type: 'post',
+					data: $('form').serialize(),
+					success:function(res){
+						if (res['status'] == 1)
+						{
+							layer.msg(res['msg'], {icon: 6});
+							setTimeout(function(){
+								window.location.href = "{:url('Article/list')}";
+							}, 2000);
+						} else {
+							layer.msg(res['msg'], {icon: 5});
+						}
+					}
+				});
+				return false;
+			  	});
 		  
 		  
 		});
 	</script>
-	</body>
+</body>
 
 </html>

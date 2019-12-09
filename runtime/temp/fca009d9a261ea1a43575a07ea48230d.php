@@ -1,4 +1,4 @@
-<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\add.html";i:1575692962;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\edit.html";i:1575691336;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,7 +33,7 @@
           <a><cite>首页</cite></a>
           <a><cite>文章管理</cite></a>
           <a><cite>文章列表</cite></a>
-          <a><cite>添加文章</cite></a>
+          <a><cite>编辑文章</cite></a>
         </span>
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:0px; font-size: 14px;margin-left: 10px;"  href="javascript:window.history.go(-1);" title="返回上一页"><i class="layui-icon" style="line-height:30px; font-size: 12px !important;">返回上一页</i></a>
     </div>
@@ -52,14 +52,14 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="">
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="/static/uploads/<?php echo htmlentities($result['art_img']); ?>">
 			</div>
 			<div class="layui-form-item">
 				<label for="link" class="layui-form-label">
 					文章标题
 				</label>
 				<div class="layui-input-inline" style="width: 50%;">
-					<input type="text" id="link" value="" placeholder="输入文章标题" name="art_title" class="layui-input" lay-verify="required">
+					<input type="text" id="link" value="<?php echo !empty($result['art_title']) ? htmlentities($result['art_title']) : ''; ?>" placeholder="输入文章标题" name="art_title" class="layui-input" lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item layui-form-text">
@@ -67,7 +67,7 @@
 					副标题
 				</label>
 				<div class="layui-input-block" style="width: 50%;">
-			     	<textarea id="subtitle" name="subtitle" lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
+			     	<textarea id="subtitle" name="subtitle" placeholder="请输入内容" class="layui-textarea"><?php echo !empty($result['subtitle']) ? htmlentities($result['subtitle']) : ''; ?></textarea>
 			    </div>
 			</div>
 			<div class="layui-form-item">
@@ -76,7 +76,7 @@
 					<select name="cate_id" id="cate_id">
 						<option value="0">请选择</option>
 						<?php if(is_array($cate) || $cate instanceof \think\Collection || $cate instanceof \think\Paginator): if( count($cate)==0 ) : echo "" ;else: foreach($cate as $key=>$list): ?>
-							<option value="<?php echo htmlentities($list['cate_id']); ?>"><?php echo htmlentities($list['cate_name']); ?></option>
+							<option value="<?php echo htmlentities($list['cate_id']); ?>" <?php echo $list['cate_id']==$result['cate_id'] ? 'selected' : ''; ?>><?php echo htmlentities($list['cate_name']); ?></option>
 						<?php endforeach; endif; else: echo "" ;endif; ?>
 					</select>
 				</div>
@@ -86,7 +86,7 @@
 					阅读量
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="view" value="8888" name="view" class="layui-input">
+					<input type="text" id="view" value="<?php echo !empty($result['view']) ? htmlentities($result['view']) : '8888'; ?>" name="view" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -94,7 +94,7 @@
 					展示顺序
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="sort" value="0" name="sort" class="layui-input">
+					<input type="text" id="sort" value="<?php echo !empty($result['sort']) ? htmlentities($result['sort']) : 0; ?>" name="sort" class="layui-input">
 				</div>
 				<div class="layui-form-mid layui-word-aux">
 					<span class="x-red">越大排在前面最大不能超过255</span>
@@ -103,8 +103,8 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">是否显示</label>
 				<div class="layui-input-block">
-					 <input type="radio" name="is_show" checked value="0" title="显示">
-					 <input type="radio" name="is_show" value="-1" title="隐藏">
+					 <input type="radio" name="is_show" <?php echo $result['is_show']==0 ? 'checked' : ''; ?> value="0" title="显示">
+					 <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? 'checked' : ''; ?> value="-1" title="隐藏">
 				</div>
 			 </div>
 			<div class="layui-form-item">
@@ -113,7 +113,7 @@
 					<select name="author_id" id="author_id">
 						<option value="0">请选择</option>
 						<?php foreach($author as $v): ?>
-							<option value="<?php echo htmlentities($v['author_id']); ?>"><?php echo htmlentities($v['author']); ?></option>
+							<option value="<?php echo htmlentities($v['author_id']); ?>" <?php echo $v['author_id']==$result['author_id'] ? 'selected' : ''; ?>><?php echo htmlentities($v['author']); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -121,10 +121,10 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">热门标签</label>
 				<div class="layui-input-block">
-					<input type="checkbox" name="inte_id[]" value="1" title="妹子">
-					<input type="checkbox" name="inte_id[]" value="2" title="鸡汤文"> 
-					<input type="checkbox" name="inte_id[]" value="3" title="趣味"> 
-					<input type="checkbox" name="inte_id[]" value="4" title="户外拍摄"> 
+					<input type="checkbox" name="inte_id[]" value="1" <?php echo in_array(1, $result['inte_id'])?'checked':''; ?> title="妹子">
+					<input type="checkbox" name="inte_id[]" value="2" <?php echo in_array('2', $result['inte_id'])?'checked':''; ?> title="鸡汤文"> 
+					<input type="checkbox" name="inte_id[]" value="3" <?php echo in_array(3, $result['inte_id'])?'checked':''; ?> title="趣味"> 
+					<input type="checkbox" name="inte_id[]" value="4" <?php echo in_array('4', $result['inte_id'])?'checked':''; ?> title="户外拍摄"> 
 				</div>
 			 </div>
 			<div class="layui-form-item layui-form-text">
@@ -132,10 +132,11 @@
 					文章内容
 				</label>
 				<div class="layui-input-block" style="width: 80%;">
-			     	<textarea id="content" name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+			     	<textarea id="content" style="display: none;" name="content" placeholder="请输入内容" class="layui-textarea"><?php echo !empty($result['content']) ? htmlentities($result['content']) : ''; ?></textarea>
 			    </div>
 			</div>
-			<input type="hidden" name="art_img" value="">
+			<input type="hidden" name="art_img" value="<?php echo !empty($result['art_img']) ? htmlentities($result['art_img']) : ''; ?>">
+			<input type="hidden" name="art_id" value="<?php echo htmlentities($result['art_id']); ?>">
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
@@ -152,13 +153,11 @@
 		  	,layer = layui.layer;
             var lement = layui.element();//面包导航
             var layedit = layui.layedit;//富文本编辑器
-            layedit.build('content');
-
+            var index = layedit.build('content');
 		  	//图片上传接口
 			layui.upload({
 				url: '<?php echo url("Base/uploads"); ?>' //上传接口
 				,success: function(res){ //上传成功后的回调
-					// console.log(res);
 					if (res['status'] == 1)
 					{	var upload_url = "<?php echo '/static/uploads/'; ?>";
 						var art_img = upload_url + res['img_url'];
@@ -173,18 +172,10 @@
 
 			//监听提交
 			$('.sendForm').on('click', function(data){
-				var art_title = $("input[name='art_title']").val();
-				if (!art_title)
-				{
-					layer.msg('文章标题不能为空', {icon: 5});
-					return false;
-				}
-				var subtitle = $("textarea[name='subtitle']").val();
-				if (!subtitle)
-				{
-					layer.msg('文章副标题不能为空', {icon: 5});
-					return false;
-				}
+
+				// 为富文本编译器赋值
+				var content = layedit.getContent(index);
+				$("textarea[name='content']").val(content);
 				var art_img = $("input[name='art_img']").val();
 				if (!art_img) {
 					layer.msg('请上传图片', {icon: 5});
@@ -193,23 +184,23 @@
 
 				// 提交数据到后台
 				$.ajax({
-						url: "<?php echo url('Article/ajaxAddData'); ?>",
-						type: 'post',
-						data: $('form').serialize(),
-						success:function(res){
-							if (res['status'] == 1)
-							{
-								layer.msg(res['msg'], {icon: 6});
-								setTimeout(function(){
-									window.location.href = "<?php echo url('Article/list'); ?>";
-								}, 2000);
-							} else {
-								layer.msg(res['msg'], {icon: 5});
-							}
+					url: "<?php echo url('Article/ajaxEidtData'); ?>",
+					type: 'post',
+					data: $('form').serialize(),
+					success:function(res){
+						if (res['status'] == 1)
+						{
+							layer.msg(res['msg'], {icon: 6});
+							setTimeout(function(){
+								window.location.href = "<?php echo url('Article/list'); ?>";
+							}, 2000);
+						} else {
+							layer.msg(res['msg'], {icon: 5});
 						}
-					});
-					return false;
-			  });
+					}
+				});
+				return false;
+			  	});
 		  
 		  
 		});

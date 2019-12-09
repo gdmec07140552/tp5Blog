@@ -1,4 +1,4 @@
-<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\list.html";i:1575519194;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\list.html";i:1575702290;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -123,7 +123,7 @@
             </table>
         </form>
         <input type="hidden" name="totalNum" value="<?php echo count($result); ?>">
-        <div id="page"></div>
+        <div id="page" style="text-align: center;"><?php echo $page; ?></div>
     </div>
     <script id="detialHtml" type="text/html">
         <div class="x-body">

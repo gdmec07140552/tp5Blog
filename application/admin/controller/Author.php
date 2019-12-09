@@ -21,6 +21,7 @@ class Author extends Base
 	{
 		$input = input() ? input() : array();
 		$result = model('Author')->getPage([],'', 0, ['sort' => 'desc', 'author_id' => 'desc']);
+		$this->assign('page', $result);
 		$array = [];
 		foreach ($result as $key => $value) {
 			$array[] = $value;

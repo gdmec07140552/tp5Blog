@@ -38,7 +38,7 @@
 					副标题
 				</label>
 				<div class="layui-input-block" style="width: 50%;">
-			     	<textarea id="subtitle" name="subtitle" placeholder="请输入内容" class="layui-textarea"></textarea>
+			     	<textarea id="subtitle" name="subtitle" lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
 			    </div>
 			</div>
 			<div class="layui-form-item">
@@ -92,10 +92,10 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">热门标签</label>
 				<div class="layui-input-block">
-					<input type="checkbox" name="inte_id" value="1" title="妹子">
-					<input type="checkbox" name="inte_id" value="2" title="鸡汤文"> 
-					<input type="checkbox" name="inte_id" value="3" title="趣味"> 
-					<input type="checkbox" name="inte_id" value="4" title="户外拍摄"> 
+					<input type="checkbox" name="inte_id[]" value="1" title="妹子">
+					<input type="checkbox" name="inte_id[]" value="2" title="鸡汤文"> 
+					<input type="checkbox" name="inte_id[]" value="3" title="趣味"> 
+					<input type="checkbox" name="inte_id[]" value="4" title="户外拍摄"> 
 				</div>
 			 </div>
 			<div class="layui-form-item layui-form-text">
@@ -110,7 +110,7 @@
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
-				<button  class="layui-btn" lay-filter="add" lay-submit="">
+				<button  class="layui-btn sendForm">
 					确定
 				</button>
 			</div>
@@ -142,9 +142,20 @@
 				}
 			});			
 
-			  //监听提交
-			form.on('submit(add)', function(data){
-				// console.log(data['field']);
+			//监听提交
+			$('.sendForm').on('click', function(data){
+				var art_title = $("input[name='art_title']").val();
+				if (!art_title)
+				{
+					layer.msg('文章标题不能为空', {icon: 5});
+					return false;
+				}
+				var subtitle = $("textarea[name='subtitle']").val();
+				if (!subtitle)
+				{
+					layer.msg('文章副标题不能为空', {icon: 5});
+					return false;
+				}
 				var art_img = $("input[name='art_img']").val();
 				if (!art_img) {
 					layer.msg('请上传图片', {icon: 5});
@@ -155,7 +166,7 @@
 				$.ajax({
 						url: "{:url('Article/ajaxAddData')}",
 						type: 'post',
-						data: data['field'],
+						data: $('form').serialize(),
 						success:function(res){
 							if (res['status'] == 1)
 							{
