@@ -1,4 +1,33 @@
-{include file="common/header" /}
+<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\auth\list.html";i:1575946960;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>
+            德玛西亚总部
+        </title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <!-- css样式文件引入 -->
+        <link rel="stylesheet" href="/static/admin/css/x-admin.css" media="all">
+<!-- <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+        <!-- js文件引入 -->
+        <!-- 判断js文件是否需要引入 -->
+<?php if (in_array('layui', $js_array)): ?>
+	<script src="/static/admin/lib/layui/layui.js" charset="utf-8"></script>
+<?php endif; if (in_array('x-admin', $js_array)): ?>
+	<script src="/static/admin/js/x-admin.js"></script>
+<?php endif; if (in_array('x-layui', $js_array)): ?>
+	<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
+<?php endif; ?>
+<script src="/static/js/jquery.min.js"></script>
+    </head>
+    <body>
     <div class="x-nav">
         <span class="layui-breadcrumb">
           <a><cite>首页</cite></a>
@@ -8,7 +37,7 @@
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加权限','{:url("Auth/add")}','570','550')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：{:count($result)} 条</span></xblock>
+        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加权限','<?php echo url("Auth/add"); ?>','570','550')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
         <form>
             <table class="layui-table">
                 <thead>
@@ -37,32 +66,32 @@
                     <?php foreach($auth as $k => $res): ?>
                     <tr>
                         <td>
-                            <input type="checkbox" value="{$res['auth_id']}" name="idArr[]" lay-skin="primary">
+                            <input type="checkbox" value="<?php echo htmlentities($res['auth_id']); ?>" name="idArr[]" lay-skin="primary">
                         </td>
                         <td>
-                            <input style="width: 50px;" type="text" data-auth_id="{$res['auth_id']}" value="{$res['sort']}" class="layui-input">  
+                            <input style="width: 50px;" type="text" data-auth_id="<?php echo htmlentities($res['auth_id']); ?>" value="<?php echo htmlentities($res['sort']); ?>" class="layui-input">  
                             
                         </td>
                         <td>
-                            {$res['auth_name']}
+                            <?php echo htmlentities($res['auth_name']); ?>
                         </td>
                         <td>
-                            {$res['auth_link']}
+                            <?php echo htmlentities($res['auth_link']); ?>
                         </td>
                         <td class="td-status">
-                            <span style="background-color: {$res['is_show']==-1?'#C71D23':'#009688'}" class="layui-btn layui-btn-normal layui-btn-mini" data-auth_id="{$res['auth_id']}" data-status="{$res['is_show']}">
-                                {$res['is_show']==-1?'隐藏':'显示'}
+                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-auth_id="<?php echo htmlentities($res['auth_id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
+                                <?php echo $res['is_show']==-1 ? '隐藏' : '显示'; ?>
                             </span>
                         </td>
                         <td class="td-manage">
                             <!-- <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a> -->
-                            <a title="编辑权限" href="javascript:;" onclick="banner_edit('编辑权限','{:url('Auth/edit')}?auth_id={$res['auth_id']}','4','570','550')"
+                            <a title="编辑权限" href="javascript:;" onclick="banner_edit('编辑权限','<?php echo url('Auth/edit'); ?>?auth_id=<?php echo htmlentities($res['auth_id']); ?>','4','570','550')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="banner_del(this, {$res['auth_id']})" 
+                            <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['auth_id']); ?>)" 
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
@@ -72,8 +101,8 @@
                 </tbody>
             </table>
         </form>
-        <input type="hidden" name="totalNum" value="{:count($result)}">
-        <div id="page" style="text-align: center;">{$result|raw}</div>
+        <input type="hidden" name="totalNum" value="<?php echo count($result); ?>">
+        <div id="page" style="text-align: center;"><?php echo $result; ?></div>
     </div>        
     <script>
         layui.use(['laydate','element','laypage','layer'], function(){
@@ -99,7 +128,7 @@
             layer.confirm('确认要删除吗？',function(index){
                 //捉到所有被选中的，发异步进行删除
                 $.ajax({
-                    url: "{:url('Auth/ajaxDelAllData')}",
+                    url: "<?php echo url('Auth/ajaxDelAllData'); ?>",
                     type: 'post',
                     data: $('form').serialize(),
                     success: function(res)
@@ -130,7 +159,7 @@
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
                 $.get(
-                    '{:url("Auth/ajaxDeleteData")}/auth_id/'+id,
+                    '<?php echo url("Auth/ajaxDeleteData"); ?>/auth_id/'+id,
                     function(res){               
                         if (res['status'] == 1)
                         {
@@ -157,7 +186,7 @@
                 var is_show = status==0 ? '-1' : '0';
                 
                 $.get(
-                    "{:url('Auth/ajaxIsShow')}/is_show/" + is_show+"/auth_id/"+auth_id,
+                    "<?php echo url('Auth/ajaxIsShow'); ?>/is_show/" + is_show+"/auth_id/"+auth_id,
                     function(res){
                         if (res['status'] == 1)
                         {
@@ -191,7 +220,7 @@
                 var auth_id = $(this).data('auth_id');
                 var val = $(this).val();
                 $.get(
-                    "{:url('Auth/ajaxSort')}/auth_id/" + auth_id + '/sort/' + val,
+                    "<?php echo url('Auth/ajaxSort'); ?>/auth_id/" + auth_id + '/sort/' + val,
                     function(res){
                         if (res['status'] == 1)
                         {

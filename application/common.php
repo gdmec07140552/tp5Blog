@@ -106,3 +106,68 @@ function arrayStringToInt($array)
 	}, $array);
 	return $newArr;
 }
+
+/**
+ * [redis 引入Redis缓存]
+ * @return [type] [description]
+ */
+function redis()
+{
+	$redis = new \think\cache\driver\Redis();
+	$redis->connect('127.0.0.1', 6379);
+	$redis->auth('kansz');
+	return $redis;
+}
+
+/**
+ * [read_all_dir 读取目录及子目录下所有文件名]
+ * @param  [type] $path [读取目录]
+ * @return [type]       [description]
+ */
+function read_all_dir($path = '')
+{
+	//1、打开要操作目录的目录句柄
+	$handler = opendir($path);
+	$result = [];
+	if ($handler)
+	{
+		/*其中$file= readdir($handler)每次循环时将读取的文件名赋值给$file ，$file  !== false。一定要用!==，因为如果某个文件名如果叫'0′，或某些被系统认为是代表false，用!=就会停止循环*/
+		// 2、循环读取目录下的所有文件
+		while( ($file = readdir($handler)) !== false )
+		{
+			if (!in_array($file, ['.', '..', 'Login.php', 'Base.php'])) {
+				$cur_path = $path . DIRECTORY_SEPARATOR . $file;
+				// 3、判断是否为目录，递归读取文件
+				if (is_dir($cur_path))
+				{
+					$result[][$file] = read_all_dir($cur_path);
+				} else {
+					$result[] = basename($file, '.php');
+				}
+			}
+
+		}
+	}
+	// 4、关闭目录
+	closedir($handler);
+
+	return $result;
+}
+
+/**
+ * [ajaxGetAction 获取类里面的所有方法和两个类的方法差集]
+ * @param  [type]  $controller [类名]
+ * @param  boolean $isDiff     [是否返回差集]
+ * @return [type]              [description]
+ */
+function getClassAction($controller, $isDiff = false)
+{
+	$contArr = get_class_methods(get_class(controller($controller)));
+	// $basaeArr = get_class_methods(get_class(new Base));
+	$basaeArr = get_class_methods(get_class(controller('Base')));
+	$diffArr = array_diff($contArr, $basaeArr);	
+	if ($isDiff == true)
+		return $diffArr;
+	else 
+		return $contArr;
+}

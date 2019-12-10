@@ -79,3 +79,14 @@ CREATE TABLE IF NOT EXISTS blog_admin_log
 	create_time int(11) NOT NULL DEFAULT '0' COMMENT '操作时间',
 	PRIMARY KEY (log_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT="日志文件" AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS blog_auth
+(
+	auth_id smallint(6) NOT NULL AUTO_INCREMENT,
+	auth_name char(60) NOT NULL DEFAULT '' COMMENT '权限名称',
+	auth_link varchar(255) NOT NULL DEFAULT '' COMMENT '权限',
+	is_show tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁言：0正常，-1禁用',
+	pid smallint(6) NOT NULL DEFAULT '0' COMMENT '上级分类id：0代表顶级分类',
+	sort tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序：越大排在前面最大不能超过255',
+	PRIMARY KEY (auth_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限管理' AUTO_INCREMENT=1;
