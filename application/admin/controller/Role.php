@@ -23,11 +23,7 @@ class Role extends Base
 		$input = input() ? input() : array();
 
 		$result = model('Role')->getPage([],'', 0, ['sort' => 'desc', 'role_id' => 'desc']);
-		// 打印树形数据
-		$auth = model('Category')->getTree($result, ['auth_name', 'role_id']);
-		// dump($auth);die;
 
-		$this->assign('auth', $auth);
 		$this->assign('result' , $result);
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
@@ -125,19 +121,9 @@ class Role extends Base
 		$input = input() ? input() : array();
 
 		//取出所有的角色
-		$auth = model('Role')->getAllData(
-			[],
-			'role_id, auth_name, pid',
-			0,
-			['sort' => 'desc', 'role_id' => 'desc']
-		);
-
-		//获取controller所有控制名称
-		$controller = read_all_dir(__DIR__);
-		$this->assign('controller', $controller);
-
-		$result = model('Category')->getTrees($auth, ['auth_name', 'role_id']);
-		$this->assign('auth', $result);
+		$result = model('Auth')->getAllData();
+		dump($result);
+		$this->assign('result', $result);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);

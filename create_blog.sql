@@ -10,6 +10,20 @@ CREATE TABLE IF NOT EXISTS blog_admin
 	last_ip char(20) NOT NULL DEFAULT '0' COMMENT '最后的登录ip',
 	PRIMARY KEY (admin_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员账号' AUTO_INCREMENT=1;
+-- 默认密码：admin888
+-- insert into blog_admin
+-- (
+-- 	admin_name, admin_pass, head_img, status, login_num, last_time, last_ip
+-- ) values 
+-- (
+-- 	'admin',
+-- 	'9d3d6ce1daf8ddf49216cce29ebdfcf8',
+-- 	'',
+-- 	'0',
+-- 	'1',
+-- 	'1575940628',
+-- 	'127.0.0.1'
+-- )
 
 CREATE TABLE IF NOT EXISTS blog_banner
 (
@@ -80,7 +94,7 @@ CREATE TABLE IF NOT EXISTS blog_admin_log
 	PRIMARY KEY (log_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT="日志文件" AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS blog_auth
+CREATE TABLE IF NOT EXISTS blog_admin_auth
 (
 	auth_id smallint(6) NOT NULL AUTO_INCREMENT,
 	auth_name char(60) NOT NULL DEFAULT '' COMMENT '权限名称',
@@ -90,3 +104,16 @@ CREATE TABLE IF NOT EXISTS blog_auth
 	sort tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序：越大排在前面最大不能超过255',
 	PRIMARY KEY (auth_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限管理' AUTO_INCREMENT=1;
+
+
+CREATE TABLE IF NOT EXISTS blog_admin_role
+(
+	role_id smallint(6) NOT NULL AUTO_INCREMENT,
+	role_name char(40) NOT NULL DEFAULT '' COMMENT '角色名称',
+	auth varchar(255) NOT NULL DEFAULT '' COMMENT '权限id',
+	is_show tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否禁言：0正常，-1禁用',
+	sort tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序：越大排在前面最大不能超过255',
+	description varchar(255) NOT NULL DEFAULT '' COMMENT '角色描述',
+	PRIMARY KEY (role_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT="角色管理" AUTO_INCREMENT=1;
+

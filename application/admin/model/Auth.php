@@ -7,7 +7,7 @@ namespace app\admin\model;
 class Auth extends Base
 {
 	
-	protected $table = 'auth';
+	protected $table = 'admin_auth';
 	function __construct()
 	{
 		parent::__construct();

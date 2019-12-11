@@ -6,7 +6,7 @@ namespace app\admin\model;
 */
 class Role extends Base
 {
-	protected $table = 'role';
+	protected $table = 'admin_role';
 	function __construct()
 	{
 		parent::__construct();
