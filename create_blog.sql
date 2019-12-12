@@ -4,26 +4,28 @@ CREATE TABLE IF NOT EXISTS blog_admin
 	admin_name char(20) NOT NULL DEFAULT '' COMMENT '用户名',
 	admin_pass char(32) NOT NULL DEFAULT '' COMMENT '登录密码',
 	head_img varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像',
-	status tinyint(1) NOT NULL DEFAULT '0' COMMENT '0代表正常，-1表示禁用',
+	is_show tinyint(1) NOT NULL DEFAULT '0' COMMENT '0代表正常，-1表示禁用',
 	login_num int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
 	last_time int(11) NOT NULL DEFAULT '0' COMMENT '最后的登录时间',
 	last_ip char(20) NOT NULL DEFAULT '0' COMMENT '最后的登录ip',
 	PRIMARY KEY (admin_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员账号' AUTO_INCREMENT=1;
+-- 修改blog_admin表status为is_show
+-- alter table blog_admin status is_show tinyint(1)
 -- 默认密码：admin888
--- insert into blog_admin
--- (
--- 	admin_name, admin_pass, head_img, status, login_num, last_time, last_ip
--- ) values 
--- (
--- 	'admin',
--- 	'9d3d6ce1daf8ddf49216cce29ebdfcf8',
--- 	'',
--- 	'0',
--- 	'1',
--- 	'1575940628',
--- 	'127.0.0.1'
--- )
+insert into blog_admin
+(
+	admin_name, admin_pass, head_img, status, login_num, last_time, last_ip
+) values 
+(
+	'admin',
+	'9d3d6ce1daf8ddf49216cce29ebdfcf8',
+	'',
+	'0',
+	'1',
+	'1575940628',
+	'127.0.0.1'
+)
 
 CREATE TABLE IF NOT EXISTS blog_banner
 (

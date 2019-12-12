@@ -1,4 +1,4 @@
-<?php /*a:4:{s:60:"D:\phpStudy\WWW\tp5Blog\application\admin\view\role\add.html";i:1576054028;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\role\edit.html";i:1576054369;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,19 +33,18 @@
           <a><cite>首页</cite></a>
           <a><cite>管理员管理管理</cite></a>
           <a><cite>角色列表</cite></a>
-          <a><cite>添加角色</cite></a>
+          <a><cite>编辑角色</cite></a>
         </span>
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:0px; font-size: 14px;margin-left: 10px;"  href="javascript:window.history.go(-1);" title="返回上一页"><i class="layui-icon" style="line-height:30px; font-size: 12px !important;">返回上一页</i></a>
     </div>
-    <div class="x-body">
-    		
+    <div class="x-body">    		
             <form class="layui-form layui-form-pane">
                 <div class="layui-form-item">
                     <label for="name" class="layui-form-label">
                         角色名称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="name" name="role_name" required="" lay-verify="required"
+                        <input type="text" id="name" name="role_name" value="<?php echo htmlentities($result['role_name']); ?>" required="" lay-verify="required"
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
@@ -54,7 +53,7 @@
                     	角色所拥有的权限
                     </label>
                 </div>
-                <?php if(is_array($result) || $result instanceof \think\Collection || $result instanceof \think\Paginator): if( count($result)==0 ) : echo "" ;else: foreach($result as $key=>$res): ?>
+                <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): if( count($list)==0 ) : echo "" ;else: foreach($list as $key=>$res): ?>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label" style="font-size: 18px; color: #009688;">
                     	<?php echo htmlentities($res['auth_name']); ?>>>>权限
@@ -67,7 +66,7 @@
                                 <td>
                                     <div class="layui-input-block">
                                         <?php if(isset($res['son'])): foreach($res['son'] as $k => $v): ?>
-													<input type="checkbox" name="auth[]" title="<?php echo htmlentities($v['auth_name']); ?>" lay-skin="primary" value="<?php echo htmlentities($v['auth_id']); ?>"> 
+													<input type="checkbox" name="auth[]" value="<?php echo htmlentities($v['auth_id']); ?>" title="<?php echo htmlentities($v['auth_name']); ?>" lay-skin="primary" <?php if(in_array($v['auth_id'], $result['auth'])){echo "checked";} ?>> 
 	                                        <?php endforeach; ?>
                                         <?php endif; ?>
                                     </div>
@@ -83,13 +82,14 @@
                        	角色描述
                     </label>
                     <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" id="desc" name="description" class="layui-textarea"></textarea>
+                        <textarea placeholder="请输入内容" id="desc" name="description" class="layui-textarea"><?php echo htmlentities($result['description']); ?></textarea>
                     </div>
                 </div>
+                <input type="hidden" name="role_id" value="<?php echo htmlentities($result['role_id']); ?>">
                 <div class="layui-form-item">
-                <button  class="layui-btn sendForm">
-					确定
-				</button>
+	                <button  class="layui-btn sendForm">
+						确定
+					</button>
               </div>
             </form>
         </div>    
@@ -104,7 +104,7 @@
 			$('.sendForm').on('click', function(data){
 				// 提交数据到后台
 				$.ajax({
-					url: "<?php echo url('Role/ajaxAddData'); ?>",
+					url: "<?php echo url('Role/ajaxEidtData'); ?>",
 					type: 'post',
 					data: $('form').serialize(),
 					success:function(res){

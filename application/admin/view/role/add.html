@@ -9,63 +9,59 @@
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:0px; font-size: 14px;margin-left: 10px;"  href="javascript:window.history.go(-1);" title="返回上一页"><i class="layui-icon" style="line-height:30px; font-size: 12px !important;">返回上一页</i></a>
     </div>
     <div class="x-body">
-            <form action="" method="post" class="layui-form layui-form-pane">
+    		
+            <form class="layui-form layui-form-pane">
                 <div class="layui-form-item">
                     <label for="name" class="layui-form-label">
-                        <span class="x-red">*</span>角色名
+                        角色名称
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="name" name="name" required="" lay-verify="required"
+                        <input type="text" id="name" name="role_name" required="" lay-verify="required"
                         autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item layui-form-text" style="width: 80%;">
-                    <label class="layui-form-label">
-                        拥有权限
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label" style="font-size: 25px; color: #009688;">
+                    	角色所拥有的权限
                     </label>
+                </div>
+                {foreach name="result" item="res"}
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label" style="font-size: 18px; color: #009688;">
+                    	{$res['auth_name']}>>>权限
+                    </label>
+                    
                     <table  class="layui-table layui-input-block">
                         <tbody>
+                        
                             <tr>
                                 <td>
-                                    用户管理
-                                </td>
-                                <td>
                                     <div class="layui-input-block">
-                                        <input name="id[]" type="checkbox" value="2"> 用户停用
-                                        <input name="id[]" type="checkbox" value="2"> 用户删除
-                                        <input name="id[]" type="checkbox" value="2"> 用户修改
-                                        <input name="id[]" type="checkbox" value="2"> 用户改密
-                                        <input name="id[]" type="checkbox" value="2"> 用户列表
+                                        {if isset($res['son'])}
+                                        	<?php foreach($res['son'] as $k => $v): ?>
+													<input type="checkbox" name="auth[]" title="{$v['auth_name']}" lay-skin="primary" value="{$v['auth_id']}"> 
+	                                        <?php endforeach; ?>
+                                        {/if}
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    文章管理
-                                </td>
-                                <td>
-                                    <div class="layui-input-block">
-                                        <input name="id[]" type="checkbox" value="2"> 文章添加
-                                        <input name="id[]" type="checkbox" value="2"> 文章删除
-                                        <input name="id[]" type="checkbox" value="2"> 文章修改
-                                        <input name="id[]" type="checkbox" value="2"> 文章改密
-                                        <input name="id[]" type="checkbox" value="2"> 文章列表
-                                    </div>
-                                </td>
-                            </tr>
+                          
                         </tbody>
                     </table>
                 </div>
+                {/foreach}
                 <div class="layui-form-item layui-form-text" style="width: 80%;">
                     <label for="desc" class="layui-form-label">
-                        描述
+                       	角色描述
                     </label>
                     <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>
+                        <textarea placeholder="请输入内容" id="desc" name="description" class="layui-textarea"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                <button class="layui-btn" lay-submit="" lay-filter="add">增加</button>
+                <button  class="layui-btn sendForm">
+					确定
+				</button>
               </div>
             </form>
         </div>    
@@ -78,32 +74,25 @@
 
 			//监听提交
 			$('.sendForm').on('click', function(data){
-				var art_title = $("input[name='art_title']").val();
-				if (!art_title)
-				{
-					layer.msg('文章标题不能为空', {icon: 5});
-					return false;
-				}
-
 				// 提交数据到后台
 				$.ajax({
-						url: "{:url('Role/ajaxAddData')}",
-						type: 'post',
-						data: $('form').serialize(),
-						success:function(res){
-							if (res['status'] == 1)
-							{
-								layer.msg(res['msg'], {icon: 6});
-								setTimeout(function(){
-									window.location.href = "{:url('Role/list')}";
-								}, 2000);
-							} else {
-								layer.msg(res['msg'], {icon: 5});
-							}
+					url: "{:url('Role/ajaxAddData')}",
+					type: 'post',
+					data: $('form').serialize(),
+					success:function(res){
+						if (res['status'] == 1)
+						{
+							layer.msg(res['msg'], {icon: 6});
+							setTimeout(function(){
+								window.location.href = "{:url('Role/list')}";
+							}, 2000);
+						} else {
+							layer.msg(res['msg'], {icon: 5});
 						}
-					});
-					return false;
-			  });
+					}
+				});
+				return false;
+			});
 		  
 		  
 		});

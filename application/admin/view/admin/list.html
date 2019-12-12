@@ -2,13 +2,13 @@
     <div class="x-nav">
         <span class="layui-breadcrumb">
           <a><cite>首页</cite></a>
-          <a><cite>文章管理</cite></a>
-          <a><cite>分类列表</cite></a>
+          <a><cite>管理员管理</cite></a>
+          <a><cite>管理员列表</cite></a>
         </span>
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加分类','{:url("Category/add")}','550','450')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：{:count($result)} 条</span></xblock>
+        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加管理员','{:url("Admin/add")}','550','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：{:count($result)} 条</span></xblock>
         <form>
             <table class="layui-table">
                 <thead>
@@ -17,10 +17,7 @@
                             <input type="checkbox" name="checkAll" value="0" lay-skin="primary"> 
                         </th>
                         <th>
-                            排序
-                        </th>
-                        <th>
-                            分类名
+                            管理员名
                         </th>
                         <th>
                             显示状态
@@ -31,20 +28,16 @@
                     </tr>
                 </thead>
                 <tbody id="x-img">
-                    <?php foreach($cate as $k => $res): ?>
+                    <?php foreach($result as $k => $res): ?>
                     <tr>
                         <td>
-                            <input type="checkbox" value="{$res['cate_id']}" name="idArr[]" lay-skin="primary">
+                            <input type="checkbox" value="{$res['admin_id']}" name="idArr[]" lay-skin="primary">
                         </td>
                         <td>
-                            <input style="width: 50px;" type="text" data-cate_id="{$res['cate_id']}" value="{$res['sort']}" class="layui-input">  
-                            
-                        </td>
-                        <td>
-                            {$res['cate_name']}
+                            {$res['admin_name']}
                         </td>
                         <td class="td-status">
-                            <span style="background-color: {$res['is_show']==-1?'#C71D23':'#009688'}" class="layui-btn layui-btn-normal layui-btn-mini" data-cate_id="{$res['cate_id']}" data-status="{$res['is_show']}">
+                            <span style="background-color: {$res['is_show']==-1?'#C71D23':'#009688'}" class="layui-btn layui-btn-normal layui-btn-mini" data-admin_id="{$res['admin_id']}" data-status="{$res['is_show']}">
                                 {$res['is_show']==-1?'隐藏':'显示'}
                             </span>
                         </td>
@@ -52,11 +45,11 @@
                             <!-- <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a> -->
-                            <a title="编辑分类" href="javascript:;" onclick="banner_edit('编辑分类','{:url('Category/edit')}?cate_id={$res['cate_id']}','4','550','450')"
+                            <a title="编辑管理员" href="javascript:;" onclick="banner_edit('编辑管理员','{:url('Admin/edit')}?admin_id={$res['admin_id']}','4','550','500')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="banner_del(this, {$res['cate_id']})" 
+                            <a title="删除" href="javascript:;" onclick="banner_del(this, {$res['admin_id']})" 
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
@@ -76,16 +69,15 @@
             lement = layui.element();//面包导航
             laypage = layui.laypage;//分页
             layer = layui.layer;//弹出层
-
-          //以上模块根据需要引入
-
-            layer.ready(function(){ //为了layer.ext.js加载完毕再执行
-                layer.photos({
-                    photos: '#x-img'
-                //,shift: 5 //0-6的选择，指定弹出图片动画类型，默认随机
-                });
-            }); 
           
+            laypage({
+            cont: 'page'
+            ,pages: 2
+            ,first: 1
+            ,last: 2
+            ,prev: '<em><</em>'
+            ,next: '<em>></em>'
+          }); 
         });
 
         //批量删除提交
@@ -93,7 +85,7 @@
             layer.confirm('确认要删除吗？',function(index){
                 //捉到所有被选中的，发异步进行删除
                 $.ajax({
-                    url: "{:url('Category/ajaxDelAllData')}",
+                    url: "{:url('Admin/ajaxDelAllData')}",
                     type: 'post',
                     data: $('form').serialize(),
                     success: function(res)
@@ -124,7 +116,7 @@
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
                 $.get(
-                    '{:url("Category/ajaxDeleteData")}/cate_id/'+id,
+                    '{:url("Admin/ajaxDeleteData")}/admin_id/'+id,
                     function(res){               
                         if (res['status'] == 1)
                         {
@@ -147,11 +139,11 @@
             $('.layui-btn-mini').on('click', function(data){
                 var _this = $(this);
                 var status = _this.data('status');
-                var cate_id = _this.data('cate_id');
+                var admin_id = _this.data('admin_id');
                 var is_show = status==0 ? '-1' : '0';
                 
                 $.get(
-                    "{:url('Category/ajaxIsShow')}/is_show/" + is_show+"/cate_id/"+cate_id,
+                    "{:url('Admin/ajaxIsShow')}/is_show/" + is_show+"/admin_id/"+admin_id,
                     function(res){
                         if (res['status'] == 1)
                         {
@@ -180,22 +172,6 @@
                 });
             });
 
-            // 排序设置
-            $('.layui-input').on('change', function(data){
-                var cate_id = $(this).data('cate_id');
-                var val = $(this).val();
-                $.get(
-                    "{:url('Category/ajaxSort')}/cate_id/" + cate_id + '/sort/' + val,
-                    function(res){
-                        if (res['status'] == 1)
-                        {
-                            layer.msg(res['msg'], {icon: 6});
-                            window.location.reload();
-                        } else {
-                            layer.msg(res['msg'], {icon: 5});
-                        }
-                    });
-            });
         });
     </script>
     </body>

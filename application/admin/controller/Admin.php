@@ -2,11 +2,10 @@
 namespace app\admin\controller;
 
 use think\Db;
-use think\facade\Request;
 /**
-* 角色管理
+* 管理员管理
 */
-class Role extends Base
+class Admin extends Base
 {
 	
 	function __construct()
@@ -15,14 +14,14 @@ class Role extends Base
 	}
 
 	/**
-	 * [list 角色列表]
+	 * [list 管理员列表]
 	 * @return [type] [description]
 	 */
 	public function list()
 	{
 		$input = input() ? input() : array();
 
-		$result = model('Role')->getPage([],'', 0, ['sort' => 'desc', 'role_id' => 'desc']);
+		$result = model('Admin')->getPage([],'', 0);
 
 		$this->assign('result' , $result);
 		//引入js文件
@@ -36,15 +35,17 @@ class Role extends Base
 	 */
 	public function ajaxDeleteData()
 	{
-		$input = input();
+		$data = input();
 
-		if (empty($input['role_id']))
+		if (empty($data['admin_id']))
 			return json(['status' => 0, 'msg' => '删除失败']);
-		$result = model('Role')->deleteData(['role_id' => $input['role_id']]);
+		$result = model('Admin')->deleteData(['admin_id' => $data['admin_id']]);
 		if ($result)
 		{
+			// 删除成则把它下级管理员设置成一级管理员
+			model('Admin')->editData(['pid' => $data['admin_id']], ['pid' => 0]);
 			// 管理员日志记录
-			model('Base')->addLog(3, '角色管理', $input['role_id']);
+			model('Base')->addLog(3, '管理员管理', $data['admin_id']);
 			return json(['status' => 1, 'msg' => '删除成功']);
 		} else {
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -57,17 +58,18 @@ class Role extends Base
 	 */
 	public function ajaxDelAllData()
 	{
-		$input = input('post.');
-		if (empty($input['idArr']))
+		$data = input('post.');
+		if (empty($data['idArr']))
 			return json(['status' => 0, 'msg' => '删除失败']);
 		Db::startTrans();
 		try {
-			$where['role_id'] = ['IN', $input['idArr']];
-			model('Role')->deleteData($where);
-			// 删除成则把它下级角色设置成一级角色
-			foreach ($input['idArr'] as $value) {
+			$where['admin_id'] = ['IN', $data['idArr']];
+			model('Admin')->deleteData($where);
+			// 删除成则把它下级管理员设置成一级管理员
+			foreach ($data['idArr'] as $value) {
+				model('Admin')->editData(['pid' => $value], ['pid' => 0]);
 				// 管理员日志记录
-				model('Base')->addLog(3, '角色管理', $value);
+				model('Base')->addLog(3, '管理员管理', $value);
 			}
 			Db::commit();
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -84,9 +86,9 @@ class Role extends Base
 	public function ajaxIsShow()
 	{
 		$input = input() ? input() : array();
-		$result = model('Role')->editData(['role_id' => $input['role_id']], ['is_show' => $input['is_show']]);
+		$result = model('Admin')->editData(['admin_id' => $input['admin_id']], ['is_show' => $input['is_show']]);
 		// 管理员日志记录
-			model('Base')->addLog(2, '角色管理', $input['role_id']);
+			model('Base')->addLog(2, '管理员管理', $input['admin_id']);
 		if ($result)
 			return json(['status' => 1, 'msg' => '修改成功']);
 		else
@@ -94,36 +96,19 @@ class Role extends Base
 	}
 
 	/**
-	 * [ajaxSort ajax排序]
-	 * @return [type] [description]
-	 */
-	public function ajaxSort()
-	{
-		$input = input() ? input() : array();
-		$result = model('Role')->editData(['role_id' => $input['role_id']], ['sort' => $input['sort']]);
-		// 管理员日志记录
-			model('Base')->addLog(2, '角色管理', $input['role_id']);
-		if ($result)
-			return json(['status' => 1, 'msg' => '修改成功']);
-		else
-			return json(['status' => 0, 'msg' => '修改失败']);
-	}
-
-	/**
-	 * 角色管理--添加
+	 * 管理员--添加
 	 * @return [type] [description]
 	 */
 	public function add()
 	{
 		$input = input() ? input() : array();
 
-		//取出所有的角色
-		$result = model('Auth')->getAllData();
-		// 二维数组转四维数组
-		$array = model('Category')->arrayMoreToFore($result, ['auth_name', 'auth_id']);
-		unset($array[0]);
-
-		$this->assign('result', $array);
+		//取出所有的管理员
+		$role = model('Role')->getAllData(
+				[],
+				'role_id, role_name'
+			);
+		$this->assign('role', $role);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
@@ -138,43 +123,36 @@ class Role extends Base
 	{
 		//添加数据
 		$input = input('post.');
-		// 处理权限id
-		if (!empty($input['auth']))
-			$input['auth'] = implode(',', $input['auth']);
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
-		$result = model('Role')->insertData($input);
-		if ($result) {
-			// 管理员日志记录
-			model('Base')->addLog(1, '角色管理', $result);
-
+		$result = model('Admin')->insertData($input);
+		// 管理员日志记录
+			model('Base')->addLog(1, '管理员管理', $result);
+		if ($result)
 			return json(['status' => 1, 'msg' => '添加成功']);
-		} else {
+		else
 			return json(['status' => 0, 'msg' => '添加失败']);
-		}
 	}
 
 	/**
-	 * 角色管理--编辑
+	 * 管理员--编辑
 	 * @return [type] [description]
 	 */
 	public function edit()
 	{
 		$input = input() ? input() : array();
 		
-		$result = model('Role')->getOneData(['role_id' => input('role_id')]);
-		// 获取控制器名和操作方法名
-		if (!empty($result['auth']))
-			$result['auth'] = explode(',', $result['auth']);
+		$result = model('Admin')->getOneData(['admin_id' => input('admin_id')]);
 		$this->assign('result', $result);
-
-		//取出所有的角色
-		$auth = model('Auth')->getAllData();
-		// 二维数组转四维数组
-		$array = model('Category')->arrayMoreToFore($auth, ['auth_name', 'auth_id']);
-		unset($array[0]);
-
-		$this->assign('list', $array);
+		// 获取管理员数据
+		$array = model('Admin')->getAllData(
+				[],
+				'admin_id, cate_name, pid',
+				0,
+				['sort' => 'desc', 'admin_id' => 'desc']
+			);
+		$cate = model('Admin')->getTrees($array);
+		$this->assign('cate', $cate);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-admin']);
@@ -188,19 +166,28 @@ class Role extends Base
 	public function ajaxEidtData()
 	{
 		$input = input('post.') ? input('post.') : array();
-		$role_id = $input['role_id'];
-		unset($input['role_id']);
-		// 处理权限id
-		if (!empty($input['auth']))
-			$input['auth'] = implode(',', $input['auth']);
-		$result = model('Role')->editData(['role_id' => $role_id], $input);
-		if ($result)
-		{
+		$admin_id = $input['admin_id'];
+		unset($input['admin_id']);
+		// 查找是否有该管理员
+		$cate = model('Admin')->getOneData(['admin_id' => $admin_id], 'pid');		
+		if (!$cate)
+			return json(['status' => 0, 'msg' => '修改失败']);
+		Db::startTrans();
+		try {
+			// 如果把当前管理员设置成自己的子管理员的话，则把他设置成顶级管理员
+			if ($admin_id == $input['pid'])
+				$input['pid'] = 0;
+			model('Admin')->editData(['admin_id' => $admin_id], $input);
+			// 如果是顶级管理员修改的话，则把他的下一级管理员设置成顶级管理员
+			if ($cate['pid'] == 0)
+				model('Admin')->editData(['pid' => $admin_id], ['pid' => 0]);
 			// 管理员日志记录
-			model('Base')->addLog(2, '角色管理', $role_id);
+			model('Base')->addLog(2, '管理员管理', $admin_id);
 
+			Db::commit();
 			return json(['status' => 1, 'msg' => '修改成功']);
-		} else {
+		} catch (Exception $e) {
+			Db::rollback();
 			return json(['status' => 0, 'msg' => '修改失败']);
 		}
 	}

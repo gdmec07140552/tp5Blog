@@ -1,4 +1,4 @@
-<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\role\list.html";i:1576057539;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\list.html";i:1576060146;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,12 +32,12 @@
         <span class="layui-breadcrumb">
           <a><cite>首页</cite></a>
           <a><cite>管理员管理</cite></a>
-          <a><cite>角色列表</cite></a>
+          <a><cite>管理员列表</cite></a>
         </span>
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><a href="<?php echo url('Role/add'); ?>" class="layui-btn"><i class="layui-icon">&#xe608;</i>添加</a><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
+        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加管理员','<?php echo url("Admin/add"); ?>','550','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
         <form>
             <table class="layui-table">
                 <thead>
@@ -46,17 +46,8 @@
                             <input type="checkbox" name="checkAll" value="0" lay-skin="primary"> 
                         </th>
                         <th>
-                            排序
+                            管理员名
                         </th>
-                        <th>
-                            角色名称
-                        </th>
-                        <th>
-                            角色描述
-                        </th>
-                        <!-- <th>
-                            详情
-                        </th> -->
                         <th>
                             显示状态
                         </th>
@@ -69,24 +60,13 @@
                     <?php foreach($result as $k => $res): ?>
                     <tr>
                         <td>
-                            <input type="checkbox" value="<?php echo htmlentities($res['role_id']); ?>" name="idArr[]" lay-skin="primary">
+                            <input type="checkbox" value="<?php echo htmlentities($res['admin_id']); ?>" name="idArr[]" lay-skin="primary">
                         </td>
-                        <td >
-                            <input style="width: 50px;" type="text" data-role_id="<?php echo htmlentities($res['role_id']); ?>" value="<?php echo htmlentities($res['sort']); ?>" class="layui-input">
+                        <td>
+                            <?php echo htmlentities($res['admin_name']); ?>
                         </td>
-                        <td >
-                            <?php echo htmlentities($res['role_name']); ?>
-                        </td>
-                        <td >
-                            <?php echo htmlentities($res['description']); ?>
-                        </td>                        
-                        <!-- <td>
-                            <a href="<?php echo url('Role/detail'); ?>?role_id=<?php echo htmlentities($res['role_id']); ?>">
-                                <i class="layui-icon showDetail" style="top: 3px; font-size: 30px;">&#xe60b;</i>
-                            </a>
-                        </td> -->
                         <td class="td-status">
-                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-role_id="<?php echo htmlentities($res['role_id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
+                            <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-admin_id="<?php echo htmlentities($res['admin_id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
                                 <?php echo $res['is_show']==-1 ? '隐藏' : '显示'; ?>
                             </span>
                         </td>
@@ -94,10 +74,11 @@
                             <!-- <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a> -->
-                            <a title="编辑角色" href="<?php echo url('Role/edit'); ?>?role_id=<?php echo htmlentities($res['role_id']); ?>" class="ml-5" style="text-decoration:none">
+                            <a title="编辑管理员" href="javascript:;" onclick="banner_edit('编辑管理员','<?php echo url('Admin/edit'); ?>?admin_id=<?php echo htmlentities($res['admin_id']); ?>','4','550','500')"
+                            class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['role_id']); ?>)" 
+                            <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['admin_id']); ?>)" 
                             style="text-decoration:none">
                                 <i class="layui-icon">&#xe640;</i>
                             </a>
@@ -118,6 +99,14 @@
             laypage = layui.laypage;//分页
             layer = layui.layer;//弹出层
           
+            laypage({
+            cont: 'page'
+            ,pages: 2
+            ,first: 1
+            ,last: 2
+            ,prev: '<em><</em>'
+            ,next: '<em>></em>'
+          }); 
         });
 
         //批量删除提交
@@ -125,7 +114,7 @@
             layer.confirm('确认要删除吗？',function(index){
                 //捉到所有被选中的，发异步进行删除
                 $.ajax({
-                    url: "<?php echo url('Role/ajaxDelAllData'); ?>",
+                    url: "<?php echo url('Admin/ajaxDelAllData'); ?>",
                     type: 'post',
                     data: $('form').serialize(),
                     success: function(res)
@@ -133,7 +122,7 @@
                         if (res['status'] == 1)
                         {
                             layer.msg(res['msg'], {icon: 6});
-                            setTimeout(function(){window.location.reload();}, 2000);
+                            window.location.reload();
                         } else{
                             layer.msg(res['msg'], {icon: 5});
                         }
@@ -142,14 +131,21 @@
                 
             });
         }
+         /*添加*/
+        function banner_add(title,url,w,h){
+            x_admin_show(title,url,w,h);
+        }
 
+        // 编辑
+        function banner_edit (title,url,id,w,h) {
+            x_admin_show(title,url,w,h); 
+        }
         /*删除*/
-        function banner_del(_this,role_id, art_img){
+        function banner_del(_this,id){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
-                $.post(
-                    '<?php echo url("Role/ajaxDeleteData"); ?>',
-                    {role_id: role_id, art_img: art_img},
+                $.get(
+                    '<?php echo url("Admin/ajaxDeleteData"); ?>/admin_id/'+id,
                     function(res){               
                         if (res['status'] == 1)
                         {
@@ -172,11 +168,11 @@
             $('.layui-btn-mini').on('click', function(data){
                 var _this = $(this);
                 var status = _this.data('status');
-                var role_id = _this.data('role_id');
+                var admin_id = _this.data('admin_id');
                 var is_show = status==0 ? '-1' : '0';
                 
                 $.get(
-                    "<?php echo url('Role/ajaxIsShow'); ?>/is_show/" + is_show+"/role_id/"+role_id,
+                    "<?php echo url('Admin/ajaxIsShow'); ?>/is_show/" + is_show+"/admin_id/"+admin_id,
                     function(res){
                         if (res['status'] == 1)
                         {
@@ -205,22 +201,6 @@
                 });
             });
 
-            // 排序设置
-            $('.layui-input').on('change', function(data){
-                var role_id = $(this).data('role_id');
-                var val = $(this).val();
-                $.get(
-                    "<?php echo url('Role/ajaxSort'); ?>/role_id/" + role_id + '/sort/' + val,
-                    function(res){
-                        if (res['status'] == 1)
-                        {
-                            layer.msg(res['msg'], {icon: 6});
-                            window.location.reload();
-                        } else {
-                            layer.msg(res['msg'], {icon: 5});
-                        }
-                    });
-            });
         });
     </script>
     </body>

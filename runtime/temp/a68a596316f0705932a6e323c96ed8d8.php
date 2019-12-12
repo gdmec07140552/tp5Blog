@@ -1,4 +1,4 @@
-<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1575947910;}*/ ?>
+<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1576057476;}*/ ?>
 	<!-- 头部文件引入 -->
 	<!DOCTYPE html>
 <html>
@@ -246,7 +246,7 @@
                 </a>
                 <dl class="layui-nav-child">
                     <dd class="">
-                        <a href="javascript:;" _href="./admin-list.html">
+                        <a href="javascript:;" _href="<?php echo url('Admin/list'); ?>">
                             <cite>管理员列表</cite>
                         </a>
                     </dd>
@@ -263,6 +263,11 @@
                     <dd class="">
                         <a href="javascript:;" _href="<?php echo url('Auth/list'); ?>">
                             <cite>权限管理</cite>
+                        </a>
+                    </dd>
+                    <dd class="">
+                        <a href="javascript:;" _href="<?php echo url('Admin/admin_log'); ?>">
+                            <cite>管理员日志</cite>
                         </a>
                     </dd>
                 </dl>
