@@ -171,3 +171,28 @@ function getClassAction($controller, $isDiff = false)
 	else 
 		return $contArr;
 }
+
+/**
+ * [checkPhone 手机验证]
+ * @param  [type] $phone [手机号]
+ * @return [type]        [description]
+ */
+function checkPhone($phone)
+{
+	if (preg_match("/^1[345789]{9}\d$/", $phone))
+		return true;
+	else
+		return false;
+}
+
+/**
+* [md5Pass md5密码加密]
+* @param  [type] $data [密码]
+* @return [type]       [description]
+*/
+function md5Pass($data)
+{
+	// 取出配置文件中的密码前缀字符串
+	$config = Config::pull('blog_config');
+	return md5($config['pass_str'] . $data);
+}

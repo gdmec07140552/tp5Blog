@@ -1,4 +1,4 @@
-<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\list.html";i:1576060146;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\list.html";i:1576146240;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -37,7 +37,7 @@
         <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
     </div>
     <div class="x-body">
-        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加管理员','<?php echo url("Admin/add"); ?>','550','500')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
+        <xblock><button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button><button class="layui-btn" onclick="banner_add('添加管理员','<?php echo url("Admin/add"); ?>','','')"><i class="layui-icon">&#xe608;</i>添加</button><span class="x-right" style="line-height:40px">共有数据：<?php echo count($result); ?> 条</span></xblock>
         <form>
             <table class="layui-table">
                 <thead>
@@ -46,7 +46,19 @@
                             <input type="checkbox" name="checkAll" value="0" lay-skin="primary"> 
                         </th>
                         <th>
+                            管理员头像
+                        </th>
+                        <th>
                             管理员名
+                        </th>
+                        <th>
+                            角色
+                        </th>
+                        <th>
+                            手机号
+                        </th>
+                        <th>
+                            邮箱
                         </th>
                         <th>
                             显示状态
@@ -60,10 +72,30 @@
                     <?php foreach($result as $k => $res): ?>
                     <tr>
                         <td>
-                            <input type="checkbox" value="<?php echo htmlentities($res['admin_id']); ?>" name="idArr[]" lay-skin="primary">
+                        <?php if($res['admin_id']!=1): ?>
+                            <input type="checkbox" value="<?php echo htmlentities($res['admin_id'].'--'.$res['head_img']); ?>" name="id_image[]" lay-skin="primary">
+                        <?php endif; ?>
+                        </td>
+                        <td>
+                            <img style="height: 80px; width: auto;"  src="/static/uploads/<?php echo htmlentities($res['head_img']); ?>" width="200" alt="<?php echo htmlentities($res['admin_name']); ?>">
+
                         </td>
                         <td>
                             <?php echo htmlentities($res['admin_name']); ?>
+                        </td>
+                        <td>
+                            <?php if($res['admin_id']==1): ?>
+                                <label style="color: #009688 !important;"><?php echo htmlentities($res['role_name']); ?></label>
+                            <?php else: ?>
+                                <?php echo htmlentities($res['role_name']); ?>
+                            <?php endif; ?>
+                        </td>
+                        
+                        <td>
+                            <?php echo htmlentities($res['phone']); ?>
+                        </td>
+                        <td>
+                            <?php echo htmlentities($res['email']); ?>
                         </td>
                         <td class="td-status">
                             <span style="background-color: <?php echo $res['is_show']==-1 ? '#C71D23' : '#009688'; ?>" class="layui-btn layui-btn-normal layui-btn-mini" data-admin_id="<?php echo htmlentities($res['admin_id']); ?>" data-status="<?php echo htmlentities($res['is_show']); ?>">
@@ -74,14 +106,16 @@
                             <!-- <a style="text-decoration:none" onclick="banner_stop(this,'10001')" href="javascript:;" title="不显示">
                                 <i class="layui-icon">&#xe601;</i>
                             </a> -->
-                            <a title="编辑管理员" href="javascript:;" onclick="banner_edit('编辑管理员','<?php echo url('Admin/edit'); ?>?admin_id=<?php echo htmlentities($res['admin_id']); ?>','4','550','500')"
+                            <a title="编辑管理员" href="javascript:;" onclick="banner_edit('编辑管理员','<?php echo url('Admin/edit'); ?>?admin_id=<?php echo htmlentities($res['admin_id']); ?>','4','','')"
                             class="ml-5" style="text-decoration:none">
                                 <i class="layui-icon">&#xe642;</i>
                             </a>
-                            <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['admin_id']); ?>)" 
-                            style="text-decoration:none">
-                                <i class="layui-icon">&#xe640;</i>
-                            </a>
+                            <?php if($res['admin_id']!=1): ?>
+                                <a title="删除" href="javascript:;" onclick="banner_del(this, <?php echo htmlentities($res['admin_id']); ?>, '<?php echo htmlentities($res['head_img']); ?>')" 
+                                style="text-decoration:none">
+                                    <i class="layui-icon">&#xe640;</i>
+                                </a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -89,7 +123,7 @@
             </table>
         </form>
         <input type="hidden" name="totalNum" value="<?php echo count($result); ?>">
-        <div id="page" style="text-align: center;"><?php echo $result; ?></div>
+        <div id="page" style="text-align: center;"></div>
     </div>        
     <script>
         layui.use(['laydate','element','laypage','layer'], function(){
@@ -141,11 +175,12 @@
             x_admin_show(title,url,w,h); 
         }
         /*删除*/
-        function banner_del(_this,id){
+        function banner_del(_this,id, head_img){
             layer.confirm('确认要删除吗？',function(index){
                 //发异步删除数据
-                $.get(
-                    '<?php echo url("Admin/ajaxDeleteData"); ?>/admin_id/'+id,
+                $.post(
+                    '<?php echo url("Admin/ajaxDeleteData"); ?>',
+                    {admin_id: id, head_img: head_img},
                     function(res){               
                         if (res['status'] == 1)
                         {
@@ -195,7 +230,7 @@
             $("input[name='checkAll']").on('click', function(data){
                 var isChecked = $(this).is(':checked');
                 
-                $("input[name='idArr[]']").each(function(index){
+                $("input[name='id_image[]']").each(function(index){
                     //全选
                     isChecked == true ? $(this).prop("checked", true) : $(this).prop("checked", false);
                 });

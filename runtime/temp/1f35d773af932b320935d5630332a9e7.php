@@ -1,4 +1,4 @@
-<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\add.html";i:1576139724;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\edit.html";i:1576140967;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -43,14 +43,14 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="">
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="/static/uploads/<?php echo htmlentities($result['head_img']); ?>">
 			</div>
 			<div class="layui-form-item">
                 <label for="admin_name" class="layui-form-label">
                     <span class="x-red">*</span>登录名
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="admin_name" name="admin_name" required="" lay-verify="required"
+                    <input type="text" id="admin_name" value="<?php echo htmlentities($result['admin_name']); ?>" name="admin_name" required="" lay-verify="required"
                     autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
@@ -62,7 +62,7 @@
                     <span class="x-red">*</span>手机
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="phone" name="phone" required="" lay-verify="phone"
+                    <input type="text" id="phone" value="<?php echo htmlentities($result['phone']); ?>" name="phone" required="" lay-verify="phone"
                     autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
@@ -74,7 +74,7 @@
                     <span class="x-red">*</span>邮箱
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_email" name="email" required="" lay-verify="email"
+                    <input type="text" id="L_email" name="email" value="<?php echo htmlentities($result['email']); ?>" required="" lay-verify="email"
                     autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
@@ -89,18 +89,17 @@
 	                <select name="role_id">
 	                    <option value="0">请选择角色</option>
 	                    <?php if(is_array($role) || $role instanceof \think\Collection || $role instanceof \think\Paginator): if( count($role)==0 ) : echo "" ;else: foreach($role as $key=>$v): ?>
-	                    	<option value="<?php echo htmlentities($v['role_id']); ?>"><?php echo htmlentities($v['role_name']); ?></option>
+	                    	<option value="<?php echo htmlentities($v['role_id']); ?>" <?php echo $v['role_id']==$result['role_id'] ? 'selected' : ''; ?>><?php echo htmlentities($v['role_name']); ?></option>
 	                    <?php endforeach; endif; else: echo "" ;endif; ?>
 	                 </select>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label for="L_pass" class="layui-form-label">
-                    <span class="x-red">*</span>密码
+                    新密码
                 </label>
                 <div class="layui-input-inline">
-                    <input type="password" id="L_pass" name="admin_pass" required="" lay-verify="admin_pass"
-                    autocomplete="off" class="layui-input">
+                    <input type="password" id="L_pass" name="admin_pass" placeholder="输入新密码" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="x-red">*</span>6到20个字符
@@ -111,18 +110,18 @@
                     <span class="x-red">*</span>确认密码
                 </label>
                 <div class="layui-input-inline">
-                    <input type="password" id="L_repass" name="repass" required="" lay-verify="repass"
-                    autocomplete="off" class="layui-input">
+                    <input type="password" id="L_repass" name="repass" placeholder="输入确认密码" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
 				<label class="layui-form-label">是否显示</label>
 				<div class="layui-input-block">
-					 <input type="radio" name="is_show" checked value="0" title="显示">
-					 <input type="radio" name="is_show" value="-1" title="隐藏">
+					 <input type="radio" name="is_show" <?php echo $result['is_show']==0 ? 'checked' : ''; ?> value="0" title="显示">
+					 <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? 'checked' : ''; ?> value="-1" title="隐藏">
 				</div>
 			 </div>
-			<input type="hidden" name="head_img" value="">
+			<input type="hidden" name="head_img" value="<?php echo htmlentities($result['head_img']); ?>">
+			<input type="hidden" name="admin_id" value="<?php echo htmlentities($result['admin_id']); ?>">
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
@@ -135,8 +134,8 @@
 	<script>
 		layui.use(['form','layer','upload'], function(){
 			$ = layui.jquery;
-		  	var form = layui.form()
-		  	,layer = layui.layer;
+			var form = layui.form()
+			,layer = layui.layer;
 
 		//图片上传接口
 		layui.upload({
@@ -155,12 +154,12 @@
 			}
 		});
 
-		  //监听提交
+		//监听提交
 		form.on('submit(add)', function(data){
 			// 提交数据到后台
 			var _this = parent.layer;
 			$.ajax({
-				url: "<?php echo url('Admin/ajaxAddData'); ?>",
+				url: "<?php echo url('Admin/ajaxEidtData'); ?>",
 				type: 'post',
 				data: data['field'],
 				success:function(res){
@@ -180,6 +179,6 @@
 		  
 		});
 	</script>
-</body>
+	</body>
 
 </html>

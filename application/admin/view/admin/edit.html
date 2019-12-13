@@ -1,44 +1,98 @@
 {include file="common/header" /}
 	<div class="x-body">
-		<form class="layui-form">
+		<form class="layui-form" enctype="multipart/form-data">
 			<div class="layui-form-item">
-				<label class="layui-form-label" for="pid">所属分类</label>
-				<div class="layui-input-block" style="width: 300px;">
-					<select name="pid" id="pid">
-						<option value="0">顶级分类</option>
-						<?php foreach($cate as $v): ?>
-							<option {$v['cate_id']==$result['pid']?'selected':''} value="{$v['cate_id']}">{$v['cate_name']}</option>
-						<?php endforeach; ?>
-					</select>
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label for="link" class="layui-form-label">
-					分类名称
+				<label for="banner_img" class="layui-form-label">
+					<span class="x-red">*</span>管理员头像
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="link" value="{$result['cate_name']}" name="cate_name" class="layui-input" lay-verify="required">
+				  <div class="site-demo-upbar">
+					<input type="file" name="images" class="layui-upload-file" id="banner_img">
+				  </div>
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label for="sort" class="layui-form-label">
-					展示顺序
+				<label  class="layui-form-label">缩略图
 				</label>
-				<div class="layui-input-inline">
-					<input type="text" id="sort" value="{$result['sort']}" name="sort" class="layui-input">
-				</div>
-				<div class="layui-form-mid layui-word-aux">
-					<span class="x-red">越大排在前面最大不能超过255</span>
-				</div>
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="__STATIC__/uploads/{$result['head_img']}">
 			</div>
 			<div class="layui-form-item">
+                <label for="admin_name" class="layui-form-label">
+                    <span class="x-red">*</span>登录名
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="admin_name" value="{$result['admin_name']}" name="admin_name" required="" lay-verify="required"
+                    autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>将会成为您唯一的登入名
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="phone" class="layui-form-label">
+                    <span class="x-red">*</span>手机
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="phone" value="{$result['phone']}" name="phone" required="" lay-verify="phone"
+                    autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>将会成为您唯一的登入名
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">
+                    <span class="x-red">*</span>邮箱
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_email" name="email" value="{$result['email']}" required="" lay-verify="email"
+                    autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="role" class="layui-form-label">
+                    <span class="x-red">*</span>角色
+                </label>
+                <div class="layui-input-inline">
+	                <select name="role_id">
+	                    <option value="0">请选择角色</option>
+	                    {foreach name="$role" item="v"}
+	                    	<option value="{$v['role_id']}" {$v['role_id']==$result['role_id']?'selected':''}>{$v['role_name']}</option>
+	                    {/foreach}
+	                 </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">
+                    新密码
+                </label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_pass" name="admin_pass" placeholder="输入新密码" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>6到20个字符
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">
+                    <span class="x-red">*</span>确认密码
+                </label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_repass" name="repass" placeholder="输入确认密码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
 				<label class="layui-form-label">是否显示</label>
 				<div class="layui-input-block">
-					 <input type="radio" name="is_show" {$result['is_show']==-1?'':'checked'} value="0" title="显示">
+					 <input type="radio" name="is_show" {$result['is_show']==0?'checked':''} value="0" title="显示">
 					 <input type="radio" name="is_show" {$result['is_show']==-1?'checked':''} value="-1" title="隐藏">
 				</div>
 			 </div>
-			<input type="hidden" name="cate_id" value="{$result['cate_id']}">
+			<input type="hidden" name="head_img" value="{$result['head_img']}">
+			<input type="hidden" name="admin_id" value="{$result['admin_id']}">
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
@@ -49,29 +103,40 @@
 		</form>
 	</div>
 	<script>
-		layui.use(['form','layer'], function(){
+		layui.use(['form','layer','upload'], function(){
 			$ = layui.jquery;
 			var form = layui.form()
 			,layer = layui.layer;
 
+		//图片上传接口
+		layui.upload({
+			url: '{:url("Common/uploads")}' //上传接口
+			,success: function(res){ //上传成功后的回调
+				// console.log(res);
+				if (res['status'] == 1)
+				{	var upload_url = "<?php echo '__IMAGE__'; ?>";
+					var head_img = upload_url + res['img_url'];
+					// 显示图片并记录图片地址
+					$('input[name="head_img"]').val(res['img_url']);
+			  		$('#LAY_demo_upload').attr('src', head_img);
+				} else {
+					layer.msg('图片上传失败', {icon: 5});
+				}
+			}
+		});
+
 		//监听提交
 		form.on('submit(add)', function(data){
-			var cate_name = $("input[name='cate_name']").val();
-			if (!cate_name)
-			{
-				layer.msg('分类名称不能为空');
-				return false;
-			}
 			// 提交数据到后台
 			var _this = parent.layer;
 			$.ajax({
-				url: "{:url('Category/ajaxEidtData')}",
+				url: "{:url('Admin/ajaxEidtData')}",
 				type: 'post',
 				data: data['field'],
 				success:function(res){
 					if (res['status'] == 1)
 					{
-						// window.location.href = "{:url('Category/banner_list')}";
+						// window.location.href = "{:url('Admin/banner_list')}";
 						var index = _this.getFrameIndex(window.name);
 						_this.close(index);
 					} else {

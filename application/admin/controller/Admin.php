@@ -21,7 +21,15 @@ class Admin extends Base
 	{
 		$input = input() ? input() : array();
 
-		$result = model('Admin')->getPage([],'', 0);
+		$result = model('Admin')->getAllData([]);
+		// 获取角色名称
+		foreach ($result as $key => $value) {
+
+			if ($value['admin_id'] == 1)
+				$result[$key]['role_name'] = "超级管理员";
+			if ($value['role_id'] > 0)
+				$result[$key]['role_name'] = model('Role')->getValue(['role_id' => $value['role_id']], 'role_name');
+		}
 
 		$this->assign('result' , $result);
 		//引入js文件
@@ -42,8 +50,9 @@ class Admin extends Base
 		$result = model('Admin')->deleteData(['admin_id' => $data['admin_id']]);
 		if ($result)
 		{
-			// 删除成则把它下级管理员设置成一级管理员
-			model('Admin')->editData(['pid' => $data['admin_id']], ['pid' => 0]);
+			// 删除成则把它的图片从本地删除
+			if (!empty($input['head_img']))
+				delImage($input['head_img']);
 			// 管理员日志记录
 			model('Base')->addLog(3, '管理员管理', $data['admin_id']);
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -59,17 +68,17 @@ class Admin extends Base
 	public function ajaxDelAllData()
 	{
 		$data = input('post.');
-		if (empty($data['idArr']))
+		if (empty($data['id_image']))
 			return json(['status' => 0, 'msg' => '删除失败']);
 		Db::startTrans();
 		try {
-			$where['admin_id'] = ['IN', $data['idArr']];
-			model('Admin')->deleteData($where);
-			// 删除成则把它下级管理员设置成一级管理员
-			foreach ($data['idArr'] as $value) {
-				model('Admin')->editData(['pid' => $value], ['pid' => 0]);
+			foreach ($data['id_image'] as $key => $value) {
+				$idImage = explode('--', $value);
+				$result = model('Admin')->deleteData(['admin_id' => $idImage['0']]);
+				if (!empty($idImage[1]) && $result)
+					delImage($idImage[1]);
 				// 管理员日志记录
-				model('Base')->addLog(3, '管理员管理', $value);
+				model('Base')->addLog(3, '管理员管理', $idImage['0']);
 			}
 			Db::commit();
 			return json(['status' => 1, 'msg' => '删除成功']);
@@ -103,7 +112,7 @@ class Admin extends Base
 	{
 		$input = input() ? input() : array();
 
-		//取出所有的管理员
+		//取出所有的角色
 		$role = model('Role')->getAllData(
 				[],
 				'role_id, role_name'
@@ -125,13 +134,14 @@ class Admin extends Base
 		$input = input('post.');
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
-		$result = model('Admin')->insertData($input);
-		// 管理员日志记录
-			model('Base')->addLog(1, '管理员管理', $result);
-		if ($result)
+		$result = model('Admin')->checkData();
+		if ($result['status'] == 1) {
+			// 管理员日志记录
+				model('Base')->addLog(1, '管理员管理', $result['msg']);
 			return json(['status' => 1, 'msg' => '添加成功']);
-		else
-			return json(['status' => 0, 'msg' => '添加失败']);
+		} else {
+			return json(['status' => 0, 'msg' => $result['msg']]);
+		}
 	}
 
 	/**
@@ -142,17 +152,15 @@ class Admin extends Base
 	{
 		$input = input() ? input() : array();
 		
+		// 获取管理员数据
 		$result = model('Admin')->getOneData(['admin_id' => input('admin_id')]);
 		$this->assign('result', $result);
-		// 获取管理员数据
-		$array = model('Admin')->getAllData(
+		//取出所有的角色
+		$role = model('Role')->getAllData(
 				[],
-				'admin_id, cate_name, pid',
-				0,
-				['sort' => 'desc', 'admin_id' => 'desc']
+				'role_id, role_name'
 			);
-		$cate = model('Admin')->getTrees($array);
-		$this->assign('cate', $cate);
+		$this->assign('role', $role);
 
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-admin']);
@@ -168,21 +176,25 @@ class Admin extends Base
 		$input = input('post.') ? input('post.') : array();
 		$admin_id = $input['admin_id'];
 		unset($input['admin_id']);
+		unset($input['images']);
+		// 不修改密码则用旧密码
+		if (empty($input['admin_pass']))
+			unset($input['admin_pass']);
+		else
+			$input['admin_pass'] = md5Pass($input['admin_pass']);
+		unset($input['repass']);
 		// 查找是否有该管理员
-		$cate = model('Admin')->getOneData(['admin_id' => $admin_id], 'pid');		
-		if (!$cate)
+		$admin = model('Admin')->getOneData(['admin_id' => $admin_id], 'admin_name, head_img');
+		if (!$admin)
 			return json(['status' => 0, 'msg' => '修改失败']);
 		Db::startTrans();
 		try {
-			// 如果把当前管理员设置成自己的子管理员的话，则把他设置成顶级管理员
-			if ($admin_id == $input['pid'])
-				$input['pid'] = 0;
 			model('Admin')->editData(['admin_id' => $admin_id], $input);
-			// 如果是顶级管理员修改的话，则把他的下一级管理员设置成顶级管理员
-			if ($cate['pid'] == 0)
-				model('Admin')->editData(['pid' => $admin_id], ['pid' => 0]);
 			// 管理员日志记录
 			model('Base')->addLog(2, '管理员管理', $admin_id);
+			//修改成功把旧的图片删除
+			if (!empty($input['head_img']) && $input['head_img'] != $admin['head_img'] && !empty($admin['head_img']))
+				delImage($admin['head_img']);
 
 			Db::commit();
 			return json(['status' => 1, 'msg' => '修改成功']);
@@ -190,5 +202,21 @@ class Admin extends Base
 			Db::rollback();
 			return json(['status' => 0, 'msg' => '修改失败']);
 		}
+	}
+
+	/**
+	 * [admin_log 管理员日志]
+	 * @return [type] [description]
+	 */
+	public function admin_log()
+	{
+		$input = input() ? input() : array();
+
+		$result = model('AdminLog')->getPage([],'', 0, ['log_id' => 'desc'], 20);
+
+		$this->assign('result' , $result);
+		//引入js文件
+		$this->assign('js_array', ['layui', 'x-layui']);
+		return $this->fetch('admin_log');
 	}
 }

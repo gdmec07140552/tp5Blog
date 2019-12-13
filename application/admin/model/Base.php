@@ -40,7 +40,7 @@ class Base extends Model
 	 */
 	public function getValue($where, $field = '')
 	{
-		return Db::name($this->table)->where(new Where($where))->value($fieLd);
+		return Db::name($this->table)->where(new Where($where))->value($field);
 	}
 
 	/**

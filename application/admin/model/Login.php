@@ -5,7 +5,6 @@ use think\Model;
 use think\Request;
 use think\Db;
 use think\Validate;
-use think\facade\Config;
 use think\facade\Session;
 
 class Login extends Model
@@ -32,16 +31,20 @@ class Login extends Model
 			return ['status' => -1, 'mess' => $check_result];
 		}
 
-		//查找用户基本信息
+		// 根据用户名查找用户信息
 		$user = Db::name($this->table)->where(['admin_name' => $data['admin_name']])->find();
-		if (!$user) return ['status' => -1, 'mess' => '用户名错误'];
+		if (!$user) {
+			// 根据手机号码查找用户信息
+			$user = Db::name($this->table)->where(['phone' => $data['admin_name']])->find();
+			if (!$user)
+				return ['status' => -1, 'mess' => '用户名错误'];
+		}
 
 		//检查用户的密码是否正确
 		// 1.取出配置文件中的密码前缀字符串
-		$config = Config::pull('blog_config');
-		$admin_pass = md5($config['pass_str'] . $data['admin_pass']);
+		$admin_pass = md5Pass($data['admin_pass']);
 		if ($admin_pass != $user['admin_pass']) return ['status' => -1 , 'mess' => '密码错误'];
-		if ($user['status'] == -1) ['status' => -1, 'mess' => '该用户已被禁用'];
+		if ($user['is_show'] == -1) ['status' => -1, 'mess' => '该用户已被禁用'];
 
 		//登录成功保存用户的基本信息
 		// 1.保存用户的基本信息

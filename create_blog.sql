@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS blog_admin
 	last_ip char(20) NOT NULL DEFAULT '0' COMMENT '最后的登录ip',
 	PRIMARY KEY (admin_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员账号' AUTO_INCREMENT=1;
+alter table blog_admin ADD COLUMN phone char(20) NOT NULL DEFAULT '' COMMENT '手机号' AFTER head_img;
+alter table blog_admin ADD COLUMN email char(40) NOT NULL DEFAULT '' COMMENT '邮箱' AFTER phone;
+alter table blog_admin ADD COLUMN role_id smallint(6) NOT NULL DEFAULT '0' COMMENT '角色id' AFTER email;
 -- 修改blog_admin表status为is_show
 -- alter table blog_admin status is_show tinyint(1)
 -- 默认密码：admin888
