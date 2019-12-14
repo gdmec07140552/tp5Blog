@@ -1,4 +1,4 @@
-<?php /*a:4:{s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin_log\list.html";i:1576200527;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin_log\list.html";i:1576224079;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -117,7 +117,7 @@
                         if (res['status'] == 1)
                         {
                             layer.msg(res['msg'], {icon: 6});
-                            window.location.reload();
+                            setTimeout(function(){window.location.reload();}, 2000);
                         } else{
                             layer.msg(res['msg'], {icon: 5});
                         }

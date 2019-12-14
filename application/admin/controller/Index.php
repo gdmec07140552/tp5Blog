@@ -7,7 +7,8 @@ class Index extends Base
 	function __construct()
 	{
 		parent::__construct();
-		
+		// 检测用户的基本权限
+		// permission();
 	}
 
 	/**
@@ -31,5 +32,16 @@ class Index extends Base
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-admin']);
 		return $this->fetch('welcome');
+	}
+
+	/**
+	 * [no_permission 无权限]
+	 * @return [type] [description]
+	 */
+	public function no_permission()
+	{
+		//引入js文件
+		$this->assign('js_array', []);
+		return $this->fetch('no_permission');
 	}
 }

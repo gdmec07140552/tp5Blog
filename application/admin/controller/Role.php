@@ -20,6 +20,10 @@ class Role extends Base
 	 */
 	public function list()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		$result = model('Role')->getPage([],'', 0, ['sort' => 'desc', 'role_id' => 'desc']);
@@ -36,6 +40,10 @@ class Role extends Base
 	 */
 	public function ajaxDeleteData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+		
 		$input = input();
 
 		if (empty($input['role_id']))
@@ -57,6 +65,10 @@ class Role extends Base
 	 */
 	public function ajaxDelAllData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.');
 		if (empty($input['idArr']))
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -83,6 +95,10 @@ class Role extends Base
 	 */
 	public function ajaxIsShow()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Role')->editData(['role_id' => $input['role_id']], ['is_show' => $input['is_show']]);
 		// 管理员日志记录
@@ -99,6 +115,10 @@ class Role extends Base
 	 */
 	public function ajaxSort()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Role')->editData(['role_id' => $input['role_id']], ['sort' => $input['sort']]);
 		// 管理员日志记录
@@ -115,6 +135,10 @@ class Role extends Base
 	 */
 	public function add()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		//取出所有的角色
@@ -136,6 +160,10 @@ class Role extends Base
 	 */
 	public function ajaxAddData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		//添加数据
 		$input = input('post.');
 		// 处理权限id
@@ -160,6 +188,10 @@ class Role extends Base
 	 */
 	public function edit()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		
 		$result = model('Role')->getOneData(['role_id' => input('role_id')]);
@@ -187,6 +219,10 @@ class Role extends Base
 	 */
 	public function ajaxEidtData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.') ? input('post.') : array();
 		$role_id = $input['role_id'];
 		unset($input['role_id']);

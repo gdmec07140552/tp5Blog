@@ -196,3 +196,67 @@ function md5Pass($data)
 	$config = Config::pull('blog_config');
 	return md5($config['pass_str'] . $data);
 }
+
+/**
+ * [permission 检测是否有操作权限]
+ * @return [type] [description]
+ */
+function permission()
+{
+	// 检验权限
+	$action = \think\facade\Request::action();
+	$module = \think\facade\Request::module();
+	$controller = \think\facade\Request::controller();
+	$url = $module . '/' .$controller . '/' . $action;
+	if ($url == 'admin/index/index' || $url == 'admin/index/iwelcome' || $url == 'admin/index/ino_permission')
+		return true;
+	// 取出用户的权限
+	$auth = Session::get('auth');
+
+	// 如果是超级boss直接返回
+	if ($auth == 'all')
+	{
+		return true;
+	} elseif (!empty($auth)) {				
+		// 把二维数组转成一维数组
+		$result = array_column($auth, 'auth_link');
+		if (in_array($url, $result))
+			return true;
+		else 
+			return false;
+	} else {
+		return false;
+	}	
+}
+
+function getNav($nav = [], $leval = 0)
+{
+
+	// 取出用户的权限
+	$auth = Session::get('auth');	
+
+	// 如果是超级boss直接返回
+	if ($auth == 'all')
+	{
+		return '';
+	} elseif (!empty($auth)) {				
+		// 把二维数组转成一维数组
+		$result = array_column($auth, 'auth_link');
+		$str = 'display: none;';
+		foreach ($result as $key => $value) {
+			if ($leval == 0)
+			{
+				foreach ($nav as $val) {
+					if (strpos($value, $val))
+						$str = '';
+				}
+			} else {
+				if (strpos($value, $nav[0] . '/' . $nav[1]))
+					$str = '';
+			}
+		}
+		return $str;
+	} else {
+		return 'display: none;';
+	}
+}

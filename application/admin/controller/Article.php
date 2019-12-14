@@ -19,6 +19,10 @@ class Article extends Base
 	 */
 	public function list()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		$result = model('Article')->getPage([],'', 0, ['sort' => 'desc', 'art_id' => 'desc']);
 		$this->assign('page' , $result);
@@ -42,6 +46,10 @@ class Article extends Base
 	 */
 	public function ajaxDeleteData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.');
 
 		if (empty($input['art_id']))
@@ -66,6 +74,10 @@ class Article extends Base
 	 */
 	public function ajaxDelAllData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.');
 		if (empty($input['id_image']))
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -94,6 +106,10 @@ class Article extends Base
 	 */
 	public function ajaxIsShow()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Article')->editData(['art_id' => $input['art_id']], ['is_show' => $input['is_show']]);
 		if ($result) {
@@ -111,6 +127,10 @@ class Article extends Base
 	 */
 	public function ajaxSort()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Article')->editData(['art_id' => $input['art_id']], ['sort' => $input['sort']]);
 		if ($result) {
@@ -128,6 +148,10 @@ class Article extends Base
 	 */
 	public function add()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		// 获取文章分类
 		$cate = model('Category')->getAllData();
@@ -149,6 +173,10 @@ class Article extends Base
 	 */
 	public function ajaxAddData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		//添加数据
 		$input = input('post.');
 		unset($input['images']);
@@ -176,6 +204,10 @@ class Article extends Base
 	 */
 	public function edit()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		
 		$result = model('Article')->getOneData(['art_id' => input('art_id')]);
@@ -206,6 +238,10 @@ class Article extends Base
 	 */
 	public function ajaxEidtData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.') ? input('post.') : array();
 		$art_id = $input['art_id'];
 		unset($input['art_id']);
@@ -234,6 +270,10 @@ class Article extends Base
 
 	public function detail()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		
 		$result = model('Article')->getDetail(['a.art_id' => $input['art_id']]);

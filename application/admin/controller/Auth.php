@@ -11,7 +11,7 @@ class Auth extends Base
 	
 	function __construct()
 	{
-		parent::__construct();
+		parent::__construct();		
 	}
 
 	/**
@@ -20,6 +20,10 @@ class Auth extends Base
 	 */
 	public function list()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		$result = model('Auth')->getPage([],'', 0, ['sort' => 'desc', 'auth_id' => 'desc']);
@@ -40,6 +44,10 @@ class Auth extends Base
 	 */
 	public function ajaxDeleteData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input();
 
 		if (empty($input['auth_id']))
@@ -63,6 +71,10 @@ class Auth extends Base
 	 */
 	public function ajaxDelAllData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.');
 		if (empty($input['idArr']))
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -90,6 +102,10 @@ class Auth extends Base
 	 */
 	public function ajaxIsShow()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Auth')->editData(['auth_id' => $input['auth_id']], ['is_show' => $input['is_show']]);
 		// 管理员日志记录
@@ -106,6 +122,10 @@ class Auth extends Base
 	 */
 	public function ajaxSort()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Auth')->editData(['auth_id' => $input['auth_id']], ['sort' => $input['sort']]);
 		// 管理员日志记录
@@ -122,6 +142,10 @@ class Auth extends Base
 	 */
 	public function add()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		//取出所有的权限
@@ -150,6 +174,10 @@ class Auth extends Base
 	 */
 	public function ajaxAddData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		//添加数据
 		$input = input('post.');
 		if ($input['pid'] != 0)
@@ -178,6 +206,10 @@ class Auth extends Base
 	 */
 	public function edit()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		
 		$result = model('Auth')->getOneData(['auth_id' => input('auth_id')]);
@@ -218,6 +250,10 @@ class Auth extends Base
 	 */
 	public function ajaxEidtData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.') ? input('post.') : array();
 		$auth_id = $input['auth_id'];
 		unset($input['auth_id']);
@@ -254,6 +290,9 @@ class Auth extends Base
 
 	public function ajaxGetAction()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
 		$input = input('get.');
 		$actionArr = getClassAction($input['cont_name'], true);
 		

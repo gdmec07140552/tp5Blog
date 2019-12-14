@@ -19,6 +19,10 @@ class Banner extends Base
 	 */
 	public function banner_list()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		$result = model('Banner')->getAllData();
@@ -35,6 +39,10 @@ class Banner extends Base
 	 */
 	public function ajaxDeleteData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+		
 		$data = input();
 
 		if (empty($data['id']))
@@ -55,6 +63,10 @@ class Banner extends Base
 	 */
 	public function ajaxDelAllData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$data = input();
 
 		if (empty($data['id_image']))
@@ -85,6 +97,10 @@ class Banner extends Base
 	 */
 	public function ajaxIsShow()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Banner')->updateOneData(['id' => $input['id']], ['is_show' => $input['is_show']]);
 		// 管理员日志记录
@@ -101,6 +117,10 @@ class Banner extends Base
 	 */
 	public function ajaxSort()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Banner')->updateOneData(['id' => $input['id']], ['sort' => $input['sort']]);
 		// 管理员日志记录
@@ -117,6 +137,10 @@ class Banner extends Base
 	 */
 	public function banner_add()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		//引入js文件
@@ -130,6 +154,10 @@ class Banner extends Base
 	 */
 	public function ajaxAddData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		//添加数据
 		$result = model('Banner')->addData();
 		return json($result);
@@ -141,6 +169,10 @@ class Banner extends Base
 	 */
 	public function banner_edit()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		
 		$result = model('Banner')->getOneData(['id' => input('id')]);
@@ -157,6 +189,10 @@ class Banner extends Base
 	 */
 	public function ajaxEidtData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		// 修改数据
 		$result = model('Banner')->saveData();
 		return json($result);

@@ -19,6 +19,10 @@ class Admin extends Base
 	 */
 	public function list()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		$result = model('Admin')->getAllData([]);
@@ -43,6 +47,10 @@ class Admin extends Base
 	 */
 	public function ajaxDeleteData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$data = input();
 
 		if (empty($data['admin_id']))
@@ -67,6 +75,10 @@ class Admin extends Base
 	 */
 	public function ajaxDelAllData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$data = input('post.');
 		if (empty($data['id_image']))
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -94,6 +106,10 @@ class Admin extends Base
 	 */
 	public function ajaxIsShow()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Admin')->editData(['admin_id' => $input['admin_id']], ['is_show' => $input['is_show']]);
 		// 管理员日志记录
@@ -110,6 +126,10 @@ class Admin extends Base
 	 */
 	public function add()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		//取出所有的角色
@@ -130,6 +150,10 @@ class Admin extends Base
 	 */
 	public function ajaxAddData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		//添加数据
 		$input = input('post.');
 		if (empty($input))
@@ -150,6 +174,10 @@ class Admin extends Base
 	 */
 	public function edit()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		
 		// 获取管理员数据
@@ -173,6 +201,10 @@ class Admin extends Base
 	 */
 	public function ajaxEidtData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.') ? input('post.') : array();
 		$admin_id = $input['admin_id'];
 		unset($input['admin_id']);
@@ -204,19 +236,4 @@ class Admin extends Base
 		}
 	}
 
-	/**
-	 * [admin_log 管理员日志]
-	 * @return [type] [description]
-	 */
-	public function admin_log()
-	{
-		$input = input() ? input() : array();
-
-		$result = model('AdminLog')->getPage([],'', 0, ['log_id' => 'desc'], 20);
-
-		$this->assign('result' , $result);
-		//引入js文件
-		$this->assign('js_array', ['layui', 'x-layui']);
-		return $this->fetch('admin_log');
-	}
 }

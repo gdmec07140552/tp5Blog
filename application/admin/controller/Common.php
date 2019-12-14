@@ -21,7 +21,10 @@ class Common extends Base
 	 */
 	public function uploads()
 	{
-
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+		
 		$result = uploads('images', 1, 1);
 
 		return json($result);

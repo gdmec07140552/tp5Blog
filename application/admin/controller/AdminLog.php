@@ -19,6 +19,10 @@ class AdminLog extends Base
 	 */
 	public function list()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		$result = model('AdminLog')->getPage([],'', 0, ['log_id' => 'desc'], 20);
@@ -35,6 +39,10 @@ class AdminLog extends Base
 	 */
 	public function ajaxDeleteData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$data = input();
 
 		if (empty($data['log_id']))
@@ -54,6 +62,10 @@ class AdminLog extends Base
 	 */
 	public function ajaxDelAllData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$data = input('post.');
 		if (empty($data['idArr']))
 			return json(['status' => 0, 'msg' => '删除失败']);

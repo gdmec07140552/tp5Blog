@@ -1,4 +1,4 @@
-<?php /*a:4:{s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_add.html";i:1575444810;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\banner_add.html";i:1575945197;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -106,7 +106,7 @@
 
 		  //图片上传接口
 		layui.upload({
-			url: '<?php echo url("Base/uploads"); ?>' //上传接口
+			url: '<?php echo url("Common/uploads"); ?>' //上传接口
 			,success: function(res){ //上传成功后的回调
 				// console.log(res);
 				if (res['status'] == 1)
@@ -116,7 +116,7 @@
 					$('input[name="img_url"]').val(res['img_url']);
 			  		$('#LAY_demo_upload').attr('src', img_url);
 				} else {
-					layer.msg('图片上传失败', {inco: 5});
+					layer.msg('图片上传失败', {icon: 5});
 				}
 			}
 		});
@@ -128,7 +128,7 @@
 			// var images = $("#banner_img")[0].files[0];
 			var img_url = $("input[name='img_url']").val();
 			if (!img_url) {
-				layer.msg('请上传图片', {inco: 5});
+				layer.msg('请上传图片', {icon: 5});
 				return false;
 			}
 
@@ -145,7 +145,7 @@
 						var index = _this.getFrameIndex(window.name);
 						_this.close(index);
 					} else {
-						layer.msg(res['msg'], {inco: 5});
+						layer.msg(res['msg'], {icon: 5});
 					}
 				}
 			});

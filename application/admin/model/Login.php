@@ -57,10 +57,17 @@ class Login extends Model
 				]);
 		// 3.管理员日志记录
 			model('Base')->addLog();
+		// 4.保存用户的权限
+			$this->setPermission();
 
 		return ['status' => 1, 'data' => Session::get('user')];
 	}
 
+	/**
+	 * [checkData 验证数据]
+	 * @param  [type] $data [验证数据]
+	 * @return [type]       [description]
+	 */
 	protected function checkData($data)
 	{
 		//验证用户名和密码
@@ -81,6 +88,35 @@ class Login extends Model
 			return $validate->getError();
 		else
 			return 1;
+	}
+
+	/**
+	 * [setPermission 保护用户的权限信息]
+	 * @param [type] $user [description]
+	 */
+	protected function setPermission()
+	{
+		$user = Session::get('user');
+		if ($user['admin_id'] == 1)
+		{
+			// 超级管理员，大boss给所有权限
+			Session::set('auth', 'all');
+		} else {
+			if ($user['role_id'] > 0)
+			{				
+				// 获取角色下拥有的权限
+				$role = model('Role')->getValue(['role_id' => $user['role_id']], 'auth');
+				$idArr = explode(',', $role);
+				$where['auth_id'] = ['in', $idArr];
+				$auth = model('Auth')->getAllData($where, 'auth_link');
+				Session::set('auth', $auth);
+			} else {
+				Session::set('auth', '');
+			}
+
+		}
+
+		return Session::get('auth');
 	}
 
 

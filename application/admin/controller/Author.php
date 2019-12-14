@@ -19,6 +19,10 @@ class Author extends Base
 	 */
 	public function list()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		$result = model('Author')->getPage([],'', 0, ['sort' => 'desc', 'author_id' => 'desc']);
 		$this->assign('page', $result);
@@ -39,6 +43,9 @@ class Author extends Base
 	 */
 	public function ajaxDeleteData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
 		$data = input('post.');
 
 		if (empty($data['author_id']))
@@ -63,6 +70,10 @@ class Author extends Base
 	 */
 	public function ajaxDelAllData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$data = input('post.');
 		if (empty($data['id_image']))
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -91,6 +102,10 @@ class Author extends Base
 	 */
 	public function ajaxIsShow()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Author')->editData(['author_id' => $input['author_id']], ['is_show' => $input['is_show']]);
 		// 管理员日志记录
@@ -107,6 +122,10 @@ class Author extends Base
 	 */
 	public function ajaxSort()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Author')->editData(['author_id' => $input['author_id']], ['sort' => $input['sort']]);
 		// 管理员日志记录
@@ -123,6 +142,9 @@ class Author extends Base
 	 */
 	public function add()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
 		$input = input() ? input() : array();
 
 		//引入js文件
@@ -136,6 +158,10 @@ class Author extends Base
 	 */
 	public function ajaxAddData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		//添加数据
 		$input = input('post.');
 		unset($input['images']);
@@ -157,6 +183,9 @@ class Author extends Base
 	 */
 	public function edit()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
 		$input = input() ? input() : array();
 		
 		$result = model('Author')->getOneData(['author_id' => input('author_id')]);
@@ -173,6 +202,10 @@ class Author extends Base
 	 */
 	public function ajaxEidtData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.') ? input('post.') : array();
 		$author_id = $input['author_id'];
 		unset($input['author_id']);

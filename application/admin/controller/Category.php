@@ -19,6 +19,10 @@ class Category extends Base
 	 */
 	public function list()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+		
 		$input = input() ? input() : array();
 
 		$result = model('Category')->getPage([],'', 0, ['sort' => 'desc', 'cate_id' => 'desc']);
@@ -39,6 +43,10 @@ class Category extends Base
 	 */
 	public function ajaxDeleteData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$data = input();
 
 		if (empty($data['cate_id']))
@@ -62,6 +70,10 @@ class Category extends Base
 	 */
 	public function ajaxDelAllData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$data = input('post.');
 		if (empty($data['idArr']))
 			return json(['status' => 0, 'msg' => '删除失败']);
@@ -89,6 +101,10 @@ class Category extends Base
 	 */
 	public function ajaxIsShow()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Category')->editData(['cate_id' => $input['cate_id']], ['is_show' => $input['is_show']]);
 		// 管理员日志记录
@@ -105,6 +121,10 @@ class Category extends Base
 	 */
 	public function ajaxSort()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input() ? input() : array();
 		$result = model('Category')->editData(['cate_id' => $input['cate_id']], ['sort' => $input['sort']]);
 		// 管理员日志记录
@@ -121,6 +141,10 @@ class Category extends Base
 	 */
 	public function add()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 
 		//取出所有的分类
@@ -145,6 +169,9 @@ class Category extends Base
 	 */
 	public function ajaxAddData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
 		//添加数据
 		$input = input('post.');
 		if (empty($input))
@@ -164,6 +191,10 @@ class Category extends Base
 	 */
 	public function edit()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return $this->redirect('index/no_permission');
+
 		$input = input() ? input() : array();
 		
 		$result = model('Category')->getOneData(['cate_id' => input('cate_id')]);
@@ -189,6 +220,10 @@ class Category extends Base
 	 */
 	public function ajaxEidtData()
 	{
+		// 检测用户的基本权限
+		if (!permission())
+			return json(['status' => 0, 'msg' => '无权限操作']);
+
 		$input = input('post.') ? input('post.') : array();
 		$cate_id = $input['cate_id'];
 		unset($input['cate_id']);

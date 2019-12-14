@@ -12,4 +12,5 @@ class Role extends Base
 		parent::__construct();
 		$this->table = $this->table;
 	}
+
 }
