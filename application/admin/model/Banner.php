@@ -5,6 +5,7 @@ use think\Model;
 use think\Request;
 use think\Db;
 use think\facade\Config;
+use think\db\Where;
 
 /**
 * 轮播图管理
@@ -80,12 +81,12 @@ class Banner extends Model
 	 * 获取所有的数据
 	 * @return [getAllData] [description]
 	 */
-	public function getAllData($num = 0)
+	public function getAllData($num = 0, $where = [])
 	{
 		if ($num == 0)
-			return Db::name($this->table)->order(['sort' =>'desc', 'id' => 'desc'])->select();
+			return Db::name($this->table)->where(new Where($where))->order(['sort' =>'desc', 'id' => 'desc'])->select();
 		else
-			return Db::name($this->table)->order(['sort' =>'desc', 'id' => 'desc'])->limit($num)->select();
+			return Db::name($this->table)->where(new Where($where))->order(['sort' =>'desc', 'id' => 'desc'])->limit($num)->select();
 
 	}
 
