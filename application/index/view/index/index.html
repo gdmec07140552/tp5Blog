@@ -7,14 +7,13 @@
     <ul class="am-slides">
     {foreach name="$banner" item="b"}
       <li>
-            <img src="__IMAGE__{$b['img_url']}">
+            <img src="__IMAGE__{$b['img_url']}" art="{$b['img_des']}">
             <div class="blog-slider-desc am-slider-desc ">
                 <div class="blog-text-center blog-slider-con">
-                    <span><a href="" class="blog-color">Article &nbsp;</a></span>               
-                    <h1 class="blog-h-margin"><a href="">总在思考一句积极的话</a></h1>
-                    <p>那时候刚好下着雨，柏油路面湿冷冷的，还闪烁着青、黄、红颜色的灯火。
-                    </p>
-                    <span class="blog-bor">2015/10/9</span>
+                    <span><a href="" class="blog-color">{$b['art']['author']} &nbsp;</a></span>               
+                    <h1 class="blog-h-margin"><a href="{:url('Article/detail')}/art_id/{$b['art']['art_id']}">{$b['art']['art_title']}</a></h1>
+                    <p>{$b['img_des']}</p>
+                    <span class="blog-bor">{:date('Y/m/d',$b['art']['create_time'])}</span>
                     <br><br><br><br><br><br><br>                
                 </div>
             </div>
@@ -53,57 +52,13 @@
             </article>
         <?php endforeach; ?>
         <ul class="am-pagination">
-  <li class="am-pagination-prev"><a href="">&laquo; Prev</a></li>
-  <li class="am-pagination-next"><a href="">Next &raquo;</a></li>
-</ul>
+            <li class="am-pagination-prev"><a href="">&laquo; Prev</a></li>
+            <li class="am-pagination-next"><a href="">Next &raquo;</a></li>
+        </ul>
     </div>
-
-    <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
-        <div class="blog-sidebar-widget blog-bor">
-            <h2 class="blog-text-center blog-title"><span>Recommend Author</span></h2>
-            <img src="__IMAGE__{$author['head_img']}" alt="{$author['author']}" class="blog-entry-img" >
-            <?php if($author['sex'] == 0): ?>
-                <p> 妹子 &nbsp;</p>
-            <?php endif; ?>
-            <?php if($author['sex'] == 1): ?>
-                <p> 渣男 &nbsp;</p>
-            <?php endif; ?>
-            <?php if($author['sex'] == 2): ?>
-                <p> 禽兽 &nbsp;</p>
-            <?php endif; ?>
-            <p>{$author['introduction']}</p>
-            <p>{$author['content']}</p>
-        </div>
-        <div class="blog-sidebar-widget blog-bor">
-            <h2 class="blog-text-center blog-title"><span>Contact ME</span></h2>
-            <p>
-                <a href=""><span class="am-icon-qq am-icon-fw am-primary blog-icon"></span></a>
-                <a href=""><span class="am-icon-github am-icon-fw blog-icon"></span></a>
-                <a href=""><span class="am-icon-weibo am-icon-fw blog-icon"></span></a>
-                <a href=""><span class="am-icon-reddit am-icon-fw blog-icon"></span></a>
-                <a href=""><span class="am-icon-weixin am-icon-fw blog-icon"></span></a>
-            </p>
-        </div>
-        <div class="blog-clear-margin blog-sidebar-widget blog-bor am-g ">
-            <h2 class="blog-title"><span>TAG cloud</span></h2>
-            <div class="am-u-sm-12 blog-clear-padding">
-            <a href="" class="blog-tag">amaze</a>
-            <a href="" class="blog-tag">妹纸 UI</a>
-            <a href="" class="blog-tag">HTML5</a>
-            <a href="" class="blog-tag">这是标签</a>
-            <a href="" class="blog-tag">Impossible</a>
-            <a href="" class="blog-tag">开源前端框架</a>
-            </div>
-        </div>
-        <div class="blog-sidebar-widget blog-bor">
-            <h2 class="blog-title"><span>么么哒</span></h2>
-            <ul class="am-list">
-                <li><a href="#">每个人都有一个死角， 自己走不出来，别人也闯不进去。</a></li>
-                <li><a href="#">我把最深沉的秘密放在那里。</a></li>
-                <li><a href="#">你不懂我，我不怪你。</a></li>
-                <li><a href="#">每个人都有一道伤口， 或深或浅，盖上布，以为不存在。</a></li>
-            </ul>
-        </div>
-    </div>
+<!-- right_content start -->
+{include file="common/right_content" /}
+<!-- riht_content end -->
+    
 </div>
 {include file="common/footer" /}

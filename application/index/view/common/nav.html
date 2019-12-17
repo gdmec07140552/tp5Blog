@@ -7,7 +7,7 @@
 			<li class="am-active"><a href="/">首页</a></li>
 			<?php foreach($cate as $c): ?>
 				<li class="am-dropdown" data-am-dropdown>
-					<a class="{:isset($c['son'])?'am-dropdown-toggle':''}" data-am-dropdown-toggle href="javascript:;">
+					<a class="{:isset($c['son'])?'am-dropdown-toggle':''}" data-am-dropdown-toggle href="{:url('Index/index')}/cate_id/{$c['cate_id']}">
 						{$c['cate_name']} 
 						{if isset($c['son'])}
 							<span class="am-icon-caret-down"></span>
@@ -17,7 +17,7 @@
 						{if isset($c['son'])}
 							{foreach name="$c['son']" item="v"}
 								<li>
-									<a href="lw-index.html">{$v['cate_name']}</a>
+									<a href="{:url('Index/index')}/cate_id/{$v['cate_id']}">{$v['cate_name']}</a>
 								</li>
 							{/foreach}
 						{/if}

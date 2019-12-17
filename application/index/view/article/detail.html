@@ -50,14 +50,14 @@
         <hr>
 		<div class="am-g blog-author blog-article-margin">
 			<div class="am-u-sm-3 am-u-md-3 am-u-lg-2">
-				<img src="__IMAGE__{$author['head_img']}" alt="" class="blog-author-img am-circle">
+				<img src="__IMAGE__{$result['head_img']}" alt="" class="blog-author-img am-circle">
 			</div>
 			<div class="am-u-sm-9 am-u-md-9 am-u-lg-10">
 				<h3>
 					<span>作者 &nbsp;: &nbsp;</span>
-					<span class="blog-color">{$author['author']}</span>
+					<span class="blog-color">{$result['author']}</span>
 				</h3>
-				<p>{$author['content']}</p>
+				<p>{$result['cont']}</p>
 			</div>
 		</div>
         <hr>
@@ -98,7 +98,9 @@
 
         <hr>
     </div>
-
+<!-- right_content start -->
+{include file="common/right_content" /}
+<!-- riht_content end -->
 
 </div>
 <!-- content end -->

@@ -36,9 +36,6 @@ class Base extends Controller
 				// 数据缓存
 				redis()->rpush('cate', serialize($value));
 			}
-
-			// 设置缓存一天
-			redis()->expire('cate', 86400);
 		} else {
 			foreach ($result as $key => $value) {
 				$result[$key] = unserialize($value);
@@ -46,5 +43,28 @@ class Base extends Controller
 		}
 
 		$this->assign('cate', $result);
+	}
+
+	/**
+	 * [link_article 相似文章推荐]
+	 * @return [type] [description]
+	 */
+	public function link_article($cate_id = 0)
+	{
+		$result = [];
+		// 按分类查找
+		if ($cate_id > 0)
+			$article_id = redis()->lrange('article_cate_id_' . $cate_id, 0, 5);
+		else
+			$article_id = redis()->lrange('article_id', 0, 5);
+
+		foreach($article_id as $k=> $val)
+		{
+			$result[] = redis()->hgetall('article_list_' . $val);
+		}
+
+		$this->assign('link_article', $result);
+
+		return $result;
 	}
 }

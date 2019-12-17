@@ -1,4 +1,4 @@
-<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1576227084;}*/ ?>
+<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1576458295;}*/ ?>
 	<!-- 头部文件引入 -->
 	<!DOCTYPE html>
 <html>
@@ -64,9 +64,9 @@
                     <i class="layui-icon" style="top: 3px;">&#xe634;</i><cite>轮播管理</cite>
                 </a>
                 <dl class="layui-nav-child">
-                    <dd class="" style="<?php echo getNav(['Banner', 'banner_list'], 1); ?>">
+                    <dd class="" style="<?php echo getNav(['Banner', 'list'], 1); ?>">
                         <dd class="">
-                            <a href="javascript:;" _href="<?php echo url('Banner/banner_list'); ?>">
+                            <a href="javascript:;" _href="<?php echo url('Banner/list'); ?>">
                                 <cite>轮播图列表</cite>
                             </a>
                         </dd>

@@ -1,16 +1,10 @@
 <?php
 namespace app\admin\model;
 
-use think\Model;
-use think\Request;
-use think\Db;
-use think\facade\Config;
-use think\db\Where;
-
 /**
 * 轮播图管理
 */
-class Banner extends Model
+class Banner extends Base
 {
 	
 	protected $table = 'banner';
@@ -21,119 +15,45 @@ class Banner extends Model
 	}
 
 	/**
-	 * 添加数据
-	 * [addData description]
+	 * [setRedis 设置缓存数据]
+	 * @param [type] $banner_id [轮播id]
+	 * @param [type] $data      [轮播数据]
 	 */
-	public function addData()
+	public function setRedis($banner_id, $data)
 	{
-		$data = input();
-		$res = $this->insertData([
+		// 设置缓存数据的key
+		$banner_key = 'banner_list_' . $banner_id;
+
+		// 保存数据
+		redis()->hmset($banner_key, [
+				'banner_id' => $banner_id,
 				'img_url' => $data['img_url'],
 				'img_des' => $data['img_des'],
 				'link_url' => $data['link_url'],
-				'author_id' => $data['author_id'],
-				'sort' => $data['sort'],
+				'art_id' => $data['art_id'],
 				'is_show' => $data['is_show']
 			]);
-		// 管理员日志记录
-		model('Base')->addLog(1, '轮播图', $res);
-		if ($res)
-			return ['status' => 1, 'msg' => '添加成功'];
-		else
-			return ['status' => 0, 'msg' => '添加失败'];
+
+		// 保存轮播图id		
+		redis()->rpush('banner_list_id', $banner_id);
+
+		return true;
 	}
 
 	/**
-	 * 修改数据
-	 * [saveData description]
+	 * [delRedis 删除缓存数据]
+	 * @param  [type] $banner_id [轮播id]
+	 * @return [type]            [description]
 	 */
-	public function saveData()
+	public function delRedis($banner_id)
 	{
-		$data = input();
-		$id = $data['id'] ? $data['id'] : '';
-		unset($data['id']);
-		$banner = $this->getOneData(['id' => $id], 'img_url');
-		if (!$banner)
-		{
-			return ['status' => -1, 'msg' => '改数据不存在'];
-		}
+		// 设置缓存数据的key
+		$banner_key = 'banner_list_' . $banner_id;
+		// 清除轮播数据列表
+		redis()->delete($banner_key);
+		// 清除轮播数据列表id
+		redis()->delete('banner_list_id');
 
-		// 如果有新的图片上传则删除旧图片
-		if (!empty($banner) && $banner!= $data['img_url'])
-			delImage($banner);
-
-		$saveData = [
-			'img_url' => $data['img_url'],
-			'img_des' => $data['img_des'],
-			'link_url' => $data['link_url'],
-			'author_id' => $data['author_id'],
-			'sort' => $data['sort'],
-			'is_show' => $data['is_show']
-		];
-		// 管理员日志记录
-		model('Base')->addLog(2, '轮播图', $id);
-		$res = $this->updateOneData(['id' => $id], $saveData);
-
-		return ['status' => 1, 'msg' => '修改成功'];
-	}
-
-	/**
-	 * 获取所有的数据
-	 * @return [getAllData] [description]
-	 */
-	public function getAllData($num = 0, $where = [])
-	{
-		if ($num == 0)
-			return Db::name($this->table)->where(new Where($where))->order(['sort' =>'desc', 'id' => 'desc'])->select();
-		else
-			return Db::name($this->table)->where(new Where($where))->order(['sort' =>'desc', 'id' => 'desc'])->limit($num)->select();
-
-	}
-
-
-	/**
-	 * 获取单条数据
-	 * @return [type] [description]
-	 */
-	public function getOneData($where, $fieLd = '')
-	{
-		if (empty($fieLd))
-			return Db::name($this->table)->where($where)->find();
-		else
-			return Db::name($this->table)->where($where)->value($fieLd);
-
-	}
-
-	/**
-	 * 更新数据
-	 * @return [type] [description]
-	 */
-	public function updateOneData($where, $data)
-	{	
-		return Db::name($this->table)->where($where)->update($data);
-		
-	}
-
-	/**
-	 * 添加数据
-	 * @return [type] [description]
-	 */
-	public function insertData($data)
-	{	
-		return Db::name($this->table)->insertGetId($data);
-	}
-
-	/**
-	 * 删除数据
-	 * @return [type] [description]
-	 */
-	public function deleteData($where)
-	{		
-		$res = Db::name($this->table)->where($where)->delete();
-
-		if ($res)
-			return ['status' => 1, 'msg' => '删除成功'];
-		else
-			return ['status' => 0, 'msg' => '删除失败'];
+		return true;
 	}
 }

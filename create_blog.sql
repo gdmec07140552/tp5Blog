@@ -32,15 +32,16 @@ insert into blog_admin
 
 CREATE TABLE IF NOT EXISTS blog_banner
 (
-	id smallint(6) NOT NULL AUTO_INCREMENT,
+	banner_id smallint(6) NOT NULL AUTO_INCREMENT,
 	img_url varchar(255) NOT NULL DEFAULT '' COMMENT '图片地址',
 	img_des varchar(255) NOT NULL DEFAULT '' COMMENT '图片描述',
 	link_url varchar(255) NOT NULL DEFAULT '' COMMENT '图片链接地址',
-	author_id int(11) NOT NULL DEFAULT '0' COMMENT '作者id',
+	art_id int(11) NOT NULL DEFAULT '0' COMMENT '文章id',
 	sort tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序：越大排在前面最大不能超过255',
 	is_show tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示：0正常，-1禁用',
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT="banner图" AUTO_INCREMENT=1;
+-- alter table blog_banner change author_id art_id int(11) not null default '0' comment '文章id';
 
 CREATE TABLE IF NOT EXISTS blog_category
 (

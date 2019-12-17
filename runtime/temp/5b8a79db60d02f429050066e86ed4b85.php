@@ -1,4 +1,4 @@
-<?php /*a:6:{s:66:"D:\phpStudy\WWW\tp5Blog\application\index\view\article\detail.html";i:1576319561;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\header.html";i:1576290265;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\css.html";i:1576289465;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\nav.html";i:1576296235;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\footer.html";i:1576289507;s:69:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\javascript.html";i:1576289315;}*/ ?>
+<?php /*a:7:{s:66:"D:\phpStudy\WWW\tp5Blog\application\index\view\article\detail.html";i:1576487234;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\header.html";i:1576290265;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\css.html";i:1576289465;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\nav.html";i:1576486004;s:72:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\right_content.html";i:1576487072;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\footer.html";i:1576289507;s:69:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\javascript.html";i:1576289315;}*/ ?>
 <!-- header start -->
 <!doctype html>
 <html>
@@ -35,7 +35,7 @@
 			<li class="am-active"><a href="/">首页</a></li>
 			<?php foreach($cate as $c): ?>
 				<li class="am-dropdown" data-am-dropdown>
-					<a class="<?php echo isset($c['son'])?'am-dropdown-toggle':''; ?>" data-am-dropdown-toggle href="javascript:;">
+					<a class="<?php echo isset($c['son'])?'am-dropdown-toggle':''; ?>" data-am-dropdown-toggle href="<?php echo url('Index/index'); ?>/cate_id/<?php echo htmlentities($c['cate_id']); ?>">
 						<?php echo htmlentities($c['cate_name']); if(isset($c['son'])): ?>
 							<span class="am-icon-caret-down"></span>
 						<?php endif; ?>
@@ -43,7 +43,7 @@
 					<ul class="am-dropdown-content">
 						<?php if(isset($c['son'])): if(is_array($c['son']) || $c['son'] instanceof \think\Collection || $c['son'] instanceof \think\Paginator): if( count($c['son'])==0 ) : echo "" ;else: foreach($c['son'] as $key=>$v): ?>
 								<li>
-									<a href="lw-index.html"><?php echo htmlentities($v['cate_name']); ?></a>
+									<a href="<?php echo url('Index/index'); ?>/cate_id/<?php echo htmlentities($v['cate_id']); ?>"><?php echo htmlentities($v['cate_name']); ?></a>
 								</li>
 							<?php endforeach; endif; else: echo "" ;endif; ?>
 						<?php endif; ?>
@@ -108,14 +108,14 @@
         <hr>
 		<div class="am-g blog-author blog-article-margin">
 			<div class="am-u-sm-3 am-u-md-3 am-u-lg-2">
-				<img src="/static/uploads/<?php echo htmlentities($author['head_img']); ?>" alt="" class="blog-author-img am-circle">
+				<img src="/static/uploads/<?php echo htmlentities($result['head_img']); ?>" alt="" class="blog-author-img am-circle">
 			</div>
 			<div class="am-u-sm-9 am-u-md-9 am-u-lg-10">
 				<h3>
 					<span>作者 &nbsp;: &nbsp;</span>
-					<span class="blog-color"><?php echo htmlentities($author['author']); ?></span>
+					<span class="blog-color"><?php echo htmlentities($result['author']); ?></span>
 				</h3>
-				<p><?php echo htmlentities($author['content']); ?></p>
+				<p><?php echo htmlentities($result['cont']); ?></p>
 			</div>
 		</div>
         <hr>
@@ -156,7 +156,55 @@
 
         <hr>
     </div>
-
+<!-- right_content start -->
+<div class="am-u-md-4 am-u-sm-12 blog-sidebar">
+    <div class="blog-sidebar-widget blog-bor">
+        <h2 class="blog-text-center blog-title"><span>Recommend Author</span></h2>
+        <img src="/static/uploads/<?php echo htmlentities($top_author['head_img']); ?>" alt="<?php echo htmlentities($top_author['author']); ?>" class="blog-entry-img" >
+        <?php if($top_author['sex'] == 0): ?>
+            <p> 妹子 &nbsp;</p>
+        <?php endif; if($top_author['sex'] == 1): ?>
+            <p> 渣男 &nbsp;</p>
+        <?php endif; if($top_author['sex'] == 2): ?>
+            <p> 禽兽 &nbsp;</p>
+        <?php endif; ?>
+        <p><?php echo htmlentities($top_author['introduction']); ?></p>
+        <p><?php echo htmlentities($top_author['content']); ?></p>
+    </div>
+    <div class="blog-sidebar-widget blog-bor">
+        <h2 class="blog-text-center blog-title"><span>Contact ME</span></h2>
+        <p>
+            <a href=""><span class="am-icon-qq am-icon-fw am-primary blog-icon"></span></a>
+            <a href=""><span class="am-icon-github am-icon-fw blog-icon"></span></a>
+            <a href=""><span class="am-icon-weibo am-icon-fw blog-icon"></span></a>
+            <a href=""><span class="am-icon-reddit am-icon-fw blog-icon"></span></a>
+            <a href=""><span class="am-icon-weixin am-icon-fw blog-icon"></span></a>
+        </p>
+    </div>
+    <div class="blog-clear-margin blog-sidebar-widget blog-bor am-g ">
+        <h2 class="blog-title"><span>TAG cloud</span></h2>
+        <div class="am-u-sm-12 blog-clear-padding">
+        <a href="" class="blog-tag">amaze</a>
+        <a href="" class="blog-tag">妹纸 UI</a>
+        <a href="" class="blog-tag">HTML5</a>
+        <a href="" class="blog-tag">这是标签</a>
+        <a href="" class="blog-tag">Impossible</a>
+        <a href="" class="blog-tag">开源前端框架</a>
+        </div>
+    </div>
+    <div class="blog-sidebar-widget blog-bor">
+        <h2 class="blog-title"><span>么么哒</span></h2>
+        <ul class="am-list">
+            <?php foreach($link_article as $link): ?>
+                <li>
+                    <a href="<?php echo url('Article/detail'); ?>/art_id/<?php echo htmlentities($link['art_id']); ?>"><?php echo htmlentities($link['art_title']); ?></a>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+  
+</div>
+<!-- riht_content end -->
 
 </div>
 <!-- content end -->
