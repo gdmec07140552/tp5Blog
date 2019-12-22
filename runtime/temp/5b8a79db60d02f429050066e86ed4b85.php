@@ -1,4 +1,4 @@
-<?php /*a:7:{s:66:"D:\phpStudy\WWW\tp5Blog\application\index\view\article\detail.html";i:1576487234;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\header.html";i:1576290265;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\css.html";i:1576289465;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\nav.html";i:1576486004;s:72:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\right_content.html";i:1576487072;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\footer.html";i:1576289507;s:69:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\javascript.html";i:1576289315;}*/ ?>
+<?php /*a:7:{s:66:"D:\phpStudy\WWW\tp5Blog\application\index\view\article\detail.html";i:1576833810;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\header.html";i:1576290265;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\css.html";i:1576289465;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\nav.html";i:1576978549;s:72:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\right_content.html";i:1576487072;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\footer.html";i:1576289507;s:69:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\javascript.html";i:1576978799;}*/ ?>
 <!-- header start -->
 <!doctype html>
 <html>
@@ -57,7 +57,7 @@
 		</ul>
 		<form class="am-topbar-form am-topbar-right am-form-inline" role="search">
 			<div class="am-form-group">
-				<input type="text" class="am-form-field am-input-sm" placeholder="搜索">
+				<input type="text" class="am-form-field am-input-sm" value="<?php echo htmlentities($keyboard); ?>" name="keyboard" placeholder="搜索内容">
 			</div>
 		</form>
 	</div>
@@ -120,12 +120,15 @@
 		</div>
         <hr>
 		<ul class="am-pagination blog-article-margin">
-			<li class="am-pagination-prev">
-				<a href="#" class="">&laquo; 一切的回顾</a>
-			</li>
-			<li class="am-pagination-next">
-				<a href="">不远的未来 &raquo;</a>
-			</li>
+			<?php if ($prevNext['prev'] != 0): ?>
+				<li class="am-pagination-prev">
+					<a href="<?php echo url('Article/detail'); ?>/art_id/<?php echo htmlentities($prevNext['prev']); ?>" class="">&laquo; 一切的回顾</a>
+				</li>
+			<?php endif; if ($prevNext['next'] != 0): ?>
+				<li class="am-pagination-next">
+					<a href="<?php echo url('Article/detail'); ?>/art_id/<?php echo htmlentities($prevNext['next']); ?>" class="">不远的未来 &raquo;</a>
+				</li>
+			<?php endif; ?>
 		</ul>
         
         <hr>
@@ -249,3 +252,5 @@
 </html>
 <script src="/static/home/js/jquery.min.js"></script>
 <script src="/static/home/js/amazeui.min.js"></script>
+<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
+<script src="/static/admin/lib/layui/layui.js" charset="utf-8"></script>

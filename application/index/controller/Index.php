@@ -16,11 +16,23 @@ class Index extends Base
     {
     	// 获取所有轮播图数据
     	$banner = $this->getBanner();
-
     	// 获取多条文章
-    	$cate_id = input('cate_id');
-    	$article = $this->getAllArticle(0, -1, $cate_id);
+    	$cate_id = input('cate_id') ? input('cate_id') : 0;
+        $keyboard = input('keyboard') ? input('keyboard') : '';
+    	if ($keyboard) {
+            $where[] = ['m.is_show', 'eq', 0];
+            $where[] = ['m.art_title', 'like' , '%'.$keyboard.'%'];
+
+            $article = model('admin/Article')->articleAuthor([
+                'where' => $where,
+                'order' => ['m.sort' => 'desc', 'm.art_id' => 'desc'],
+                'limit' => '0,5'
+            ]);
+        } else {
+            $article = $this->getAllArticle(0, 5, $cate_id);
+        }
     	$this->assign('article', $article);
+        $this->assign('cate_id', $cate_id);
     	// 获取轮播图对应的文章
     	foreach ($banner as $key => $value) {
     		$banner[$key]['art'] = redis()->hgetall('article_list_' . $value['art_id']);
@@ -150,6 +162,42 @@ class Index extends Base
     	}
 
     	return $result;
+    }
+
+    /**
+     * [getPageData 获取分页数据]
+     * @return [type] [description]
+     */
+    public function getPageData()
+    {
+        // 获取分页的页数
+        $page = (int) input('page');
+        $cate_id = input('cate_id');
+        $keyboard = input('keyboard');
+        $start = $page * 5;
+        $stop = ($page + 1) * 5;
+        if ($keyboard)
+        {
+            if ($cate_id)
+                $where[] = ['m.cate_id', 'eq', $cate_id];
+            $where[] = ['m.art_title', 'like', '%'.$keyboard.'%'];
+            $article = model('admin/Article')->articleAuthor([
+                'where' => $where,
+                'order' => ['m.sort' => 'desc', 'm.art_id' => 'desc'],
+                'limit' => $start.','.$stop
+            ]);
+        } else {            
+            // 取出对应的文章
+            $article = $this->getAllArticle($start, $stop, $cate_id);
+            foreach ($article as $key => $value) {
+                $article[$key]['create_time'] = date('Y/m/d', $value['create_time']);
+            }
+            
+        }
+        if ($article)
+            return json(['status' => 1, 'res' => $article]);
+        else
+            return json(['status' => 0]);
     }
 
 

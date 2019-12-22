@@ -41,6 +41,8 @@ class Base extends Controller
 				$result[$key] = unserialize($value);
 			}
 		}
+		$keyboard = input('keyboard') ? input('keyboard') : '';
+		$this->assign('keyboard', $keyboard);
 
 		$this->assign('cate', $result);
 	}

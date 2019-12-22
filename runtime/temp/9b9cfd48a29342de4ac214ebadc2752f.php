@@ -1,4 +1,4 @@
-<?php /*a:7:{s:63:"D:\phpStudy\WWW\tp5Blog\application\index\view\index\index.html";i:1576487264;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\header.html";i:1576290265;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\css.html";i:1576289465;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\nav.html";i:1576486004;s:72:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\right_content.html";i:1576487072;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\footer.html";i:1576289507;s:69:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\javascript.html";i:1576289315;}*/ ?>
+<?php /*a:7:{s:63:"D:\phpStudy\WWW\tp5Blog\application\index\view\index\index.html";i:1576982427;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\header.html";i:1576290265;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\css.html";i:1576289465;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\nav.html";i:1576978549;s:72:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\right_content.html";i:1576983181;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\footer.html";i:1576289507;s:69:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\javascript.html";i:1576978799;}*/ ?>
 <!doctype html>
 <html>
 <head>
@@ -54,7 +54,7 @@
 		</ul>
 		<form class="am-topbar-form am-topbar-right am-form-inline" role="search">
 			<div class="am-form-group">
-				<input type="text" class="am-form-field am-input-sm" placeholder="搜索">
+				<input type="text" class="am-form-field am-input-sm" value="<?php echo htmlentities($keyboard); ?>" name="keyboard" placeholder="搜索内容">
 			</div>
 		</form>
 	</div>
@@ -85,8 +85,9 @@
 <!-- banner end -->
 
 <!-- content srart -->
-<div class="am-g am-g-fixed blog-fixed">
+<div class="am-g am-g-fixed blog-fixed" id="html-content">
     <div class="am-u-md-8 am-u-sm-12">
+        <div id="flushPage">
         <?php foreach($article as $k => $v): ?>
             <article class="am-g blog-entry-article">
                 <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-img">
@@ -109,13 +110,23 @@
                 </div>
             </article>
         <?php endforeach; ?>
-        <ul class="am-pagination">
-            <li class="am-pagination-prev"><a href="">&laquo; Prev</a></li>
-            <li class="am-pagination-next"><a href="">Next &raquo;</a></li>
-        </ul>
+        </div>
+        <?php if( count($article) >= 5 ): ?>
+            <ul class="am-pagination">
+                <li class="am-pagination-prev" style="display: none;"><a class="getPage page-prev" data-page="0" href="javascript:;">&laquo; Prev</a></li>
+                <li class="am-pagination-next"><a class="getPage page-next" data-page="1" href="javascript:;">Next &raquo;</a></li>
+            </ul>
+        <?php endif; ?>
     </div>
+    <input type="hidden" name="cate_id" value="<?php echo htmlentities($cate_id); ?>">
 <!-- right_content start -->
 <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
+    <div class="blog-sidebar-widget blog-bor">
+        <h2 class="blog-text-center blog-title"><span>About Me</span></h2>
+        <img src="/static/uploads/<?php echo htmlentities($top_author['head_img']); ?>" alt="<?php echo htmlentities($top_author['author']); ?>" class="blog-entry-img" >
+            <p> Admin&nbsp; &nbsp; 妹子 &nbsp;</p>
+        <p><?php echo htmlentities($top_author['introduction']); ?></p>
+    </div>
     <div class="blog-sidebar-widget blog-bor">
         <h2 class="blog-text-center blog-title"><span>Recommend Author</span></h2>
         <img src="/static/uploads/<?php echo htmlentities($top_author['head_img']); ?>" alt="<?php echo htmlentities($top_author['author']); ?>" class="blog-entry-img" >
@@ -205,3 +216,76 @@
 </html>
 <script src="/static/home/js/jquery.min.js"></script>
 <script src="/static/home/js/amazeui.min.js"></script>
+<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
+<script src="/static/admin/lib/layui/layui.js" charset="utf-8"></script>
+
+<!-- 获取分页数据 -->
+<script>
+    layui.use(['layer'], function(){
+        layer = layui.layer;
+    });
+    </script>
+<script type="text/javascript">
+    $(function(){
+        $('.getPage').click(function(){
+            // 加载图标显示
+            var index = layer.load(2, {
+                shade: [0.1,'#fff'] //0.1透明度的白色背景,
+            });
+            var page  = $(this).data('page');
+            var cate_id = $("input[name='cate_id']").val();
+            var keyboard = $("input[name='keyboard']").val();
+            $.post(
+                "<?php echo url('Index/getPageData'); ?>",
+                {page: page, cate_id:cate_id, keyboard:keyboard},
+                function(data){
+                    $('.am-pagination-prev').hide();
+                    $('.am-pagination-next').hide();
+                    // 锚点定位
+                    $("html,body").animate({
+                        scrollTop:$("#html-content").offset().top
+                    },1000);
+                    // 关闭加载
+                    layer.close(index);
+                    if (data['status'] == 1)
+                    { 
+                        var html = '';
+                        for (var i = 0; i < data['res'].length; i++) {
+                            html += '<article class="am-g blog-entry-article">';
+                                html += '<div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-img">';
+                                    html += '<img src="/static/uploads/'+data['res'][i]['art_img']+'" alt="" class="am-u-sm-12">';
+                                html += '</div>';
+                                html += '<div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">';
+                                    html += '<span><a href="" class="blog-color">'+data['res'][i]['author']+' &nbsp;</a></span>';
+                                    if (data['res'][i]['sex'] == 0)
+                                        html += '<span> @妹子 &nbsp;</span>';
+                                    if (data['res'][i]['sex'] == 1)
+                                        html += '<span> @渣男 &nbsp;</span>';
+                                    if (data['res'][i]['sex'] == 2)
+                                        html += '<span> @禽兽 &nbsp;</span>';
+                                    html += '<span>'+data['res'][i]['create_time']+'</span>';
+                                    html += '<h1><a href="<?php echo url('Article/detail'); ?>/art_id/'+data['res'][i]['art_id']+'">'+data['res'][i]['art_title']+'</a></h1>';
+                                    html += '<p>'+data['res'][i]['subtitle']+'</p>';
+                                    html += '<p><a href="<?php echo url('Article/detail'); ?>/art_id/'+data['res'][i]['art_id']+'" class="blog-continue">'+data['res'][i]['art_title']+'</a></p></div></article>';
+                        }
+                        $('#flushPage').html(html);
+                        if (page > 0) {
+                            $('.am-pagination-prev').show();
+                            $('.page-prev').attr("data-page", page-1);
+                        }
+                        if (data['res'].length == 5) {
+                            $('.am-pagination-next').show();
+                            $('.page-next').attr("data-page", page+1);
+                        } else {
+                            $('.am-pagination-next').hide();
+                        }
+                    } else {
+                        var html = '<h3 style="text-align: center; color: #666;">数据已加载完了</h3>';
+                        $('#flushPage').html(html);
+                        $('.am-pagination-prev').show();
+                        $('.page-prev').attr("data-page", page-1);
+                    }
+                });
+        });
+    });
+</script>
