@@ -1,4 +1,33 @@
-{include file="common/header" /}
+<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\auth\edit.html";i:1575944061;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>
+            德玛西亚总部
+        </title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <!-- css样式文件引入 -->
+        <link rel="stylesheet" href="/static/admin/css/x-admin.css" media="all">
+<!-- <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+        <!-- js文件引入 -->
+        <!-- 判断js文件是否需要引入 -->
+<?php if (in_array('layui', $js_array)): ?>
+	<script src="/static/admin/lib/layui/layui.js" charset="utf-8"></script>
+<?php endif; if (in_array('x-admin', $js_array)): ?>
+	<script src="/static/admin/js/x-admin.js"></script>
+<?php endif; if (in_array('x-layui', $js_array)): ?>
+	<script src="/static/admin/js/x-layui.js" charset="utf-8"></script>
+<?php endif; ?>
+<script src="/static/js/jquery.min.js"></script>
+    </head>
+    <body>
     <div class="x-body">
         <form class="layui-form" enctype="multipart/form-data">
             <div class="layui-form-item">
@@ -6,7 +35,7 @@
                     权限名称
                 </label>
                 <div class="layui-input-inline" style="width: 300px;">
-                    <input type="text" id="link" value="" name="auth_name" class="layui-input" placeholder="输入权限名称" lay-verify="required">
+                    <input type="text" id="link" value="<?php echo !empty($result['auth_name']) ? htmlentities($result['auth_name']) : ''; ?>" name="auth_name" class="layui-input" placeholder="输入权限名称" lay-verify="required">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -15,7 +44,7 @@
                     <select name="pid" id="pid">
                         <option value="0">顶级权限</option>
                         <?php foreach($auth as $v): ?>
-                            <option value="{$v['auth_id']}">{$v['auth_name']}</option>
+                            <option value="<?php echo htmlentities($v['auth_id']); ?>"  <?php echo $v['auth_id']==$result['pid'] ? 'selected' : ''; ?>><?php echo htmlentities($v['auth_name']); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -28,7 +57,7 @@
                     <select name="cont_name" id="cont_name" lay-filter="projectfilter">
                         <option value="0">选择控制器</option>
                         <?php foreach($controller as $con): ?>
-                            <option value="{$con}">{$con}</option>
+                            <option value="<?php echo !empty($con) ? htmlentities($con) : '0'; ?>" <?php echo $con==$result['cont_name'] ? 'selected' : ''; ?>><?php echo htmlentities($con); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -39,7 +68,7 @@
                 </label>
                 <div class="layui-input-block" style="width: 300px;">
                     <select name="action_name" id="action_name">
-                        <option value="0">选择操作方法</option>
+                        <option value="<?php echo !empty($result['action_name']) ? htmlentities($result['action_name']) : '0'; ?>"><?php echo !empty($result['action_name']) ? htmlentities($result['action_name']) : '选择操作方法'; ?></option>
                     </select>
                 </div>
             </div>
@@ -48,7 +77,7 @@
                     展示顺序
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" id="sort" value="0" name="sort" class="layui-input">
+                    <input type="text" id="sort" value="<?php echo !empty($result['sort']) ? htmlentities($result['sort']) : '0'; ?>" name="sort" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="x-red">越大排在前面最大不能超过255</span>
@@ -57,10 +86,11 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">是否显示</label>
                 <div class="layui-input-block">
-                     <input type="radio" name="is_show" checked value="0" title="显示">
-                     <input type="radio" name="is_show" value="-1" title="隐藏">
+                     <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? '' : 'checked'; ?> value="0" title="显示">
+                     <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? 'checked' : ''; ?> value="-1" title="隐藏">
                 </div>
              </div>
+            <input type="hidden" name="auth_id" value="<?php echo htmlentities($result['auth_id']); ?>">
             <div class="layui-form-item">
                 <label for="L_repass" class="layui-form-label">
                 </label>
@@ -70,7 +100,6 @@
             </div>
         </form>
     </div>
-
     <script>
         layui.use(['form','layer'], function(){
             $ = layui.jquery;
@@ -82,7 +111,7 @@
             if (data['value'] != 0)
             {
                 $.get(
-                "{:url('Auth/ajaxGetAction')}?cont_name=" + data['value'],
+                "<?php echo url('Auth/ajaxGetAction'); ?>?cont_name=" + data['value'],
                 function(res){
                     // console.log(res);
                     $("#action_name").empty();
@@ -101,23 +130,18 @@
         });
         //监听提交
         form.on('submit(add)', function(data){
-            var auth_name = $("input[name='auth_name']").val();
-            if (!auth_name)
-            {
-                layer.msg('权限名称不能为空', {icon: 5});
-                return false;
-            }
             // 提交数据到后台
             var _this = parent.layer;
             $.ajax({
-                url: "{:url('Auth/ajaxAddData')}",
+                url: "<?php echo url('Auth/ajaxEidtData'); ?>",
                 type: 'post',
                 data: data['field'],
                 success:function(res){
                     if (res['status'] == 1)
                     {
-                        layer.msg(res['msg'], {icon: 6});
-                        setTimeout(function(){window.parent.location.reload();}, 2000);
+                        // window.location.href = "<?php echo url('Auth/banner_list'); ?>";
+                        var index = _this.getFrameIndex(window.name);
+                        _this.close(index);
                     } else {
                         layer.msg(res['msg'], {icon: 5});
                     }
@@ -129,6 +153,6 @@
           
         });
     </script>
-</body>
+    </body>
 
 </html>

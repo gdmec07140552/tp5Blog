@@ -47,6 +47,7 @@ class Login extends Controller
 	{
 		//清空用户基本信息
 		Session::delete('user');
+		session_destroy();
 		return $this->redirect('Login/login');
 	}
 }

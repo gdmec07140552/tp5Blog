@@ -1,10 +1,10 @@
-<?php /*a:5:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\welcome.html";i:1575162368;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\footer.html";i:1575088361;}*/ ?>
+<?php /*a:5:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\welcome.html";i:1575162368;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577002293;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\footer.html";i:1575088361;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>
-            德玛西亚总部
+            信资产
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">

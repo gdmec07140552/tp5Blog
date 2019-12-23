@@ -266,14 +266,14 @@
                     </dd>
                 </dl>
             </li>
-            <li class="layui-nav-item" style="{:getNav(['System'], 0)}">
+            <li class="layui-nav-item" style="{:getNav(['System','Conf'], 0)}">
                 <a class="javascript:;" href="javascript:;">
                     <i class="layui-icon" style="top: 3px;">&#xe614;</i><cite>系统设置</cite>
                 </a>
                 <dl class="layui-nav-child">
-                    <dd class="" style="{:getNav(['System', 'list'], 1)}">
-                        <a href="javascript:;" _href="./sys-set.html">
-                            <cite>系统设置</cite>
+                    <dd class="" style="{:getNav(['Conf', 'list'], 1)}">
+                        <a href="javascript:;" _href="{:url('Conf/list')}">
+                            <cite>网站配置</cite>
                         </a>
                     </dd>
                     <dd class="" style="{:getNav(['System', 'list'], 1)}">

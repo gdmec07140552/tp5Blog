@@ -123,3 +123,16 @@ CREATE TABLE IF NOT EXISTS blog_admin_role
 	PRIMARY KEY (role_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT="角色管理" AUTO_INCREMENT=1;
 
+CREATE TABLE IF NOT EXISTS blog_conf
+(
+	conf_id smallint NOT NULL AUTO_INCREMENT,
+	conf_title varchar(40) NOT NULL DEFAULT '' COMMENT '配置标题',
+	conf_name varchar(100) NOT NULL DEFAULT '' COMMENT '配置字段名',
+	conf_content text NOT NULL DEFAULT '' COMMENT '配置内容',
+	sort tinyint(4) NOT NULL DEFAULT '0' COMMENT '排序：越大排在前面最大不能超过255',
+	conf_tips varchar(100) NOT NULL DEFAULT '' COMMENT '提示信息',
+	field_type char(20) NOT NULL DEFAULT '' COMMENT '字段类型',
+	field_value varchar(255) NOT NULL DEFAULT '' COMMENT '字段值',
+	PRIMARY KEY (conf_id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站配置';
+-- alter table blog_conf change field_type field_type char(20) NOT NULL DEFAULT '' COMMENT '字段类型';

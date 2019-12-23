@@ -48,6 +48,7 @@ class Login extends Model
 
 		//登录成功保存用户的基本信息
 		// 1.保存用户的基本信息
+			unset($user['admin_pass']);
 			Session::set('user', $user);
 		// 2.更新用户的登录数据
 			Db::name($this->table)->where('admin_id' , 'eq', $user['admin_id'])->update([

@@ -115,9 +115,10 @@
 				success:function(res){
 					if (res['status'] == 1)
 					{
-						// window.location.href = "{:url('Banner/banner_list')}";
-						var index = _this.getFrameIndex(window.name);
-						_this.close(index);
+						// var index = _this.getFrameIndex(window.name);
+						// _this.close(index);
+						layer.msg(res['msg'], {icon: 6});
+						setTimeout(function(){window.parent.location.reload();}, 2000);
 					} else {
 						layer.msg(res['msg'], {icon: 5});
 					}

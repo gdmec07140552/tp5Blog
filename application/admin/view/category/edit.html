@@ -71,9 +71,10 @@
 				success:function(res){
 					if (res['status'] == 1)
 					{
-						// window.location.href = "{:url('Category/banner_list')}";
-						var index = _this.getFrameIndex(window.name);
-						_this.close(index);
+						layer.msg(res['msg'], {icon: 6});
+						setTimeout(function(){window.parent.location.reload();}, 2000);
+						// var index = _this.getFrameIndex(window.name);
+						// _this.close(index);
 					} else {
 						layer.msg(res['msg'], {icon: 5});
 					}

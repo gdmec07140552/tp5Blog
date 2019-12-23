@@ -1,11 +1,11 @@
-<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1575088250;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1576458295;}*/ ?>
+<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1576988176;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577002293;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1576986844;}*/ ?>
 	<!-- 头部文件引入 -->
 	<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>
-            德玛西亚总部
+            信资产
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -34,7 +34,7 @@
 			<div class="layui-header header header-demo">
 				<div class="layui-main">
 					<a class="logo" href="<?php echo url('Index/index'); ?>">
-						德玛西亚总部 [ 闲人勿进 ]
+						信资产后台
 					</a>
 					<ul class="layui-nav" lay-filter="">
 					  <li class="layui-nav-item"><img src="/static/admin/images/logo.png" class="layui-circle" style="border: 2px solid #A9B7B7;" width="35px" alt=""></li>
@@ -324,14 +324,14 @@
                     </dd>
                 </dl>
             </li>
-            <li class="layui-nav-item" style="<?php echo getNav(['System'], 0); ?>">
+            <li class="layui-nav-item" style="<?php echo getNav(['System','Conf'], 0); ?>">
                 <a class="javascript:;" href="javascript:;">
                     <i class="layui-icon" style="top: 3px;">&#xe614;</i><cite>系统设置</cite>
                 </a>
                 <dl class="layui-nav-child">
-                    <dd class="" style="<?php echo getNav(['System', 'list'], 1); ?>">
-                        <a href="javascript:;" _href="./sys-set.html">
-                            <cite>系统设置</cite>
+                    <dd class="" style="<?php echo getNav(['Conf', 'list'], 1); ?>">
+                        <a href="javascript:;" _href="<?php echo url('Conf/list'); ?>">
+                            <cite>网站配置</cite>
                         </a>
                     </dd>
                     <dd class="" style="<?php echo getNav(['System', 'list'], 1); ?>">
