@@ -164,23 +164,23 @@
 
 				// 提交数据到后台
 				$.ajax({
-						url: "{:url('Article/ajaxAddData')}",
-						type: 'post',
-						data: $('form').serialize(),
-						success:function(res){
-							if (res['status'] == 1)
-							{
-								layer.msg(res['msg'], {icon: 6});
-								setTimeout(function(){
-									window.location.href = "{:url('Article/list')}";
-								}, 2000);
-							} else {
-								layer.msg(res['msg'], {icon: 5});
-							}
+					url: "{:url('Article/ajaxAddData')}",
+					type: 'post',
+					data: $('form').serialize(),
+					success:function(res){
+						if (res['status'] == 1)
+						{
+							layer.msg(res['msg'], {icon: 6});
+							setTimeout(function(){
+								window.location.href = "{:url('Article/list')}";
+							}, 2000);
+						} else {
+							layer.msg(res['msg'], {icon: 5});
 						}
-					});
-					return false;
-			  });
+					}
+				});
+				return false;
+			 });
 		  
 		  
 		});

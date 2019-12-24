@@ -27,12 +27,9 @@
 				<label for="conf_content" class="layui-form-label">
 					配置内容
 				</label>
-				<div class="layui-input-inline">
-					<input type="text" id="conf_content" placeholder="请输入字段的值" name="conf_content" class="layui-input" lay-verify="required">
-				</div>
-				<div class="layui-input-inline">
-					<span class="x-red">*</span>
-				</div>
+				<div class="layui-input-block">
+			     	<textarea id="conf_content" name="conf_content" placeholder="请输入字段的值" class="layui-textarea" lay-verify="required"></textarea>
+			    </div>
 			</div>
 			<div class="layui-form-item">
 				<label for="sort" class="layui-form-label">
@@ -112,7 +109,7 @@
 				{	var upload_url = "<?php echo '__IMAGE__'; ?>";
 					var head_img = upload_url + res['img_url'];
 					// 显示图片并记录图片地址
-					$('input[name="conf_content"]').val(res['img_url']);
+					$('textarea[name="conf_content"]').val(res['img_url']);
 			  		$('#LAY_demo_upload').attr('src', head_img);
 				} else {
 					layer.msg('图片上传失败', {icon: 5});
@@ -149,8 +146,8 @@
 					}
 				}
 			});
-			return false;
-		  });		  
+				return false;
+		  	});		  
 		});
 	</script>
 </body>
