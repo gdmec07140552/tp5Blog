@@ -1,16 +1,14 @@
-<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1576988176;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577002293;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1576986844;}*/ ?>
+<?php /*a:5:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\index.html";i:1577265316;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\sidebar.html";i:1576986844;}*/ ?>
 	<!-- 头部文件引入 -->
 	<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            信资产
-        </title>
+        <title><?php echo isset($website['admin_title'])?$website['admin_title']:''; ?></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" type="image/x-icon" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
@@ -33,25 +31,38 @@
 		<div class="layui-layout layui-layout-admin">
 			<div class="layui-header header header-demo">
 				<div class="layui-main">
-					<a class="logo" href="<?php echo url('Index/index'); ?>">
-						信资产后台
-					</a>
+					<a class="logo" href="<?php echo url('Index/index'); ?>"><?php echo isset($website['admin_name'])?$website['admin_name']:''; ?></a>
 					<ul class="layui-nav" lay-filter="">
-					  <li class="layui-nav-item"><img src="/static/admin/images/logo.png" class="layui-circle" style="border: 2px solid #A9B7B7;" width="35px" alt=""></li>
-					  <li class="layui-nav-item">
-						<a href="javascript:;"><?php echo Session('user')['admin_name']; ?></a>
-						<dl class="layui-nav-child"> <!-- 二级菜单 -->
-						  <dd><a href="">个人信息</a></dd>
-						  <dd><a href="">切换帐号</a></dd>
-						  <dd><a href="<?php echo url('Login/logout'); ?>">退出</a></dd>
-						</dl>
-					  </li>
-					  <!-- <li class="layui-nav-item">
-						<a href="" title="消息">
-							<i class="layui-icon" style="top: 1px;">&#xe63a;</i>
-						</a>
-						</li> -->
-					  <li class="layui-nav-item x-index"><a href="/">前台首页</a></li>
+						<li class="layui-nav-item">
+							<img src="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" class="layui-circle" style="border: 2px solid #A9B7B7;" width="35px" alt="">
+						</li>
+						<li class="layui-nav-item">
+							<a href="javascript:;"><?php echo Session('user')['admin_name']; ?></a>
+							<dl class="layui-nav-child"> <!-- 二级菜单 -->
+								<dd>
+									<a href="">个人信息</a>
+								</dd>
+								<dd>
+									<a href="">切换帐号</a>
+								</dd>
+								<dd>
+									<a href="<?php echo url('Login/logout'); ?>">退出</a>
+								</dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item">
+							<a href="" title="消息">
+								<i class="layui-icon" style="top: 1px;">&#xe63a;</i>
+							</a>
+						</li>
+						<li class="layui-nav-item cleanRedis">
+							<a href="javascript:;"  title="清理缓存">
+								<i class="layui-icon" style="top: 1px;">&#xe639;</i>
+							</a>
+						</li>
+						<li class="layui-nav-item x-index">
+							<a href="/">前台首页</a>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -385,6 +396,30 @@
 			<div class="site-mobile-shade">
 			</div>
 		</div>
+		<script type="text/javascript">
+			// 清理前端页面的redis缓存
+			$(function(){
+				layui.use(['layer'], function(){
+					$ = layui.jquery;
+				  	layer = layui.layer;
+				});
+				$('.cleanRedis').on('click', function(){
+					layer.confirm('您确定要清理缓存数据吗？', {
+						btn: ['确定','取消'] //按钮
+					}, function(){
+						layer.msg('确定', {icon: 6});
+						$.get(
+							"<?php echo url('Index/cleanRedis'); ?>",
+							function(res){
+								if (res['status'] == 1)
+									layer.msg(res['msg'], {icon: 6});
+								else
+									layer.msg(res['msg'], {icon: 5});
+							});
+					});
+				});
+			});
+		</script>
 		<!-- <script>
 		var _hmt = _hmt || [];
 		(function() {

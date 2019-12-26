@@ -1,15 +1,13 @@
-<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\conf\edit.html";i:1577085456;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577002293;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\conf\edit.html";i:1577157917;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            信资产
-        </title>
+        <title><?php echo isset($website['admin_title'])?$website['admin_title']:''; ?></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" type="image/x-icon" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
@@ -57,7 +55,7 @@
 					展示顺序
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="sort" value="0" value="<?php echo htmlentities($result['sort']); ?>" name="sort" class="layui-input">
+					<input type="text" id="sort" value="<?php echo htmlentities($result['sort']); ?>" name="sort" class="layui-input">
 				</div>
 				<div class="layui-form-mid layui-word-aux">
 					<span class="x-red">越大排在前面最大不能超过255</span>
@@ -103,7 +101,7 @@
 				<div class="layui-form-item">
 					<label  class="layui-form-label">缩略图
 					</label>
-					<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="/static/uploads//<?php echo $result['field_type']=='image' ? htmlentities($result['conf_content']) : ''; ?>">
+					<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="<?php echo $result['field_type']=='image' ? htmlentities($result['conf_content']) : ''; ?>">
 				</div>
 			</div>	
 			<div class="layui-form-item layui-form-text">
@@ -136,11 +134,10 @@
 			url: '<?php echo url("Common/uploads"); ?>' //上传接口
 			,success: function(res){ //上传成功后的回调
 				if (res['status'] == 1)
-				{	var upload_url = "<?php echo '/static/uploads/'; ?>";
-					var head_img = upload_url + res['img_url'];
+				{
 					// 显示图片并记录图片地址
 					$('textarea[name="conf_content"]').val(res['img_url']);
-			  		$('#LAY_demo_upload').attr('src', head_img);
+			  		$('#LAY_demo_upload').attr('src', res['img_url']);
 				} else {
 					layer.msg('图片上传失败', {icon: 5});
 				}

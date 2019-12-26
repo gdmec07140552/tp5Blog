@@ -1,15 +1,13 @@
-<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\edit.html";i:1575945320;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\edit.html";i:1577154815;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            德玛西亚总部
-        </title>
+        <title><?php echo isset($website['admin_title'])?$website['admin_title']:''; ?></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" type="image/x-icon" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
@@ -52,7 +50,7 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="/static/uploads/<?php echo htmlentities($result['art_img']); ?>">
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="<?php echo htmlentities($result['art_img']); ?>">
 			</div>
 			<div class="layui-form-item">
 				<label for="link" class="layui-form-label">
@@ -159,11 +157,10 @@
 				url: '<?php echo url("Common/uploads"); ?>' //上传接口
 				,success: function(res){ //上传成功后的回调
 					if (res['status'] == 1)
-					{	var upload_url = "<?php echo '/static/uploads/'; ?>";
-						var art_img = upload_url + res['img_url'];
+					{
 						// 显示图片并记录图片地址
 						$('input[name="art_img"]').val(res['img_url']);
-				  		$('#LAY_demo_upload').attr('src', art_img);
+				  		$('#LAY_demo_upload').attr('src', res['img_url']);
 					} else {
 						layer.msg('图片上传失败', {icon: 5});
 					}

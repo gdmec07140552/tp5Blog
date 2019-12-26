@@ -1,15 +1,13 @@
-<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\conf\list.html";i:1577094279;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577002293;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:61:"D:\phpStudy\WWW\tp5Blog\application\admin\view\conf\list.html";i:1577153870;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            信资产
-        </title>
+        <title><?php echo isset($website['admin_title'])?$website['admin_title']:''; ?></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" type="image/x-icon" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
@@ -111,15 +109,13 @@
                 ,success: function(res){ //上传成功后的回调
                     
                     if (res['status'] == 1)
-                    {  
-                        var upload_url = "<?php echo '/static/uploads/'; ?>";
-                        var head_img = upload_url + res['img_url'];
+                    {
                         var index = $("input[name='td_input']").val();
                         $('.td-image').each(function(idx, _this){
                             // 显示图片并记录图片地址
                             if ($(this).data('index') == index) {
                                 $(this).find('.image-input').val(res['img_url']);
-                                $(this).find('img').attr('src', head_img);
+                                $(this).find('img').attr('src', res['img_url']);
                             }
                         });
                     } else {

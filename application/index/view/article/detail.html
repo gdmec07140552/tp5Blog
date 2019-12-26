@@ -1,7 +1,7 @@
 <!-- header start -->
 {include file="common/header" /}
 <!-- header end -->
-
+<body id="blog" style="background: {:isset($website['web_bgcolor'])?$website['web_bgcolor']:'#fff';}">
 <!-- nav start -->
 {include file="common/nav" /}
 <!-- nav end -->
@@ -32,8 +32,8 @@
 	          </p>
 	        </div>        
 	        <div class="am-article-bd">
-	        	<img src="__IMAGE__{$result['art_img']}" alt="{$result['art_title']}" class="blog-entry-img blog-article-margin">
-	        	{$result['content']}
+	        	<img src="{$result['art_img']}" alt="{$result['art_title']}" class="blog-entry-img blog-article-margin">
+	        	{$result['content']|raw}
 	        </div>
       	</article>
         
@@ -50,7 +50,7 @@
         <hr>
 		<div class="am-g blog-author blog-article-margin">
 			<div class="am-u-sm-3 am-u-md-3 am-u-lg-2">
-				<img src="__IMAGE__{$result['head_img']}" alt="" class="blog-author-img am-circle">
+				<img src="{$result['head_img']}" alt="" class="blog-author-img am-circle">
 			</div>
 			<div class="am-u-sm-9 am-u-md-9 am-u-lg-10">
 				<h3>

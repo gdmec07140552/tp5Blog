@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use think\Db;
 use think\facade\Session;
+use think\facade\Config;
 /**
 * 网站配置管理
 */
@@ -55,7 +56,7 @@ class Conf extends Base
 					break;
 
 				case 'image':
-					$result[$key]['html_content'] .= '<img style="width: 112px; height: 80px;" src="/static/uploads/'.$value['conf_content'].'">';
+					$result[$key]['html_content'] .= '<img style="width: 112px; height: 80px;" src="'.$value['conf_content'].'">';
 					$result[$key]['html_content'] .= '<input class="image-input" type="hidden" name="conf_content['.$value['conf_id'].']" value="'.$value['conf_content'].'">';
 					$result[$key]['html_content'] .= '<input type="file" name="images" data-conf_id="'.$value['conf_id'].'" class="layui-upload-file">';
 					break;
@@ -155,7 +156,6 @@ class Conf extends Base
 		Session::set('token', $token);
 		$this->assign('token', $token);
 
-		$this->websiteConf();
 		//引入js文件
 		$this->assign('js_array', ['layui', 'x-layui']);
 		return $this->fetch('add');
@@ -181,12 +181,15 @@ class Conf extends Base
 		if (empty($input))
 			return json(['status' => 0, 'msg' => '添加失败']);
 		$result = model('Conf')->insertData($input);
-		// 管理员日志记录
-			model('Base')->addLog(1, '网站配置管理', $result);
-		if ($result)
+		if ($result) {
+			// 管理员日志记录
+				model('Base')->addLog(1, '网站配置管理', $result);
+			// 修改网站配置文件
+			model('Conf')->websiteConf();
 			return json(['status' => 1, 'msg' => '添加成功']);
-		else
+		} else {
 			return json(['status' => 0, 'msg' => '添加失败']);
+		}
 	}
 
 	/**
@@ -237,6 +240,8 @@ class Conf extends Base
 		$result = model('Conf')->editData(['conf_id' => $conf_id], $input);		
 		if ($result)
 		{
+			// 修改网站配置文件
+			model('Conf')->websiteConf();
 			//修改成功把旧的图片删除
 			if (($res['field_type'] == 'image') && $input['conf_content'] != $res['conf_content'])
 				delImage($res['conf_content']);
@@ -276,25 +281,12 @@ class Conf extends Base
 				model('Base')->addLog(2, '网站配置管理', $value);	
 			}
 			Db::commit();
+			// 修改网站配置文件
+			model('Conf')->websiteConf();
 			return json(['status' => 1, 'msg' => '修改成功']);
 		} catch (Exception $e) {
 			Db::rollback();
 			return json(['status' => 0, 'msg' => '修改失败']);
 		}
-	}
-
-	/**
-	 * [websiteConf 网站配置信息]
-	 * @return [type] [description]
-	 */
-	public function websiteConf()
-	{
-		$conf = model('Conf')->getAllData([], 'conf_name,conf_content');
-		$str = '<?php return [';
-		foreach ($conf as $key => $value) {
-			$str .= "'" . $value['conf_name'] . "' => '" . $value['conf_content']. "',";
-		}
-		$str .= '];';
-		file_put_contents('./blog_conf', $str);
 	}
 }

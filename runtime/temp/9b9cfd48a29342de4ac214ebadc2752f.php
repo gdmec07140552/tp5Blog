@@ -1,28 +1,36 @@
-<?php /*a:7:{s:63:"D:\phpStudy\WWW\tp5Blog\application\index\view\index\index.html";i:1576982427;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\header.html";i:1576290265;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\css.html";i:1576289465;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\nav.html";i:1576978549;s:72:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\right_content.html";i:1576983181;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\footer.html";i:1576289507;s:69:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\javascript.html";i:1576978799;}*/ ?>
+<?php /*a:7:{s:63:"D:\phpStudy\WWW\tp5Blog\application\index\view\index\index.html";i:1577269105;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\header.html";i:1577161773;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\css.html";i:1576289465;s:62:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\nav.html";i:1577174139;s:72:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\right_content.html";i:1577174889;s:65:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\footer.html";i:1577160329;s:69:"D:\phpStudy\WWW\tp5Blog\application\index\view\common\javascript.html";i:1576978799;}*/ ?>
 <!doctype html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description" content="">
-	<meta name="keywords" content="">
+	<meta name="description" content="<?php echo isset($website['website_des'])?$website['website_des']:''; ?>">
+	<meta name="keywords" content="<?php echo isset($website['website_keywords'])?$website['website_keywords']:''; ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<title><?php echo htmlentities($title); ?></title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="Cache-Control" content="no-siteapp"/>
-	<link rel="icon" type="image/png" href="/static/home/i/favicon.png">
+	<link rel="icon" type="image/png" href="<?php echo isset($website['home_logo'])?$website['home_logo']:''; ?>">
 	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="icon" sizes="192x192" href="/static/home/i/app-icon72x72@2x.png">
+	<link rel="icon" sizes="192x192" href="<?php echo isset($website['home_logo'])?$website['home_logo']:''; ?>">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="apple-mobile-web-app-title" content="Amaze UI"/>
-	<link rel="apple-touch-icon-precomposed" href="/static/home/i/app-icon72x72@2x.png">
-	<meta name="msapplication-TileImage" content="/static/home/i/app-icon72x72@2x.png">
+	<link rel="apple-touch-icon-precomposed" href="<?php echo isset($website['home_logo'])?$website['home_logo']:''; ?>">
+	<meta name="msapplication-TileImage" content="<?php echo isset($website['home_logo'])?$website['home_logo']:''; ?>">
 	<meta name="msapplication-TileColor" content="#0e90d2">
 	<link rel="stylesheet" href="/static/home/css/amazeui.min.css">
 <link rel="stylesheet" href="/static/home/css/app.css">
 </head>
-<body id="blog">
+<style>
+    #flushPage h2 {
+        font-size: 25px;
+        margin-top: 10%;
+        color: #999;
+        text-align: center;
+    }
+</style>
+<body id="blog" style="background: <?php echo isset($website['web_bgcolor'])?$website['web_bgcolor']:'#fff';; ?>">
 <!-- nav start -->
 <nav class="am-g am-g-fixed blog-fixed blog-nav">
 	<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only blog-button" data-am-collapse="{target: '#blog-collapse'}" ><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
@@ -57,6 +65,7 @@
 				<input type="text" class="am-form-field am-input-sm" value="<?php echo htmlentities($keyboard); ?>" name="keyboard" placeholder="搜索内容">
 			</div>
 		</form>
+		
 	</div>
 </nav>
 <hr>
@@ -67,7 +76,7 @@
     <ul class="am-slides">
     <?php if(is_array($banner) || $banner instanceof \think\Collection || $banner instanceof \think\Paginator): if( count($banner)==0 ) : echo "" ;else: foreach($banner as $key=>$b): ?>
       <li>
-            <img src="/static/uploads/<?php echo htmlentities($b['img_url']); ?>" art="<?php echo htmlentities($b['img_des']); ?>">
+            <img src="<?php echo htmlentities($b['img_url']); ?>" art="<?php echo htmlentities($b['img_des']); ?>">
             <div class="blog-slider-desc am-slider-desc ">
                 <div class="blog-text-center blog-slider-con">
                     <span><a href="" class="blog-color"><?php echo htmlentities($b['art']['author']); ?> &nbsp;</a></span>               
@@ -91,16 +100,16 @@
         <?php foreach($article as $k => $v): ?>
             <article class="am-g blog-entry-article">
                 <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-img">
-                    <img src="/static/uploads/<?php echo htmlentities($v['art_img']); ?>" alt="" class="am-u-sm-12">
+                    <img src="<?php echo htmlentities($v['art_img']); ?>" alt="" class="am-u-sm-12">
                 </div>
                 <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
                     <span><a href="" class="blog-color"><?php echo htmlentities($v['author']); ?> &nbsp;</a></span>
                     <?php if($v['sex'] == 0): ?>
-                        <span> @妹子 &nbsp;</span>
+                        <span> @Beauty &nbsp;</span>
                     <?php endif; if($v['sex'] == 1): ?>
-                        <span> @渣男 &nbsp;</span>
+                        <span> @Scumbag &nbsp;</span>
                     <?php endif; if($v['sex'] == 2): ?>
-                        <span> @禽兽 &nbsp;</span>
+                        <span> @Beast &nbsp;</span>
                     <?php endif; ?>
                     <span><?php echo date('Y/m/d', $v['create_time']); ?></span>
                     <h1><a href="<?php echo url('Article/detail'); ?>/art_id/<?php echo htmlentities($v['art_id']); ?>"><?php echo htmlentities($v['art_title']); ?></a></h1>
@@ -109,33 +118,44 @@
                     <p><a href="<?php echo url('Article/detail'); ?>/art_id/<?php echo htmlentities($v['art_id']); ?>" class="blog-continue"><?php echo htmlentities($v['art_title']); ?></a></p>
                 </div>
             </article>
-        <?php endforeach; ?>
+        <?php endforeach; if(empty($article)): ?>
+            <h2>数据已经加载完了</h2>
+        <?php endif; ?>
         </div>
-        <?php if( count($article) >= 5 ): ?>
+        <?php if( count($article) >= $pagesize ): ?>
             <ul class="am-pagination">
-                <li class="am-pagination-prev" style="display: none;"><a class="getPage page-prev" data-page="0" href="javascript:;">&laquo; Prev</a></li>
-                <li class="am-pagination-next"><a class="getPage page-next" data-page="1" href="javascript:;">Next &raquo;</a></li>
+                <li class="am-pagination-prev" style="display: none;">
+                    <a class="getPage page-prev" data-page_type="prev" href="javascript:;">
+                        &laquo; Prev
+                    </a>
+                </li>
+                <li class="am-pagination-next">
+                    <a class="getPage page-next" data-page_type="next" href="javascript:;">
+                        Next &raquo;
+                    </a>
+                </li>
             </ul>
         <?php endif; ?>
     </div>
     <input type="hidden" name="cate_id" value="<?php echo htmlentities($cate_id); ?>">
+    <input type="hidden" name="page" value="1">
 <!-- right_content start -->
 <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
     <div class="blog-sidebar-widget blog-bor">
         <h2 class="blog-text-center blog-title"><span>About Me</span></h2>
-        <img src="/static/uploads/<?php echo htmlentities($top_author['head_img']); ?>" alt="<?php echo htmlentities($top_author['author']); ?>" class="blog-entry-img" >
-            <p> Admin&nbsp; &nbsp; 妹子 &nbsp;</p>
+        <img style=" border-radius: 100%; height: 200px; width: 200px;" src="<?php echo htmlentities($top_author['head_img']); ?>" alt="<?php echo htmlentities($top_author['author']); ?>" class="blog-entry-img" >
+            <p> Admin&nbsp; &nbsp; Beauty &nbsp;</p>
         <p><?php echo htmlentities($top_author['introduction']); ?></p>
     </div>
     <div class="blog-sidebar-widget blog-bor">
         <h2 class="blog-text-center blog-title"><span>Recommend Author</span></h2>
-        <img src="/static/uploads/<?php echo htmlentities($top_author['head_img']); ?>" alt="<?php echo htmlentities($top_author['author']); ?>" class="blog-entry-img" >
+        <img src="<?php echo htmlentities($top_author['head_img']); ?>" alt="<?php echo htmlentities($top_author['author']); ?>" class="blog-entry-img" >
         <?php if($top_author['sex'] == 0): ?>
-            <p> 妹子 &nbsp;</p>
+            <p> Beauty &nbsp;</p>
         <?php endif; if($top_author['sex'] == 1): ?>
-            <p> 渣男 &nbsp;</p>
+            <p> Scumbag &nbsp;</p>
         <?php endif; if($top_author['sex'] == 2): ?>
-            <p> 禽兽 &nbsp;</p>
+            <p> Beast &nbsp;</p>
         <?php endif; ?>
         <p><?php echo htmlentities($top_author['introduction']); ?></p>
         <p><?php echo htmlentities($top_author['content']); ?></p>
@@ -180,9 +200,10 @@
 <footer class="blog-footer">
     <div class="am-g am-g-fixed blog-fixed am-u-sm-centered blog-footer-padding">
         <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
-            <h3>模板简介</h3>
-            <p class="am-text-sm">这是一个使用amazeUI做的简单的前端模板。<br> 博客/ 资讯类 前端模板 <br> 支持响应式，多种布局，包括主页、文章页、媒体页、分类页等<br>嗯嗯嗯，不知道说啥了。外面的世界真精彩<br><br>
-            Amaze UI 使用 MIT 许可证发布，用户可以自由使用、复制、修改、合并、出版发行、散布、再授权及贩售 Amaze UI 及其副本。</p>
+            <h3>Website Introduction</h3>
+            <p class="am-text-sm"><?php echo isset($website['web_introduction'])?$website['web_introduction']:''; ?></p>
+            <h3>Thank Word</h3>
+            <p class="am-text-sm"><?php echo isset($website['thank_word'])?$website['thank_word']:''; ?></p>
         </div>
         <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
             <h3>社交账号</h3>
@@ -194,11 +215,11 @@
                 <a href=""><span class="am-icon-weixin am-icon-fw blog-icon blog-icon"></span></a>
             </p>
             <h3>Credits</h3>
-            <p>我们追求卓越，然时间、经验、能力有限。Amaze UI 有很多不足的地方，希望大家包容、不吝赐教，给我们提意见、建议。感谢你们！</p>          
+            <p><?php echo isset($website['website_gredits'])?$website['website_gredits']:''; ?></p>          
         </div>
         <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
-              <h1>我们站在巨人的肩膀上</h1>
-             <h3>Heroes</h3>
+              <h1><?php echo isset($website['website_say'])?$website['website_say']:''; ?></h1>
+             <h3>Links</h3>
             <p>
                 <ul>
                     <li>jQuery</li>
@@ -210,7 +231,7 @@
             </p>
         </div>
     </div>    
-    <div class="blog-text-center">© 2015 AllMobilize, Inc. Licensed under MIT license. Made with love By LWXYFER</div>    
+    <div class="blog-text-center"><?php echo isset($website['website_filing'])?$website['website_filing']:''; ?></div>    
   </footer>
 </body>
 </html>
@@ -224,7 +245,7 @@
     layui.use(['layer'], function(){
         layer = layui.layer;
     });
-    </script>
+</script>
 <script type="text/javascript">
     $(function(){
         $('.getPage').click(function(){
@@ -232,7 +253,13 @@
             var index = layer.load(2, {
                 shade: [0.1,'#fff'] //0.1透明度的白色背景,
             });
-            var page  = $(this).data('page');
+            var page_type  = $(this).data('page_type');
+            // 获取当前页数
+            var page = $("input[name='page']").val();
+            if (page_type == 'prev')
+                page = parseInt(page) - 1;
+            else
+                page = parseInt(page) + 1;
             var cate_id = $("input[name='cate_id']").val();
             var keyboard = $("input[name='keyboard']").val();
             $.post(
@@ -250,40 +277,39 @@
                     if (data['status'] == 1)
                     { 
                         var html = '';
+                        // 记录当前页面页数
+                        $("input[name='page']").val(page);
                         for (var i = 0; i < data['res'].length; i++) {
                             html += '<article class="am-g blog-entry-article">';
                                 html += '<div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-img">';
-                                    html += '<img src="/static/uploads/'+data['res'][i]['art_img']+'" alt="" class="am-u-sm-12">';
+                                    html += '<img src="'+data['res'][i]['art_img']+'" alt="" class="am-u-sm-12">';
                                 html += '</div>';
                                 html += '<div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">';
                                     html += '<span><a href="" class="blog-color">'+data['res'][i]['author']+' &nbsp;</a></span>';
                                     if (data['res'][i]['sex'] == 0)
-                                        html += '<span> @妹子 &nbsp;</span>';
+                                        html += '<span> @Beauty &nbsp;</span>';
                                     if (data['res'][i]['sex'] == 1)
-                                        html += '<span> @渣男 &nbsp;</span>';
+                                        html += '<span> @Scumbag &nbsp;</span>';
                                     if (data['res'][i]['sex'] == 2)
-                                        html += '<span> @禽兽 &nbsp;</span>';
+                                        html += '<span> @Beast &nbsp;</span>';
                                     html += '<span>'+data['res'][i]['create_time']+'</span>';
                                     html += '<h1><a href="<?php echo url('Article/detail'); ?>/art_id/'+data['res'][i]['art_id']+'">'+data['res'][i]['art_title']+'</a></h1>';
                                     html += '<p>'+data['res'][i]['subtitle']+'</p>';
                                     html += '<p><a href="<?php echo url('Article/detail'); ?>/art_id/'+data['res'][i]['art_id']+'" class="blog-continue">'+data['res'][i]['art_title']+'</a></p></div></article>';
                         }
                         $('#flushPage').html(html);
-                        if (page > 0) {
+                        if (page > 1) {
                             $('.am-pagination-prev').show();
-                            $('.page-prev').attr("data-page", page-1);
                         }
-                        if (data['res'].length == 5) {
+                        //获取分页数量
+                        var pagesize = <?php echo $pagesize; ?>;
+                        if (data['res'].length == pagesize) {
                             $('.am-pagination-next').show();
-                            $('.page-next').attr("data-page", page+1);
-                        } else {
-                            $('.am-pagination-next').hide();
                         }
                     } else {
-                        var html = '<h3 style="text-align: center; color: #666;">数据已加载完了</h3>';
+                        var html = '<h2>数据已加载完了</h2>';
                         $('#flushPage').html(html);
                         $('.am-pagination-prev').show();
-                        $('.page-prev').attr("data-page", page-1);
                     }
                 });
         });

@@ -1,5 +1,13 @@
 {include file="common/header" /}
-<body id="blog">
+<style>
+    #flushPage h2 {
+        font-size: 25px;
+        margin-top: 10%;
+        color: #999;
+        text-align: center;
+    }
+</style>
+<body id="blog" style="background: {:isset($website['web_bgcolor'])?$website['web_bgcolor']:'#fff';}">
 {include file="common/nav" /}
 <!-- banner start -->
 <div class="am-g am-g-fixed blog-fixed am-u-sm-centered blog-article-margin">
@@ -7,7 +15,7 @@
     <ul class="am-slides">
     {foreach name="$banner" item="b"}
       <li>
-            <img src="__IMAGE__{$b['img_url']}" art="{$b['img_des']}">
+            <img src="{$b['img_url']}" art="{$b['img_des']}">
             <div class="blog-slider-desc am-slider-desc ">
                 <div class="blog-text-center blog-slider-con">
                     <span><a href="" class="blog-color">{$b['art']['author']} &nbsp;</a></span>               
@@ -31,18 +39,18 @@
         <?php foreach($article as $k => $v): ?>
             <article class="am-g blog-entry-article">
                 <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-img">
-                    <img src="__IMAGE__{$v['art_img']}" alt="" class="am-u-sm-12">
+                    <img src="{$v['art_img']}" alt="" class="am-u-sm-12">
                 </div>
                 <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
                     <span><a href="" class="blog-color">{$v['author']} &nbsp;</a></span>
                     <?php if($v['sex'] == 0): ?>
-                        <span> @妹子 &nbsp;</span>
+                        <span> @Beauty &nbsp;</span>
                     <?php endif; ?>
                     <?php if($v['sex'] == 1): ?>
-                        <span> @渣男 &nbsp;</span>
+                        <span> @Scumbag &nbsp;</span>
                     <?php endif; ?>
                     <?php if($v['sex'] == 2): ?>
-                        <span> @禽兽 &nbsp;</span>
+                        <span> @Beast &nbsp;</span>
                     <?php endif; ?>
                     <span>{:date('Y/m/d', $v['create_time'])}</span>
                     <h1><a href="{:url('Article/detail')}/art_id/{$v['art_id']}">{$v['art_title']}</a></h1>
@@ -52,15 +60,27 @@
                 </div>
             </article>
         <?php endforeach; ?>
+        {if empty($article)}
+            <h2>数据已经加载完了</h2>
+        {/if}
         </div>
-        <?php if( count($article) >= 5 ): ?>
+        <?php if( count($article) >= $pagesize ): ?>
             <ul class="am-pagination">
-                <li class="am-pagination-prev" style="display: none;"><a class="getPage page-prev" data-page="0" href="javascript:;">&laquo; Prev</a></li>
-                <li class="am-pagination-next"><a class="getPage page-next" data-page="1" href="javascript:;">Next &raquo;</a></li>
+                <li class="am-pagination-prev" style="display: none;">
+                    <a class="getPage page-prev" data-page_type="prev" href="javascript:;">
+                        &laquo; Prev
+                    </a>
+                </li>
+                <li class="am-pagination-next">
+                    <a class="getPage page-next" data-page_type="next" href="javascript:;">
+                        Next &raquo;
+                    </a>
+                </li>
             </ul>
         <?php endif; ?>
     </div>
     <input type="hidden" name="cate_id" value="{$cate_id}">
+    <input type="hidden" name="page" value="1">
 <!-- right_content start -->
 {include file="common/right_content" /}
 <!-- riht_content end -->
@@ -73,7 +93,7 @@
     layui.use(['layer'], function(){
         layer = layui.layer;
     });
-    </script>
+</script>
 <script type="text/javascript">
     $(function(){
         $('.getPage').click(function(){
@@ -81,7 +101,13 @@
             var index = layer.load(2, {
                 shade: [0.1,'#fff'] //0.1透明度的白色背景,
             });
-            var page  = $(this).data('page');
+            var page_type  = $(this).data('page_type');
+            // 获取当前页数
+            var page = $("input[name='page']").val();
+            if (page_type == 'prev')
+                page = parseInt(page) - 1;
+            else
+                page = parseInt(page) + 1;
             var cate_id = $("input[name='cate_id']").val();
             var keyboard = $("input[name='keyboard']").val();
             $.post(
@@ -99,40 +125,39 @@
                     if (data['status'] == 1)
                     { 
                         var html = '';
+                        // 记录当前页面页数
+                        $("input[name='page']").val(page);
                         for (var i = 0; i < data['res'].length; i++) {
                             html += '<article class="am-g blog-entry-article">';
                                 html += '<div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-img">';
-                                    html += '<img src="__IMAGE__'+data['res'][i]['art_img']+'" alt="" class="am-u-sm-12">';
+                                    html += '<img src="'+data['res'][i]['art_img']+'" alt="" class="am-u-sm-12">';
                                 html += '</div>';
                                 html += '<div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">';
                                     html += '<span><a href="" class="blog-color">'+data['res'][i]['author']+' &nbsp;</a></span>';
                                     if (data['res'][i]['sex'] == 0)
-                                        html += '<span> @妹子 &nbsp;</span>';
+                                        html += '<span> @Beauty &nbsp;</span>';
                                     if (data['res'][i]['sex'] == 1)
-                                        html += '<span> @渣男 &nbsp;</span>';
+                                        html += '<span> @Scumbag &nbsp;</span>';
                                     if (data['res'][i]['sex'] == 2)
-                                        html += '<span> @禽兽 &nbsp;</span>';
+                                        html += '<span> @Beast &nbsp;</span>';
                                     html += '<span>'+data['res'][i]['create_time']+'</span>';
                                     html += '<h1><a href="{:url('Article/detail')}/art_id/'+data['res'][i]['art_id']+'">'+data['res'][i]['art_title']+'</a></h1>';
                                     html += '<p>'+data['res'][i]['subtitle']+'</p>';
                                     html += '<p><a href="{:url('Article/detail')}/art_id/'+data['res'][i]['art_id']+'" class="blog-continue">'+data['res'][i]['art_title']+'</a></p></div></article>';
                         }
                         $('#flushPage').html(html);
-                        if (page > 0) {
+                        if (page > 1) {
                             $('.am-pagination-prev').show();
-                            $('.page-prev').attr("data-page", page-1);
                         }
-                        if (data['res'].length == 5) {
+                        //获取分页数量
+                        var pagesize = <?php echo $pagesize; ?>;
+                        if (data['res'].length == pagesize) {
                             $('.am-pagination-next').show();
-                            $('.page-next').attr("data-page", page+1);
-                        } else {
-                            $('.am-pagination-next').hide();
                         }
                     } else {
-                        var html = '<h3 style="text-align: center; color: #666;">数据已加载完了</h3>';
+                        var html = '<h2>数据已加载完了</h2>';
                         $('#flushPage').html(html);
                         $('.am-pagination-prev').show();
-                        $('.page-prev').attr("data-page", page-1);
                     }
                 });
         });

@@ -1,4 +1,4 @@
-<?php /*a:4:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\category\edit.html";i:1577004004;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:64:"D:\phpStudy\WWW\tp5Blog\application\admin\view\category\add.html";i:1577003992;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,14 +27,14 @@
     </head>
     <body>
 	<div class="x-body">
-		<form class="layui-form">
+		<form class="layui-form" enctype="multipart/form-data">
 			<div class="layui-form-item">
 				<label class="layui-form-label" for="pid">所属分类</label>
 				<div class="layui-input-block" style="width: 300px;">
 					<select name="pid" id="pid">
 						<option value="0">顶级分类</option>
 						<?php foreach($cate as $v): ?>
-							<option <?php echo $v['cate_id']==$result['pid'] ? 'selected' : ''; ?> value="<?php echo htmlentities($v['cate_id']); ?>"><?php echo htmlentities($v['cate_name']); ?></option>
+							<option value="<?php echo htmlentities($v['cate_id']); ?>"><?php echo htmlentities($v['cate_name']); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</div>
@@ -44,7 +44,7 @@
 					分类名称
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="link" value="<?php echo htmlentities($result['cate_name']); ?>" name="cate_name" class="layui-input" lay-verify="required">
+					<input type="text" id="link" value="" name="cate_name" class="layui-input" lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -52,7 +52,7 @@
 					展示顺序
 				</label>
 				<div class="layui-input-inline">
-					<input type="text" id="sort" value="<?php echo htmlentities($result['sort']); ?>" name="sort" class="layui-input">
+					<input type="text" id="sort" value="0" name="sort" class="layui-input">
 				</div>
 				<div class="layui-form-mid layui-word-aux">
 					<span class="x-red">越大排在前面最大不能超过255</span>
@@ -61,11 +61,11 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">是否显示</label>
 				<div class="layui-input-block">
-					 <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? '' : 'checked'; ?> value="0" title="显示">
-					 <input type="radio" name="is_show" <?php echo $result['is_show']==-1 ? 'checked' : ''; ?> value="-1" title="隐藏">
+					 <input type="radio" name="is_show" checked value="0" title="显示">
+					 <input type="radio" name="is_show" value="-1" title="隐藏">
 				</div>
 			 </div>
-			<input type="hidden" name="cate_id" value="<?php echo htmlentities($result['cate_id']); ?>">
+			
 			<div class="layui-form-item">
 				<label for="L_repass" class="layui-form-label">
 				</label>
@@ -78,21 +78,23 @@
 	<script>
 		layui.use(['form','layer'], function(){
 			$ = layui.jquery;
-			var form = layui.form()
-			,layer = layui.layer;
+		  	var form = layui.form()
+		  	,layer = layui.layer;
+		
 
-		//监听提交
+		  //监听提交
 		form.on('submit(add)', function(data){
 			var cate_name = $("input[name='cate_name']").val();
 			if (!cate_name)
 			{
-				layer.msg('分类名称不能为空');
+				layer.msg('分类名称不能为空', {icon: 5});
 				return false;
 			}
+			// console.log(data['field']);
 			// 提交数据到后台
 			var _this = parent.layer;
 			$.ajax({
-				url: "<?php echo url('Category/ajaxEidtData'); ?>",
+				url: "<?php echo url('Category/ajaxAddData'); ?>",
 				type: 'post',
 				data: data['field'],
 				success:function(res){
@@ -113,6 +115,6 @@
 		  
 		});
 	</script>
-	</body>
+</body>
 
 </html>

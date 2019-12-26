@@ -44,4 +44,14 @@ class Index extends Base
 		$this->assign('js_array', []);
 		return $this->fetch('no_permission');
 	}
+
+
+	public function cleanRedis()
+	{
+		$result = redis()->flushdb();
+		if ($result)
+			return json(['status' => 1, 'msg' => '清理成功']);
+		else
+			return json(['status' => 0, 'msg' => '清理失败']);
+	}
 }

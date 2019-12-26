@@ -1,15 +1,13 @@
-<?php /*a:4:{s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\detail.html";i:1575713752;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:66:"D:\phpStudy\WWW\tp5Blog\application\admin\view\article\detail.html";i:1577265762;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            德玛西亚总部
-        </title>
+        <title><?php echo isset($website['admin_title'])?$website['admin_title']:''; ?></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" type="image/x-icon" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
@@ -42,7 +40,7 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label" style="color: #009688;">文章图片：
 				</label>
-				<img id="LAY_demo_upload" style="width: auto; height: 200px;" width="400" src="/static/uploads/<?php echo htmlentities($result['art_img']); ?>">
+				<img id="LAY_demo_upload" style="width: auto; height: 200px;" width="400" src="<?php echo htmlentities($result['art_img']); ?>">
 			</div>
 			<div class="layui-form-item">
                 <label for="author" class="layui-form-label" style="color: #009688;">

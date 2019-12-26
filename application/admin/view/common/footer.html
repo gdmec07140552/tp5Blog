@@ -1,14 +1,14 @@
         <div class="layui-footer footer footer-demo">
             <div class="layui-main">
-                <p>感谢layui,百度Echarts,jquery</p>
+                <p>{:isset($website['thank_word'])?$website['thank_word']:''}</p>
                 <p>
                     <a href="/">
-                        Copyright ©2017 x-admin v2.3 All Rights Reserved.
+                        {:isset($website['website_filing'])?$website['website_filing']:''}
                     </a>
                 </p>
                 <p>
                     <a href="./" target="_blank">
-                        本后台系统由X前端框架提供前端技术支持
+                        {:isset($website['tech_support'])?$website['tech_support']:''}
                     </a>
                 </p>
             </div>

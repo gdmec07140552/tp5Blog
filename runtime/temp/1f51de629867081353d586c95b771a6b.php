@@ -1,15 +1,13 @@
-<?php /*a:5:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\welcome.html";i:1575162368;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577002293;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\footer.html";i:1575088361;}*/ ?>
+<?php /*a:5:{s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\index\welcome.html";i:1577168314;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\footer.html";i:1577159713;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            信资产
-        </title>
+        <title><?php echo isset($website['admin_title'])?$website['admin_title']:''; ?></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" type="image/x-icon" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
@@ -30,7 +28,7 @@
     <body>
         <div class="x-body">
             <blockquote class="layui-elem-quote">
-                欢迎来祖安 德玛西亚总部！<span class="f-14"><<< !!! >>>>  </span> 开黑交流群： 3114802825
+                <?php echo isset($website['admin_welcome'])?$website['admin_welcome']:'欢迎您'; ?><span class="f-14">  <<< !!! >>>>  </span> <?php echo isset($website['admin_contact'])?$website['admin_contact']:Session('user')['admin_name']; ?>
             </blockquote>
             <p>登录次数：<?php echo Session('user')['login_num']; ?> </p>
             <p>上次登录IP：<?php echo Session('user')['last_ip']; ?>  上次登录时间： <?php $last_time = Session('user'); echo date('Y-m-d H:i:s', $last_time['last_time']); ?></p>
@@ -195,15 +193,15 @@
         </div>
         <div class="layui-footer footer footer-demo">
             <div class="layui-main">
-                <p>感谢layui,百度Echarts,jquery</p>
+                <p><?php echo isset($website['thank_word'])?$website['thank_word']:''; ?></p>
                 <p>
                     <a href="/">
-                        Copyright ©2017 x-admin v2.3 All Rights Reserved.
+                        <?php echo isset($website['website_filing'])?$website['website_filing']:''; ?>
                     </a>
                 </p>
                 <p>
                     <a href="./" target="_blank">
-                        本后台系统由X前端框架提供前端技术支持
+                        <?php echo isset($website['tech_support'])?$website['tech_support']:''; ?>
                     </a>
                 </p>
             </div>

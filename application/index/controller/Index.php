@@ -1,11 +1,15 @@
 <?php
 namespace app\index\controller;
 
+use think\facade\Config;
+
 class Index extends Base
 {
+    const PAGESIZE = 10; //分页数量
 	function __construct()
 	{
 		parent::__construct();
+        $this->assign('pagesize', self::PAGESIZE);
 	}
 
 	/**
@@ -26,10 +30,10 @@ class Index extends Base
             $article = model('admin/Article')->articleAuthor([
                 'where' => $where,
                 'order' => ['m.sort' => 'desc', 'm.art_id' => 'desc'],
-                'limit' => '0,5'
+                'limit' => '0,' . self::PAGESIZE
             ]);
         } else {
-            $article = $this->getAllArticle(0, 5, $cate_id);
+            $article = $this->getAllArticle(0, self::PAGESIZE, $cate_id);
         }
     	$this->assign('article', $article);
         $this->assign('cate_id', $cate_id);
@@ -45,8 +49,8 @@ class Index extends Base
 
     	// 推荐文章
     	$this->link_article($cate_id);
-
-    	$this->assign('title', '德玛西亚文化广场');
+        $website = Config::pull('websiteConf');
+    	$this->assign('title', $website['home_title']);
         return view('index');
     }
 
@@ -174,8 +178,8 @@ class Index extends Base
         $page = (int) input('page');
         $cate_id = input('cate_id');
         $keyboard = input('keyboard');
-        $start = $page * 5;
-        $stop = ($page + 1) * 5;
+        $start = ($page -1) * self::PAGESIZE;
+        $stop = $page * self::PAGESIZE;
         if ($keyboard)
         {
             if ($cate_id)
@@ -188,17 +192,19 @@ class Index extends Base
             ]);
         } else {            
             // 取出对应的文章
-            $article = $this->getAllArticle($start, $stop, $cate_id);
+            $article = $this->getAllArticle($start, $stop, $cate_id);           
+        }
+        if ($article) {
             foreach ($article as $key => $value) {
                 $article[$key]['create_time'] = date('Y/m/d', $value['create_time']);
             }
-            
-        }
-        if ($article)
             return json(['status' => 1, 'res' => $article]);
-        else
+        } else {
             return json(['status' => 0]);
+        }
     }
+
+    
 
 
 }

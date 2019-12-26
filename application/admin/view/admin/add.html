@@ -115,11 +115,10 @@
 			,success: function(res){ //上传成功后的回调
 				// console.log(res);
 				if (res['status'] == 1)
-				{	var upload_url = "<?php echo '__IMAGE__'; ?>";
-					var head_img = upload_url + res['img_url'];
+				{
 					// 显示图片并记录图片地址
 					$('input[name="head_img"]').val(res['img_url']);
-			  		$('#LAY_demo_upload').attr('src', head_img);
+			  		$('#LAY_demo_upload').attr('src', res['img_url']);
 				} else {
 					layer.msg('图片上传失败', {icon: 5});
 				}

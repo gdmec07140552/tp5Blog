@@ -1,10 +1,10 @@
-<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\edit.html";i:1576140967;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\edit.html";i:1577154405;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577002293;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>
-            德玛西亚总部
+            信资产
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -43,7 +43,7 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="/static/uploads/<?php echo htmlentities($result['head_img']); ?>">
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="<?php echo htmlentities($result['head_img']); ?>">
 			</div>
 			<div class="layui-form-item">
                 <label for="admin_name" class="layui-form-label">
@@ -143,11 +143,10 @@
 			,success: function(res){ //上传成功后的回调
 				// console.log(res);
 				if (res['status'] == 1)
-				{	var upload_url = "<?php echo '/static/uploads/'; ?>";
-					var head_img = upload_url + res['img_url'];
+				{
 					// 显示图片并记录图片地址
 					$('input[name="head_img"]').val(res['img_url']);
-			  		$('#LAY_demo_upload').attr('src', head_img);
+			  		$('#LAY_demo_upload').attr('src', res['img_url']);
 				} else {
 					layer.msg('图片上传失败', {icon: 5});
 				}
@@ -165,9 +164,8 @@
 				success:function(res){
 					if (res['status'] == 1)
 					{
-						// window.location.href = "<?php echo url('Admin/banner_list'); ?>";
-						var index = _this.getFrameIndex(window.name);
-						_this.close(index);
+						layer.msg(res['msg'], {icon: 6});
+						setTimeout(function(){window.parent.location.reload();}, 2000);
 					} else {
 						layer.msg(res['msg'], {icon: 5});
 					}

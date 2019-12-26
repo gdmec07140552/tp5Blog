@@ -50,7 +50,7 @@
                             
                         </td>
                         <td>
-                            <img style="height: 80px; width: auto;"  src="__STATIC__/uploads/{$res['head_img']}" width="200" alt="{$res['introduction']}">
+                            <img style="height: 80px; width: auto;"  src="{$res['head_img']}" width="200" alt="{$res['introduction']}">
 
                         </td>
                         <td >
@@ -102,7 +102,7 @@
                 <div class="layui-form-item">
                     <label  class="layui-form-label" style="color: #009688;">作者头像：
                     </label>
-                    <img id="LAY_demo_upload" style="width: auto; height: 100px;" width="400" src="__STATIC__/uploads/{{ d.head_img }}">
+                    <img id="LAY_demo_upload" style="width: auto; height: 100px;" width="400" src="{{ d.head_img }}">
                 </div>
                 <div class="layui-form-item">
                     <label for="author" class="layui-form-label" style="color: #009688;">

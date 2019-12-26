@@ -1,7 +1,7 @@
 {include file="common/header" /}
         <div class="x-body">
             <blockquote class="layui-elem-quote">
-                欢迎来祖安 德玛西亚总部！<span class="f-14"><<< !!! >>>>  </span> 开黑交流群： 3114802825
+                {:isset($website['admin_welcome'])?$website['admin_welcome']:'欢迎您'}<span class="f-14">  <<< !!! >>>>  </span> {:isset($website['admin_contact'])?$website['admin_contact']:Session('user')['admin_name']}
             </blockquote>
             <p>登录次数：{:Session('user')['login_num']} </p>
             <p>上次登录IP：{:Session('user')['last_ip']}  上次登录时间： <?php $last_time = Session('user'); echo date('Y-m-d H:i:s', $last_time['last_time']); ?></p>

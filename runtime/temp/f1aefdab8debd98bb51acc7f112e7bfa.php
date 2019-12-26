@@ -1,10 +1,10 @@
-<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\list.html";i:1576224187;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\admin\list.html";i:1577154489;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577002293;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>
-            德玛西亚总部
+            信资产
         </title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -77,7 +77,7 @@
                         <?php endif; ?>
                         </td>
                         <td>
-                            <img style="height: 80px; width: auto;"  src="/static/uploads/<?php echo htmlentities($res['head_img']); ?>" width="200" alt="<?php echo htmlentities($res['admin_name']); ?>">
+                            <img style="height: 80px; width: auto;"  src="<?php echo htmlentities($res['head_img']); ?>" width="200" alt="<?php echo htmlentities($res['admin_name']); ?>">
 
                         </td>
                         <td>

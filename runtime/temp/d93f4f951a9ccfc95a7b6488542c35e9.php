@@ -1,15 +1,13 @@
-<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\add.html";i:1576999548;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\author\add.html";i:1577155071;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            德玛西亚总部
-        </title>
+        <title><?php echo isset($website['admin_title'])?$website['admin_title']:''; ?></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" type="image/x-icon" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
@@ -118,11 +116,10 @@
 			,success: function(res){ //上传成功后的回调
 				// console.log(res);
 				if (res['status'] == 1)
-				{	var upload_url = "<?php echo '/static/uploads/'; ?>";
-					var head_img = upload_url + res['img_url'];
+				{
 					// 显示图片并记录图片地址
 					$('input[name="head_img"]').val(res['img_url']);
-			  		$('#LAY_demo_upload').attr('src', head_img);
+			  		$('#LAY_demo_upload').attr('src', res['img_url']);
 				} else {
 					layer.msg('图片上传失败', {icon: 5});
 				}
@@ -147,9 +144,8 @@
 				success:function(res){
 					if (res['status'] == 1)
 					{
-						// window.location.href = "<?php echo url('Author/list'); ?>";
-						var index = _this.getFrameIndex(window.name);
-						_this.close(index);
+						layer.msg(res['msg'], {icon: 6});
+						setTimeout(function(){window.parent.location.reload();}, 2000);
 					} else {
 						layer.msg(res['msg'], {icon: 5});
 					}

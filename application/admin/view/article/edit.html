@@ -23,7 +23,7 @@
 			<div class="layui-form-item">
 				<label  class="layui-form-label">缩略图
 				</label>
-				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="__STATIC__/uploads/{$result['art_img']}">
+				<img id="LAY_demo_upload" style="width: 112px; height: 80px;" width="400" src="{$result['art_img']}">
 			</div>
 			<div class="layui-form-item">
 				<label for="link" class="layui-form-label">
@@ -130,11 +130,10 @@
 				url: '{:url("Common/uploads")}' //上传接口
 				,success: function(res){ //上传成功后的回调
 					if (res['status'] == 1)
-					{	var upload_url = "<?php echo '__IMAGE__'; ?>";
-						var art_img = upload_url + res['img_url'];
+					{
 						// 显示图片并记录图片地址
 						$('input[name="art_img"]').val(res['img_url']);
-				  		$('#LAY_demo_upload').attr('src', art_img);
+				  		$('#LAY_demo_upload').attr('src', res['img_url']);
 					} else {
 						layer.msg('图片上传失败', {icon: 5});
 					}

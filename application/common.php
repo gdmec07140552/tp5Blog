@@ -28,6 +28,9 @@ use think\Image;
  */
 function uploads($imgName = '', $type = 1, $resType = 0, $thumb = false, $width = 300, $height = 300)
 {
+	// 上传目录
+	$upload_dir = './static/uploads/';
+	$ret_upload_dir = '/static/uploads/';
 	// 单张图片上传
 	if ($type == 1)
 	{
@@ -35,7 +38,7 @@ function uploads($imgName = '', $type = 1, $resType = 0, $thumb = false, $width 
 		$file = request()->file($imgName);
 		// 移动到框架应用根目录/uploads/ 目录下
 		$config = Config::pull('blog_config');
-		$info = $file->validate(['size' => 1952153225, 'jpg, jpeg, png, gif'])->move($config['upload_url']);
+		$info = $file->validate(['size' => 1952153225, 'jpg, jpeg, png, gif'])->move($upload_dir);
 		if ($info)
 		{
 			// 输出jpg
@@ -51,21 +54,23 @@ function uploads($imgName = '', $type = 1, $resType = 0, $thumb = false, $width 
 			$thumb_url = '';
 			if ($thumb == true)
 			{
-				$thumb_image_url = $config['upload_url'] . '/' . $info->getSaveName();
+				$thumb_image_url = $upload_dir . $info->getSaveName();
 				$image = Image::open($thumb_image_url);
 				// 按照原图的比例生成一个最大为300*300的缩略图并保存为thumb.png
-				$thumb_url = $config['upload_url'] . '/' . date('Ymd') . '/thumb_' . $info->getFilename();
+				$thumb_url = $upload_dir . date('Ymd') . '/thumb_' . $info->getFilename();
 				$image->thumb($width, $height)->save($thumb_url);
-				$thumb_url = date('Ymd') . '/thumb_' . $info->getFilename();
+				// 缩略图的拼接路径
+				$thumb_url = $ret_upload_dir . date('Ymd') . '/thumb_' . $info->getFilename();
 			}
-			
+			// 图片拼接路径
+			$img_url_info = $ret_upload_dir . date('Ymd') . '/' . $info->getFilename();
 			if ($resType == 0 )
 			{
-				return date('Ymd') . '/' . $info->getFilename();
+				return $img_url_info;
 			} else {
 				$result = [
 					'status' => 1,
-					'img_url' => date('Ymd') . '/' . $info->getFilename(),
+					'img_url' => $img_url_info,
 					'thumb_url' => $thumb_url
 				];
 				return $result;
@@ -86,8 +91,7 @@ function uploads($imgName = '', $type = 1, $resType = 0, $thumb = false, $width 
  */
 function delImage($img_url)
 {
-	$config = Config::pull('blog_config');
-	unlink($config['upload_url'] . '/' . $img_url);
+	unlink('.' . $img_url);
 }
 
 /**
@@ -138,9 +142,9 @@ function read_all_dir($path = '')
 			if (!in_array($file, ['.', '..', 'Login.php', 'Base.php'])) {
 				$cur_path = $path . DIRECTORY_SEPARATOR . $file;
 				// 3、判断是否为目录，递归读取文件
-				if (is_dir($cur_path))
+				if (is_dir($path.'/'.$file))
 				{
-					$result[][$file] = read_all_dir($cur_path);
+					$result[][$file] = read_all_dir($path.'/'.$file);
 				} else {
 					$result[] = basename($file, '.php');
 				}
@@ -229,6 +233,12 @@ function permission()
 	}	
 }
 
+/**
+ * [getNav 后台管理左侧导航栏显示状态]
+ * @param  [type]  $nav   [description]
+ * @param  integer $leval [description]
+ * @return [type]         [description]
+ */
 function getNav($nav = [], $leval = 0)
 {
 

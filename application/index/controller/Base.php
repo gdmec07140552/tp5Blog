@@ -2,7 +2,7 @@
 namespace app\index\controller;
 
 use think\Controller;
-
+use think\facade\Config;
 /**
 * 基础控制器
 */
@@ -12,7 +12,11 @@ class Base extends Controller
 	function __construct()
 	{
 		parent::__construct();
-
+		// 网站配置信息
+		$website = Config::pull('websiteConf');
+		$this->assign('website', $website);
+		if ($website['website_status'] == 1)
+			return $this->redirect('Common/down');
 		// 导航栏数据
 		$this->nav();
 	}

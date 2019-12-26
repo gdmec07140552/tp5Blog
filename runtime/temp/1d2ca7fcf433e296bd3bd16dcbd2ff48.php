@@ -1,15 +1,13 @@
-<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\list.html";i:1576478648;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1575088278;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
+<?php /*a:4:{s:63:"D:\phpStudy\WWW\tp5Blog\application\admin\view\banner\list.html";i:1577155534;s:65:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\header.html";i:1577157592;s:62:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\css.html";i:1575341690;s:69:"D:\phpStudy\WWW\tp5Blog\application\admin\view\common\javascript.html";i:1575194486;}*/ ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
-        <title>
-            德玛西亚总部
-        </title>
+        <title><?php echo isset($website['admin_title'])?$website['admin_title']:''; ?></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="shortcut icon" href="/static/admin/images/logo.png" type="image/x-icon" />
+        <link rel="shortcut icon" href="<?php echo isset($website['admin_logo'])?$website['admin_logo']:''; ?>" type="image/x-icon" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="format-detection" content="telephone=no">
@@ -76,7 +74,7 @@
                             
                         </td>
                         <td>
-                            <img style="height: 80px; width: auto;" src="/static/uploads/<?php echo htmlentities($res['img_url']); ?>" width="200" alt="<?php echo htmlentities($res['img_des']); ?>">
+                            <img style="height: 80px; width: auto;" src="<?php echo htmlentities($res['img_url']); ?>" width="200" alt="<?php echo htmlentities($res['img_des']); ?>">
                         </td>
                         <td >
                             <?php echo htmlentities($res['link_url']); ?>

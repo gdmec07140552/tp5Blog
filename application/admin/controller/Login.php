@@ -11,6 +11,7 @@ class Login extends Controller
 	function __construct()
 	{
 		parent::__construct();
+		
 	}
 
 	/**
@@ -19,6 +20,9 @@ class Login extends Controller
 	 */
 	public function login()
 	{		
+		// 获取网站配置信息
+		$website = Config::pull('websiteConf');
+		$this->assign('website', $website);
 		//判断用户是否已经登录过了
 		if (Session::get('user'))
 		{

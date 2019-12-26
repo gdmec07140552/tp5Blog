@@ -1,21 +1,21 @@
 <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
     <div class="blog-sidebar-widget blog-bor">
         <h2 class="blog-text-center blog-title"><span>About Me</span></h2>
-        <img src="__IMAGE__{$top_author['head_img']}" alt="{$top_author['author']}" class="blog-entry-img" >
-            <p> Admin&nbsp; &nbsp; 妹子 &nbsp;</p>
+        <img style=" border-radius: 100%; height: 200px; width: 200px;" src="{$top_author['head_img']}" alt="{$top_author['author']}" class="blog-entry-img" >
+            <p> Admin&nbsp; &nbsp; Beauty &nbsp;</p>
         <p>{$top_author['introduction']}</p>
     </div>
     <div class="blog-sidebar-widget blog-bor">
         <h2 class="blog-text-center blog-title"><span>Recommend Author</span></h2>
-        <img src="__IMAGE__{$top_author['head_img']}" alt="{$top_author['author']}" class="blog-entry-img" >
+        <img src="{$top_author['head_img']}" alt="{$top_author['author']}" class="blog-entry-img" >
         <?php if($top_author['sex'] == 0): ?>
-            <p> 妹子 &nbsp;</p>
+            <p> Beauty &nbsp;</p>
         <?php endif; ?>
         <?php if($top_author['sex'] == 1): ?>
-            <p> 渣男 &nbsp;</p>
+            <p> Scumbag &nbsp;</p>
         <?php endif; ?>
         <?php if($top_author['sex'] == 2): ?>
-            <p> 禽兽 &nbsp;</p>
+            <p> Beast &nbsp;</p>
         <?php endif; ?>
         <p>{$top_author['introduction']}</p>
         <p>{$top_author['content']}</p>
